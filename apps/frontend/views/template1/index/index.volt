@@ -40,11 +40,10 @@
 						</div>
 						<div>
 							<div>Giá bán lẻ: <strong class="font_size14 col_red">{{elements.currency_format(item['price_exp'])}} đ</strong></div>
-							<div>Giá CTV: <strong class="font_size14 col_blue">{{elements.currency_format(item['price_seller'])}} đ</strong></div>
+							<div>Chiết khấu CTV: <strong class="font_size14 col_blue">{{elements.currency_format(item['price_exp']-item['price_seller'])}} đ</strong></div>
 						</div>						
 						</a>
 					</div>
-					
 					{%endfor%}
 			</div>
 		</div>
@@ -53,6 +52,22 @@
 				<div class="pn-title">
 					<h2>Bán chạy</h2>
 				</div>
+			</div>
+			<div class="row pro_list">
+					{%for item in goodsells%}					
+					<div class="col-md-20 col-sm-3 col-xs-6 pro_list_item">
+						<a href="{{url.get('sp/')}}{{item['pro_no']}}_{{item['pro_id']}}">					
+						<img src="{{url.get('')}}{{item['img_path']}}"/>
+						<div>
+							<span class="lst-it-title">{{item['pro_name']}}</span>
+						</div>
+						<div>
+							<div>Giá bán lẻ: <strong class="font_size14 col_red">{{elements.currency_format(item['price_exp'])}} đ</strong></div>
+							<div>Chiết khấu CTV: <strong class="font_size14 col_blue">{{elements.currency_format(item['price_exp']-item['price_seller'])}} đ</strong></div>
+						</div>						
+						</a>
+					</div>
+					{%endfor%}
 			</div>
 		</div>
 	</div>	

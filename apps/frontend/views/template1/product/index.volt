@@ -30,14 +30,15 @@
 					<h5>Giá bán lẻ: <strong class="price col_red">{{elements.currency_format(pricelist[0].price_exp)}} đ</strong></h5>
 				</div>
 				<div class="col-md-6 col-sm-6 col-xs-12">
-					<h5>Giá CTV: <strong class="price col_blue">{{elements.currency_format(pricelist[0].price_seller)}} đ</strong></h5>
+					<h5>Chiết khấu CTV: <strong class="price col_blue">{{elements.currency_format(pricelist[0].price_exp-pricelist[0].price_seller)}} đ</strong></h5>
 				</div>
 				<div class="row margin-top10">
 					<span>Trạng thái: {{status_name}}</span>					
 				</div>
 				<form action="{{baseurl}}cart/addtocart" method="post" id="formcart">
 				<div class="row margin-top10" {%if pricelist|length==1%}style="display:none"{%endif%}>
-					<select id="pro_size" name="pro_size">
+					<span>Màu sắc</span>
+					<select id="pro_size" name="pro_size" style="width: auto">
 						{%for size in pricelist%}
 							<option value="{{size.pro_price_id}}">{{size.size}}</option>
 						{%endfor%}

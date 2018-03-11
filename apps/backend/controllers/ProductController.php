@@ -105,6 +105,7 @@ class ProductController extends PHOController
 			$param['good_sell']=NULL;
 			$param['full_box']=NULL;
 			$param['parent_id'] = 0;
+			$param['src_link'] = '';
 			/*if(strlen($param['parent_id'])==0){
 				$param['parent_id'] = 0;
 			}*/
@@ -144,6 +145,7 @@ class ProductController extends PHOController
 			  ,'technology'	
 			  ,'full_box'	
 			  ,'folder_tmp' 
+			  ,'src_link'
 			));
 				
 		$result['status'] = 'OK';	
@@ -213,7 +215,7 @@ class ProductController extends PHOController
 					$paimg['pro_id'] = $param['pro_id'];
 					//PhoLog::debug_var('update----','inset img');
 					//PhoLog::debug_var('update----',$imglist);	
-					PhoLog::debug_var('--img---',$imglist);				
+					//PhoLog::debug_var('--img---',$imglist);				
 					foreach ($imglist as $key => $img) {
 						$pimg = new ProductImg();
 						$paimg['img_path'] = $img['new'];
@@ -225,15 +227,15 @@ class ProductController extends PHOController
 					}
 					//PhoLog::debug_var('update----','inset img end');
 			}
-			PhoLog::debug_var('del----',$param['img_del']);
+			//PhoLog::debug_var('del----',$param['img_del']);
 			//xóa hình ảnh sản phẩm			
 			if(isset($param['img_del']) && count($param['img_del']) > 0){
 				//$db->delete_pro_img($param['img_del']);
 				$pimg = new ProductImg();
 				foreach ($param['img_del'] as $key => $img){
 					$img_name = str_replace(BASE_URL_NAME,'',$img);
-					PhoLog::debug_var('del----',$img_name);
-					PhoLog::debug_var('del----',$param['pro_id']);
+					//PhoLog::debug_var('del----',$img_name);
+					//PhoLog::debug_var('del----',$param['pro_id']);
 					$pimg->delete_bypost($param['pro_id'],$img_name);
 					$file->DeleteFile(PHO_PUBLIC_PATH.$img_name);
 				}
@@ -261,9 +263,10 @@ class ProductController extends PHOController
 		return "";
 	}	
 	public function get_listfile($content){
-		$pattern ='/(src="' .str_replace('/', '\/', BASE_URL_NAME).')(.*?)(\")/' ;
+		//$pattern ='/(src="' .str_replace('/', '\/', BASE_URL_NAME).')(.*?)(\")/' ;
+		$pattern ='/(src="\\/image|src="\\/tmp)(.*?)(\\")/' ;
 		preg_match_all($pattern,$content,$match);
-		//PhoLog::debug_Var('---rrrr--',$pattern);
+		PhoLog::debug_Var('---rrrr--',$pattern);
 		$result = array();
 		$repl = array(BASE_URL_NAME,'src=','"');
 		$result['main'] = array();
@@ -289,16 +292,16 @@ class ProductController extends PHOController
 		if($file->FolderExists($dest_folder) == false){
 			$file->CreateFolder($dest_folder);
 		}
-		PhoLog::debug_Var('---rrrr--',$listfile);
+		//PhoLog::debug_Var('---rrrr--',$listfile);
 		foreach ($listfile as $key => $value){
 			$exp = explode('/', $value);
 			$src_file = 'images/products/'.$pro_id.'/'.$exp[count($exp)-1];
 			$file->CopyFile($src_folder.'/'.$exp[count($exp)-1],PHO_PUBLIC_PATH.$src_file);
-			PhoLog::debug_Var('---rrrr--','from:'.$src_folder.'/'.$exp[count($exp)-1]);	
-			PhoLog::debug_Var('---rrrr--','to:'.PHO_PUBLIC_PATH.$src_file);	
+			//PhoLog::debug_Var('---rrrr--','from:'.$src_folder.'/'.$exp[count($exp)-1]);	
+			//PhoLog::debug_Var('---rrrr--','to:'.PHO_PUBLIC_PATH.$src_file);	
 			$file->DeleteFile($src_folder.'/'.$exp[count($exp)-1]);
 			$result[$key]['old'] = $value;
-			$result[$key]['new'] = $src_file;
+			$result[$key]['new'] = '/'.$src_file;
 		}
 		return $result;
 	}
@@ -362,7 +365,7 @@ class ProductController extends PHOController
 			//$img->add_logo(PHO_PUBLIC_PATH.$file_name,PHO_LOGO_ADD,5);
 			//$img->add_logo(PHO_PUBLIC_PATH.$file_name,PHO_LOGO_ADD,9);
 			$file_lb->DeleteFile($file_tmp);
-			$result['link'][] = BASE_URL_NAME.$file_name;
+			$result['link'][] = '/'.$file_name;
 		}
 		
 		return $this->ViewJSON($result);

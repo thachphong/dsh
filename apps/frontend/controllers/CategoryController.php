@@ -31,6 +31,7 @@ class CategoryController extends PHOController
         $param['ctg_name'] ='Tin rao mới';
         $param['ctg_no'] ='tin-moi';
         $param['breadcrumbs'] = array();
+        $param['rel_menu']= array();
         if($ctg_no != 'allnew'){
             $info = $ctg->get_ctg_byno($ctg_no);
             $param['ctg_name'] = $info->ctg_name;
@@ -42,6 +43,7 @@ class CategoryController extends PHOController
 				$param['type'] = $info->parent_id;
 			}
 			$param['breadcrumbs'] =$ctg->get_breadcrumb($info->parent_id);
+			$param['rel_menu'] =$ctg->get_list_relation($info->ctg_code,15);
         }        
         $param['list']=$db->get_list_byctg($ctg_no,$start_row);
         $param['total_post'] = $db->get_list_byctg_count($ctg_no);

@@ -9,14 +9,29 @@
 	</div>
 </div>
 <div class="row content_bg" >
-	<div class="container panel_bg margin-top10" id="content">            
-      <div class="col-md-12 col-sm-12 col-xs-12 margin_top">
+	<div class="container margin-top10" id="content"> 
+	  <div class="col-md-20 col-sm-25 col-xs-12 no_padding_left">
+	  	 <div class="row panel_bg">
+	  	 	<div class="pn-header-top border_bottom">
+				<div class="pn-title">
+					<h3>Danh mục liên quan</h3>
+				</div>
+			</div>
+			<div class="row" >
+				<ul class="verti_menu" style="display: block!important;z-index: 1">
+					{%for mn in rel_menu%}
+						<li><a href="{{baseurl}}c/{{mn['ctg_no']}}">{{mn['ctg_name']}}</a></li>
+					{%endfor%}
+				</ul>
+			</div>
+	  	 </div>
+	  </div>	           
+      <div class="col-md-80 col-sm-75 col-xs-12 margin_top panel_bg no_padding">
          <div class="row margin_top" >
-            <div class="pn_title">               
+            <div class="pn_title border_bottom padding-left10">               
                <h1>{{ctg_name}}</h1>
-               <label class="read_more" style="font-weight:normal">có <strong>{{total_post}}</strong> tin bất động sản</label>
-            </div>
-            <hr/>
+               <label class="read_more" style="font-weight:normal">có <strong>{{total_post}}</strong> sản phẩm</label>
+            </div>       
             <div class="row pro_list">
 					{%for item in list%}					
 					<div class="col-md-3 col-sm-3 col-xs-6 pro_list_item">

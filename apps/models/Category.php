@@ -315,4 +315,20 @@ class Category extends DBModel
         else
             return null;
 	}
+	public function get_list_relation($ctg_code,$limit = 10){
+		$sql="select ctg_id,ctg_level,parent_id,ctg_no,ctg_name  from 
+				(select * from category
+				where ctg_code like :ctg_code1
+				and ctg_level = 3
+				UNION 
+				select * from category
+				where ctg_code like :ctg_code2
+				and ctg_level = 3
+				) t
+				limit $limit
+				";		
+		$ctg_code1= substr($ctg_code,0,2).'%';
+		$ctg_code2= substr($ctg_code,0,1).'%';
+		return $this->pho_query($sql,array('ctg_code1'=>$ctg_code1,'ctg_code2'=>$ctg_code2));		
+	}
 }

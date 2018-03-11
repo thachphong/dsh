@@ -37,7 +37,7 @@ class PhofileController extends PHOController
 		//$img = new Images();
 		//$img->add_logo(PHO_PUBLIC_PATH.$file_name,PHO_LOGO_ADD,5);
 		$file_lb->DeleteFile($file_tmp);
-		$result['link'] = BASE_URL_NAME.$file_name;
+		$result['link'] = '/'.$file_name;
 		return $this->ViewJSON($result);
 	}
 	public static function uplproductAction(){

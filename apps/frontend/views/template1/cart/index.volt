@@ -37,7 +37,7 @@
                         </tr>
                         {%for item in carts%}
                         	<tr class="spline tr_product">                                       
-                                <td><img src="{{baseurl}}crop/50x50/{{item['img_path']}}" style="margin-right:10px">{{item['pro_name']}}</td>
+                                <td><img src="{{baseurl}}crop/50x50{{item['img_path']}}" style="margin-right:10px">{{item['pro_name']}}</td>
                                 <td>{{item['size']}}</td>
                                 <td align="right">
                                 <span class="amount pro_price" data="{{item['price_exp']}}">{{elements.currency_format(item['price_exp'])}}<span>₫</span></span>                    

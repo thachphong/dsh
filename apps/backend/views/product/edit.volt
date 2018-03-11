@@ -128,6 +128,14 @@
                         </div>
                       </div>
                       <div class="form-group">
+                        <label class="control-label col-md-2 col-sm-2 col-xs-12">Nguồn sản phẩm</label>
+                        <div class="col-md-8 col-sm-8 col-xs-12">
+                          <input type="text" id="src_link" name="src_link" class="form-control col-md-7 col-xs-12" value="{{src_link}}">                              
+                        </div>  
+                        <label class="control-label col-md-2 col-sm-2 col-xs-12"><input type="checkbox" id="not_src"> không có nguồn</label>
+                                            
+                      </div>
+                      <div class="form-group">
                         <div class="col-md-2 col-sm-2 col-xs-12">
                           <a class="btn btn-primary" type="button" id="btn_add_size" style="float: right">Thêm màu sắc</a>
                         </div>
@@ -148,7 +156,7 @@
                               <td>Màu sắc</td>
                               <td><input type="text" name="pro_size[]" class="form-control size_format" value="-"></td>
                               <td>Giá nhập</td>
-                              <td><input type="text" name="price_imp[]" class="col-md-3 form-control number_format" value=""></td>
+                              <td><input type="text" name="price_imp[]" class="col-md-3 form-control number_format imp" value=""></td>
                               <td>Giá CTV</td>
                               <td><input type="text" name="price_seller[]" class="col-md-3 form-control number_format" value=""></td>
                               <td>Giá bán lẻ</td>
@@ -160,11 +168,11 @@
                               <td>Màu sắc</td>
                               <td><input type="text" name="pro_size[]" class="form-control size_format" value="{{pri['size']}}"></td>
                               <td>Giá nhập</td>
-                              <td><input type="text" name="price_imp[]" class="col-md-3 form-control number_format imp" value="{{elements.currency_format(pri['price_imp'])}}"></td>
+                              <td><input type="text" name="price_imp[]" class="col-md-3 form-control number_format imp" value="{{elements.currency_format(pri['price_imp'],',')}}"></td>
                               <td>Giá CTV</td>
-                              <td><input type="text" name="price_seller[]" class="form-control number_format" value="{{elements.currency_format(pri['price_seller'])}}"></td>
+                              <td><input type="text" name="price_seller[]" class="form-control number_format" value="{{elements.currency_format(pri['price_seller'],',')}}"></td>
                               <td>Giá bán lẻ</td>
-                              <td><input type="text" name="price_exp[]" class="form-control number_format" value="{{elements.currency_format(pri['price_exp'])}}"></td>
+                              <td><input type="text" name="price_exp[]" class="form-control number_format" value="{{elements.currency_format(pri['price_exp'],',')}}"></td>
                             </tr>
                             {%endfor%}
                           </table>
@@ -193,13 +201,6 @@
                       			{%endfor%}
                       		</table>
                       	</div>                      		
-                      </div>
-                      
-                      <div class="form-group">                        
-                        <!--<label class="control-label col-md-2 col-sm-2 col-xs-12" for="ctg_name">Nội dung</label>-->
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                          
-                        </div>
                       </div>
                       <div class="form-group">
                       	<div class="col-md-12 col-sm-12 col-xs-12">    
@@ -288,9 +289,13 @@
 		    	var td_exp = $(td_seller).next().next();
 		    	var input_seller = $(td_seller).find('input')[0];
 		    	var input_exp = $(td_exp).find('input')[0];
-		    	var price_seller = Math.round((parseFloat(val) + parseFloat(val)*per_exp/100)/100)*100;
+		    	var round_num =100;
+		    	if(parseFloat(val)>50000){
+		    		round_num =1000;
+		    	}
+		    	var price_seller = Math.round((parseFloat(val) + parseFloat(val)*per_exp/100)/round_num)*round_num;
 		    	$(input_seller).val(number_format(price_seller));
-		    	$(input_exp).val(number_format(Math.round((price_seller + price_seller*per_seller/100)/100)*100));
+		    	$(input_exp).val(number_format(Math.round((price_seller + price_seller*per_seller/100)/round_num)*round_num));
 		    }
         });
         var number_format= function(val){
@@ -342,6 +347,9 @@
         	}
         	if($("#list_file").find('img').length==0){
         		return "Bạn chưa upload ảnh cho sản phẩm!";
+        	}
+        	if($("#src_link").val()=='' && $('#not_src').prop('checked')==false){
+        		return "Bạn chưa nhập nguồn sản phẩm";
         	}
           var msg ="";
           $('#list_size').find('tr').each(function(){

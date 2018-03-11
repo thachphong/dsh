@@ -67,8 +67,8 @@ class IndexController extends PHOController
 		 		//}		
 				//PhoLog::debug_var('test',__LINE__);
 				$db = new Product();		
-				$param['newlist'] = $db->get_list_new(12);
-				//$param['viplist'] = $db->get_list_new(3);
+				$param['newlist'] = $db->get_list_new(10);
+				$param['goodsells'] = $db->get_goodsell(10);
 				//$param['xemnhieu'] = $ne->get_news_pupular(5);
 				$this->set_template_share();      // set template dung chung
 				//PhoLog::debug_var('test',$param);

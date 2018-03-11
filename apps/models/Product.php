@@ -20,6 +20,8 @@ class Product extends DBModel
     public  $upd_date  ;
     public  $upd_user;
 	public  $del_flg;
+	public 	$pro_code;
+	public 	$src_link;
 	public function initialize()
     {
         $this->setSource("product");
@@ -81,9 +83,7 @@ class Product extends DBModel
 	
 	public function _insert($param)
 	{
-		try {
-		    $this->pro_no = $param['pro_no'];
-		    $this->pro_name   = $param['pro_name'];
+		try {		    
 		    $this->ctg_id  = $param['ctg_id'];
 		    $this->disp_home   = $param['disp_home'];
 		    $this->status  = 0;
@@ -97,6 +97,11 @@ class Product extends DBModel
 		    $this->add_date = date("Y-m-d H:i:s");
 		    $this->upd_date = date("Y-m-d H:i:s");
 		    $this->del_flg = 0;
+		    $this->src_link = $param['src_link'];
+		    $this->pro_code =$this->get_code_max($param['ctg_id']);
+		    $this->pro_code++;
+		    $this->pro_no = $param['pro_no'] .'-'.strtolower($this->pro_code);
+		    $this->pro_name   = $param['pro_name'].' '.$this->pro_code;
 		    		     
 		    $this->save();
 	    } catch (\Exception $e) {
@@ -104,6 +109,13 @@ class Product extends DBModel
 		}	    
 	    return $this->pro_id;
 	}	
+	public function get_code_max($parent_id){
+		$sql ="select IFNULL(max(p.pro_code),CONCAT((select ctg_code from category where ctg_id = :ctg_id ),'0000')) code_max 
+				from product p
+				where p.ctg_id = :ctg_id";
+		$res = $this->query_first($sql,array('ctg_id'=>$parent_id));
+		return $res['code_max'];
+	}
 	public function _update($param){
 		try {		
 		$sql = "update product
@@ -118,7 +130,8 @@ class Product extends DBModel
 					  disp_home =:disp_home,
 					  technology = :technology,
 					  promotions = :promotions,
-					  good_sell =:good_sell					 
+					  good_sell =:good_sell,
+					  src_link =:src_link					 
 					where pro_id = :pro_id
 				";
 		
@@ -136,7 +149,8 @@ class Product extends DBModel
 					  'content',
 					  'promotions',
 					  'technology',
-					  'user_id'	
+					  'user_id'	,
+					  'src_link'
 					));
 		$this->pho_execute($sql,$sql_par );			
 		return TRUE;	
@@ -223,7 +237,8 @@ class Product extends DBModel
 					  content,
 					  promotions,
 					  technology,
-					  full_box
+					  full_box,
+					  src_link
 			  from product where pro_id = :pro_id";
 		$res = $this->pho_query($sql ,array('pro_id'=>$pro_id));
 		if(count($res)> 0){
