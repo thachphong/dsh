@@ -110,7 +110,7 @@
                           <td><a href="{{url.get('b/')}}{{item['pro_name']}}_{{item['pro_id']}}" target="_blank" id="name_{{item['pro_id']}}">{{item['pro_name']}}</a></td>                     
                           <td id="status_{{item['pro_id']}}">{{item['status']}}</td>
                           <td>                            
-                            <span class="fa {%if item['good_sell'] == 1%}fa-square-o{%else%}fa-check-square{%endif%}" style="font-size: 16px;"></span>                            
+                            <span class="fa {%if item['good_sell'] == 0%}fa-square-o{%else%}fa-check-square{%endif%}" style="font-size: 16px;"></span>                            
                           </td>
                           <td>{{item['upd_date']}}</td> 
                           <td>                            

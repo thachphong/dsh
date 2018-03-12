@@ -37,14 +37,18 @@ class ProductController extends PHOController
 			$id = $exp[count($exp)-1];
 			
 			$result = $db->get_product_info($id);
-			//$result['des']= substr($result['content'],0,150).'...';			
-			
+			//$result['des']= substr($result['content'],0,150).'...';	
+			$sizelist =array();
+			if(strlen($result['sizelist'])>0){
+				$sizelist= explode(';',$result['sizelist']);
+			}		
+			$result['sizes'] = $sizelist;
 			$result['imglist'] = $img->get_img_bypro($id);			
 			$result['pricelist'] = $price->get_list_bypro($id);
 			$result['breadcrumbs'] = $ctg->get_breadcrumb($result['ctg_id']);
 		
 			//update traffic
-			//PhoLog::debug_var('view----',__LINE__);
+			//PhoLog::debug_var('view----',$result);
 			//$time = time();
 			//$traffic['time'] = $time;//-600;  //10phut		
 			//$traffic['section_id'] = session_id();

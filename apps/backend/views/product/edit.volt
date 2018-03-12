@@ -136,8 +136,23 @@
                                             
                       </div>
                       <div class="form-group">
+                        <label class="control-label col-md-2 col-sm-2 col-xs-12">Kích thước</label>
+                        <div class="col-md-5 col-sm-5 col-xs-12">
+                        	<a class="btn btn-default btn-xs btn_size" type="button" id="btn_S">S</a>
+                        	<a class="btn btn-default btn-xs btn_size" type="button" id="btn_M">M</a>
+                        	<a class="btn btn-default btn-xs btn_size" type="button" id="btn_L">L</a>
+                        	<a class="btn btn-default btn-xs btn_size" type="button" id="btn_XL">XL</a>
+                        	<a class="btn btn-default btn-xs btn_size" type="button" id="btn_XXL">XXL</a>
+                        </div>
+                        <div class="col-md-5 col-sm-5 col-xs-12">
+                          <input type="text" id="sizelist" name="sizelist" class="form-control" value="{{sizelist}}"> 
+                        </div>  
+                        
+                                            
+                      </div>
+                      <div class="form-group">
                         <div class="col-md-2 col-sm-2 col-xs-12">
-                          <a class="btn btn-primary" type="button" id="btn_add_size" style="float: right">Thêm màu sắc</a>
+                          <a class="btn btn-primary" type="button" id="btn_add_size" style="float: right">Thêm Giá</a>
                         </div>
                         <div class="col-md-10 col-sm-10 col-xs-12">
                           <table class="list_file" id="list_size">
@@ -153,7 +168,7 @@
                             </colgroup>
                             {%if new_flg ==1%} 
                             <tr>
-                              <td>Màu sắc</td>
+                              <td>Size</td>
                               <td><input type="text" name="pro_size[]" class="form-control size_format" value="-"></td>
                               <td>Giá nhập</td>
                               <td><input type="text" name="price_imp[]" class="col-md-3 form-control number_format imp" value=""></td>
@@ -165,7 +180,7 @@
                             {%endif%}
                             {%for pri in price_list%}                           
                             <tr>
-                              <td>Màu sắc</td>
+                              <td>Size</td>
                               <td><input type="text" name="pro_size[]" class="form-control size_format" value="{{pri['size']}}"></td>
                               <td>Giá nhập</td>
                               <td><input type="text" name="price_imp[]" class="col-md-3 form-control number_format imp" value="{{elements.currency_format(pri['price_imp'],',')}}"></td>
@@ -196,7 +211,8 @@
                       				</td>
                       				<td><label><input type="radio" name="chk" value="0" id="radio_{{img.pro_img_id}}" {%if img.avata_flg ==1%}checked="true"{%endif%} >làm ảnh đại diện</label>                      					
                       				</td>
-                      			
+                      				<td>Màu</td>
+                      				<td><input type="text" name="color[{{img.pro_img_id}}]" value="{{img.color}}"></td>
                       			</tr>
                       			{%endfor%}
                       		</table>
@@ -376,6 +392,16 @@
           });
         	return msg;
         };
+        $(document).off('click','.btn_size'); 
+        $(document).on('click','.btn_size',function(event){
+        	var id=$(this).attr('id').replace('btn_','');
+        	var val = $('#sizelist').val();
+        	if(val.trim()==''){
+        		$('#sizelist').val(id);
+        	}else{
+        		$('#sizelist').val(val+';'+id);
+        	}
+        });
         $(document).off('click','#btn_upload'); 
         $(document).on('click','#btn_upload',function(event){
         	$('#upload_file').click();
@@ -404,7 +430,7 @@
 					for(var i=0;i<datas.link.length;i++){
 		        		//form_data.append(i,file_data[i]);
 		        		cnt_add++;
-		        		var html_tr= '<tr id="tr_add_'+cnt_add+'"><td><img class="img-rounded" height="60" src="'+datas.link[i]+'" id="img_add_'+cnt_add+'"></td><td><a class="btn btn-danger btn-xs btn_del_img" id="del_add_'+cnt_add+'">Xóa hình</a></td><td><label><input type="radio" name="chk" value="1" id="radio_add_'+cnt_add+'">Chọn làm ảnh đại diện </label><input type="hidden" name="img_add['+cnt_add+']" value="'+datas.link[i]+'"></td></tr>';
+		        		var html_tr= '<tr id="tr_add_'+cnt_add+'"><td><img class="img-rounded" height="60" src="'+datas.link[i]+'" id="img_add_'+cnt_add+'"></td><td><a class="btn btn-danger btn-xs btn_del_img" id="del_add_'+cnt_add+'">Xóa hình</a></td><td><label><input type="radio" name="chk" value="1" id="radio_add_'+cnt_add+'">Chọn làm ảnh đại diện </label><input type="hidden" name="img_add['+cnt_add+']" value="'+datas.link[i]+'"></td><td>Màu</td><td><input type="text" name="color['+cnt_add+']" value=""></td></tr>';
 		        		$("#list_file").append(html_tr);		        		
 		        	}
 		        	if(get_avata_id()==""){

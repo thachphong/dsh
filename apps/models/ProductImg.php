@@ -9,7 +9,7 @@ class ProductImg extends DBModel
     public $pro_id;
   	public $img_path;
   	public $avata_flg;
-  	
+  	public $color;
     public function initialize()
     {
         $this->setSource("product_img");
@@ -22,6 +22,7 @@ class ProductImg extends DBModel
         $this->pro_id = $param['pro_id'];
         $this->img_path = $param['img_path'];
         $this->avata_flg = $param['avata_flg'];
+        $this->color = $param['color'];
         return $this->save();
     }
     public function get_img_bypro($pro_id){

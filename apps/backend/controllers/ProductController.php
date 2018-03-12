@@ -106,6 +106,8 @@ class ProductController extends PHOController
 			$param['full_box']=NULL;
 			$param['parent_id'] = 0;
 			$param['src_link'] = '';
+			$param['sizelist'] ='';
+			
 			/*if(strlen($param['parent_id'])==0){
 				$param['parent_id'] = 0;
 			}*/
@@ -146,11 +148,13 @@ class ProductController extends PHOController
 			  ,'full_box'	
 			  ,'folder_tmp' 
 			  ,'src_link'
+			  ,'sizelist'
+			  ,'color'
 			));
 				
 		$result['status'] = 'OK';	
 		$result['msg'] = 'Cập nhật thành công!';	
-		//PhoLog::debug_Var('---param--',$param);		
+		PhoLog::debug_Var('---param--',$param);		
 		$db = new Product();
 		$file = new FilePHP();
 		$msg = $this->check_validate_update($param);
@@ -220,6 +224,7 @@ class ProductController extends PHOController
 						$pimg = new ProductImg();
 						$paimg['img_path'] = $img['new'];
 						$paimg['avata_flg'] = 0;
+						$paimg['color'] = $param['color'][$key];
 						if($key == $avatakey){
 							$paimg['avata_flg'] = 1;
 						}				

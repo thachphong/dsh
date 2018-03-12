@@ -15,7 +15,7 @@
 				<div class="col-md-1 col-sm-1 col-xs-12 no_padding">
 					<ul class="img_list">
 					{%for key,img in imglist%}
-						<li class="img_item {%if key==0%}img_active{%endif%}"><img src="{{baseurl}}{{img.img_path}}"/></li>
+						<li class="img_item {%if key==0%}img_active{%endif%}" id="img_{{img.pro_img_id}}"><img src="{{baseurl}}{{img.img_path}}"/></li>
 					{%endfor%}
 					</ul>
 				</div>
@@ -37,12 +37,37 @@
 				</div>
 				<form action="{{baseurl}}cart/addtocart" method="post" id="formcart">
 				<div class="row margin-top10" {%if pricelist|length==1%}style="display:none"{%endif%}>
-					<span>Màu sắc</span>
+					<ul class="colorlist no_padding">
+						<li> Màu sắc</li>
+						{%for img in imglist%}
+							{%if img.color !=''%}
+							<li class="">
+								<a id="color_{{img.pro_img_id}}" class="color_item" href="javascript:;">
+									<img src="{{baseurl}}{{img.img_path}}" title="{{img.color}}"/>
+								</a>								
+							</li>
+							{%endif%}
+						{%endfor%}
+					</ul>					
 					<select id="pro_size" name="pro_size" style="width: auto">
 						{%for size in pricelist%}
 							<option value="{{size.pro_price_id}}">{{size.size}}</option>
 						{%endfor%}
 					</select>					
+				</div>
+				<div class="row margin-top10" {%if sizes|length==0%}style="display:none"{%endif%}>
+					<ul class="sizelist no_padding">
+						<li> Kích thước</li>
+						{%for size in sizes%}
+							{%if img.color !=''%}
+							<li class="">
+								<a class="color_item" href="javascript:;">
+									{{size}}
+								</a>								
+							</li>
+							{%endif%}
+						{%endfor%}
+					</ul>	
 				</div>
 				<div class="row margin-top10">
 					<span>Số lượng</span>
@@ -64,7 +89,7 @@
 		</div>
 	</div>
 	<div class="container margin-top20">		
-		<div class="col-md-9 col-sm-9 col-xs-12 no_padding_left">
+		<div class="col-md-80 col-sm-9 col-xs-12 no_padding_left">
 			<div class="row panel_bg">
 				<ul class="nav nav-tabs" id="comment_tab">
 	                 <li class="active"><a data-toggle="tab" href="#tab1">Mô tả</a></li>
@@ -122,13 +147,13 @@
 			</div>
 			</div>
 		</div>
-		<div class="col-md-3 col-sm-3 col-xs-12 no_padding_right">
+		<div class="col-md-20 col-sm-3 col-xs-12 no_padding">
 			<div class="pn-header-top">
 				<div class="pn-title">
 					<h2>Sản phẩm bán chạy</h2>
 				</div>
 			</div>
-			<div class="row pro_list good_sell">
+			<div class="row pro_list">
 				{{elements.getGoodsell()}}
 			</div>
 		</div>		
@@ -154,19 +179,37 @@
 		});
 		$(document).off('mouseover','.img_item');
 	    $(document).on('mouseover','.img_item',function(){
-	        $('.img_item').removeClass('img_active');
+	    	change_img($(this));
+	        /*$('.img_item').removeClass('img_active');
 	        $(this).addClass('img_active');
 	        var img = $(this).find('img')[0];
 	        var src = $(img).attr('src');
-	        console.log(src);
+	        //console.log(src);
+	        $("#zoom_08").attr('src',src);
+	        $("#zoom_08").attr('data-zoom-image',src);
+	        var ez =   $('#zoom_08').data('elevateZoom');	  
+   
+			  ez.swaptheimage(src, src); */
+	    });
+	    var change_img = function(obj){
+	    	$('.img_item').removeClass('img_active');
+	        $(obj).addClass('img_active');
+	        var img = $(obj).find('img')[0];
+	        var src = $(img).attr('src');
+	        //console.log(src);
 	        $("#zoom_08").attr('src',src);
 	        $("#zoom_08").attr('data-zoom-image',src);
 	        var ez =   $('#zoom_08').data('elevateZoom');	  
    
 			  ez.swaptheimage(src, src); 
-			     
-			        
-	    });
+	    }
+	    $(document).off('click','.color_item');
+	    $(document).on('click','.color_item',function(){
+	    	$('.color_item').removeClass('active');
+	    	$(this).addClass('active');
+	    	var id =$(this).attr('id').replace('color_','')
+	    	change_img($('#img_'+id));
+	    });	
 	    $(document).off('click','#add_cart');
 	    $(document).on('click','#add_cart',function(){
 	       Pho_json_ajax('POST',"{{url.get('cart/add')}}" ,{'pro_size':$('#pro_size').val(),'pro_qty':$('#pro_qty').val()},function(datas){

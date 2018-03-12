@@ -22,6 +22,7 @@ class Product extends DBModel
 	public  $del_flg;
 	public 	$pro_code;
 	public 	$src_link;
+	public  $sizelist;
 	public function initialize()
     {
         $this->setSource("product");
@@ -102,7 +103,7 @@ class Product extends DBModel
 		    $this->pro_code++;
 		    $this->pro_no = $param['pro_no'] .'-'.strtolower($this->pro_code);
 		    $this->pro_name   = $param['pro_name'].' '.$this->pro_code;
-		    		     
+		    $this->sizelist = $param['sizelist'];		     
 		    $this->save();
 	    } catch (\Exception $e) {
 			PhoLog::debug_var('update----',$e);
@@ -131,7 +132,8 @@ class Product extends DBModel
 					  technology = :technology,
 					  promotions = :promotions,
 					  good_sell =:good_sell,
-					  src_link =:src_link					 
+					  src_link =:src_link,
+					  sizelist =:sizelist					 
 					where pro_id = :pro_id
 				";
 		
@@ -150,7 +152,8 @@ class Product extends DBModel
 					  'promotions',
 					  'technology',
 					  'user_id'	,
-					  'src_link'
+					  'src_link',
+					  'sizelist'
 					));
 		$this->pho_execute($sql,$sql_par );			
 		return TRUE;	
@@ -238,7 +241,8 @@ class Product extends DBModel
 					  promotions,
 					  technology,
 					  full_box,
-					  src_link
+					  src_link,
+					  sizelist
 			  from product where pro_id = :pro_id";
 		$res = $this->pho_query($sql ,array('pro_id'=>$pro_id));
 		if(count($res)> 0){
