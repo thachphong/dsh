@@ -46,7 +46,13 @@ class ProductController extends PHOController
 			$result['imglist'] = $img->get_img_bypro($id);			
 			$result['pricelist'] = $price->get_list_bypro($id);
 			$result['breadcrumbs'] = $ctg->get_breadcrumb($result['ctg_id']);
-		
+			$color_flg = FALSE;
+			foreach($result['imglist'] as $item){
+				if($item->color !=''){
+					$color_flg = TRUE;
+				}
+			}
+			$result['color_flg']=$color_flg;
 			//update traffic
 			//PhoLog::debug_var('view----',$result);
 			//$time = time();

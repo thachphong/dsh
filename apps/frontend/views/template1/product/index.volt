@@ -36,41 +36,39 @@
 					<span>Trạng thái: {{status_name}}</span>					
 				</div>
 				<form action="{{baseurl}}cart/addtocart" method="post" id="formcart">
-				<div class="row margin-top10" {%if pricelist|length==1%}style="display:none"{%endif%}>
+				<div class="row margin-top10" {%if color_flg ==false%}style="display:none"{%endif%}>
+					<input type="hidden" name="color_sel" id="color_sel" value=""/>
 					<ul class="colorlist no_padding">
-						<li> Màu sắc</li>
+						<li class="title_color"> Màu sắc</li>
 						{%for img in imglist%}
 							{%if img.color !=''%}
 							<li class="">
-								<a id="color_{{img.pro_img_id}}" class="color_item" href="javascript:;">
+								<a id="color_{{img.pro_img_id}}" class="color_item" data="{{img.color}}" href="javascript:;">
 									<img src="{{baseurl}}{{img.img_path}}" title="{{img.color}}"/>
 								</a>								
 							</li>
 							{%endif%}
 						{%endfor%}
-					</ul>					
-					<select id="pro_size" name="pro_size" style="width: auto">
-						{%for size in pricelist%}
-							<option value="{{size.pro_price_id}}">{{size.size}}</option>
-						{%endfor%}
-					</select>					
+					</ul>
+					<span class="lab_red lab_invisible border_red" id="color_error">Bạn cần màu sắc !</span>
+					<input type="hidden" name="pro_size" value="{{pricelist[0].pro_price_id}}"/>
 				</div>
 				<div class="row margin-top10" {%if sizes|length==0%}style="display:none"{%endif%}>
+					<input type="hidden" name="size_sel" id="size_sel" value=""/>
 					<ul class="sizelist no_padding">
-						<li> Kích thước</li>
+						<li class="title_color"> Kích thước</li>
 						{%for size in sizes%}
-							{%if img.color !=''%}
 							<li class="">
-								<a class="color_item" href="javascript:;">
+								<a class="size_item" href="javascript:;" data="{{size}}">
 									{{size}}
 								</a>								
 							</li>
-							{%endif%}
 						{%endfor%}
 					</ul>	
+					<span class="lab_red lab_invisible border_red" id="size_error">Bạn cần kích thước !</span>
 				</div>
 				<div class="row margin-top10">
-					<span>Số lượng</span>
+					<span class="title_color">Số lượng</span>
 					<span class="pro_qty">
 						<a href="javascript:void(0)" onclick="qty_add(-1)"><i class="fa fa-minus" ></i></a>
 						<input value="1" id="pro_qty" name="pro_qty"/>
@@ -171,6 +169,11 @@
 {{ partial('includes/pho_ajax') }}
 <script>
 	$(document).ready(function() {
+		var color_flg = {{color_flg}};
+		var size_flg = false;
+		{%if sizes|length > 0%}
+			size_flg = true;
+		{%endif%}
 		$("#zoom_08").elevateZoom({
 				zoomWindowFadeIn: 500,
 				zoomWindowFadeOut: 500,
@@ -209,9 +212,17 @@
 	    	$(this).addClass('active');
 	    	var id =$(this).attr('id').replace('color_','')
 	    	change_img($('#img_'+id));
+	    	$('#color_sel').val($(this).attr('data'));
 	    });	
+	    $(document).off('click','.size_item');
+	    $(document).on('click','.size_item',function(){
+	    	$('.size_item').removeClass('active');
+	    	$(this).addClass('active');
+	    	$('#size_sel').val($(this).attr('data'));
+	    });		    
 	    $(document).off('click','#add_cart');
 	    $(document).on('click','#add_cart',function(){
+	       if(!color_size_validate()){return;}
 	       Pho_json_ajax('POST',"{{url.get('cart/add')}}" ,{'pro_size':$('#pro_size').val(),'pro_qty':$('#pro_qty').val()},function(datas){
 		        if(datas.status =="OK"){
 		          //Pho_modal_close("modal1");
@@ -226,8 +237,28 @@
 	    });
 	    $(document).off('click','#addtocart');
 	    $(document).on('click','#addtocart',function(){
+	    	if(!color_size_validate()){return;}
 	       $('#formcart').submit();
 	    });
+	    var color_size_validate = function(){
+	    	var chk = true;
+	    	console.log(color_flg);
+	    	console.log(size_flg);
+	    	if(color_flg && $('#color_sel').val()==''){
+	    		$('#color_error').show();
+	    		chk = false;
+	    	}else{
+	    		$('#color_error').hide();
+	    	}
+	    	if(size_flg && $('#size_sel').val()==''){
+	    		$('#size_error').show();
+	    		chk = false;
+	    	}else{
+	    		$('#size_error').hide();
+	    	}
+	    	console.log(chk);
+	    	return chk;
+	    }
 	});
 	function qty_add(qty){
          var val = parseInt($("#pro_qty").val());

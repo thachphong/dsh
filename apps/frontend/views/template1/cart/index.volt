@@ -20,16 +20,18 @@
                   <table class="table">
                   	<colgroup>
                   		<col width="40%">
-                  		<col width="10%">
-                  		<col width="15%">
-                  		<col width="15%">
-                  		<col width="15%">
+                  		<col width="9%">
+                  		<col width="9%">
+                  		<col width="11%">
+                  		<col width="12%">
+                  		<col width="11%">
                   		<col width="5%">
                   	</colgroup>
                     <tbody>
                         <tr class="tenbold">
                                           <th class="sanpham">Sản Phẩm</th>
-                                          <th class="sanpham">Màu sắc/ Kích thước</th>
+                                          <th class="sanpham">Màu sắc</th>
+                                          <th class="sanpham">Kích thước</th>
                                           <th style="text-align:right">Giá</th>
                                           <th style="text-align:center">Số Lượng</th>
                                           <th style="text-align:right">Thành tiền</th>
@@ -38,6 +40,7 @@
                         {%for item in carts%}
                         	<tr class="spline tr_product">                                       
                                 <td><img src="{{baseurl}}crop/50x50{{item['img_path']}}" style="margin-right:10px">{{item['pro_name']}}</td>
+                                <td>{{item['color']}}</td>
                                 <td>{{item['size']}}</td>
                                 <td align="right">
                                 <span class="amount pro_price" data="{{item['price_exp']}}">{{elements.currency_format(item['price_exp'])}}<span>₫</span></span>                    
@@ -47,7 +50,7 @@
                                 <input type="hidden" name="pro_price_id[]" value="{{item['pro_price_id']}}">     
                                 <span class="cart_pro_qty">
 									<a href="javascript:void(0)" onclick="qty_add({{item['pro_price_id']}},-1)" class="qty_btn"><i class="fa fa-minus" ></i></a>
-									<input value="1" id="pro_qty_{{item['pro_price_id']}}" name="pro_qty[]" class="qty_btn" style="width: 40px"/>
+									<input value="{{item['qty']}}" id="pro_qty_{{item['pro_price_id']}}" name="pro_qty[]" class="qty_btn" style="width: 40px"/>
 									<a href="javascript:void(0)" onclick="qty_add({{item['pro_price_id']}},1)" class="qty_btn"><i class="fa fa-plus"></i></a>
 								</span>                                      
                                 </td>

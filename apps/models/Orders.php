@@ -27,16 +27,25 @@ class Orders extends DBModel
          return Orders::find();
     }
     public function get_products($cart){
-		$listid = array_keys($cart);
-		
-		$sql ="select p.pro_id,p.pro_no,p.pro_name,t.price_seller,t.price_exp,t.size,t.pro_price_id,im.img_path
+		$listkey = array_keys($cart);
+		$listid = array();
+		foreach($listkey as $item){
+			$exp = explode('_',$item);
+			$listid[]=$exp[0];
+		}
+		$sql ="select p.pro_id,p.pro_no,p.pro_name,t.price_seller,t.price_exp,t.pro_price_id,im.img_path
 				from product p
 				INNER JOIN product_price t on t.pro_id = p.pro_id
 				INNER JOIN product_img im on im.pro_id = p.pro_id and im.avata_flg = 1
 				where t.pro_price_id in (".implode(',',$listid).")";
 		//PhoLog::debug_var('sql--',$cart);
 		//PhoLog::debug_var('sql--',$sql);
-		return $this->pho_query($sql);
+		$res = $this->pho_query($sql);
+		$result = array();
+		foreach($res as $item){
+			$result[$item['pro_price_id']]=$item;
+		}
+		return $result;
 	}
 	public function _insert($param){
 		$this->full_name = $param['fullname'];

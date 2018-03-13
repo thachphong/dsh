@@ -14,20 +14,34 @@ class CartController extends PHOController
 	{		
 		$db = new Orders();
 		$cart = $this->session->get('cart_info');
-		//ACWLog::debug_var('--cart--',$cart );
+		
 		$products = array();
 		$total_amount = 0;
+		//$list_pro = array();
 		if($cart != NULL){
-			$products = $db->get_products($cart);			
-			foreach($products as &$item){
-				$item['qty'] = $cart[$item['pro_price_id']];
-				$item['amount'] = $item['qty']*$item['price_exp'];
+			$products = $db->get_products($cart);	
+				
+			foreach($cart as $key=>&$item){
+				$exp = explode('_',$key);
+				//PhoLog::debug_var('--cart--',$exp );
+				$pro_price_id = $exp[0];
+				$row = $products[$pro_price_id];
+				//$item['qty'] = $cart[$item['pro_price_id']];
+				$item['amount'] = $item['qty']*$row['price_exp'];
+				$item['price_exp'] = $row['price_exp'];
+				$item['pro_no'] = $row['pro_no'];
+				$item['pro_name'] = $row['pro_name'];
+				$item['price_seller'] = $row['price_seller'];
+				$item['img_path'] = $row['img_path'];
+				$item['pro_price_id'] = $pro_price_id;
 				$total_amount += $item['amount'];
+				//$list_pro[$key] = $item;
 			}
 		}
+		
 		$this->set_template_share();
 		$this->ViewVAR(array(
-			'carts' =>$products
+			'carts' =>$cart
 			,'total_amount'=>$total_amount
 		));		
 	}
@@ -47,25 +61,19 @@ class CartController extends PHOController
 		$param = $this->get_param(array(
 			'pro_id',
 			'pro_qty',
-			'pro_size'
+			'pro_size',
+			'color_sel',
+			'size_sel'
 		));	
 		$cart = $this->session->get('cart_info');
-		if($cart != NULL){
-			if(isset($cart[$param['pro_size']])){
-				$cart[$param['pro_size']]= $cart[$param['pro_size']] + $param['pro_qty'];				
-			}else{
-				//$size_info =$this->get_price($param['pro_size']);
-				$cart[$param['pro_size']]=  $param['pro_qty'];
-				//$cart[$param['pro_size']]['price'] = $size_info['price_new'];
-				//$cart[$param['pro_size']]['size'] = $size_info['size'];
-			}
-		}else{
-			//$size_info =$this->get_price($param['pro_size']);
-			$cart[$param['pro_size']] =  $param['pro_qty'];
-			//$cart[$param['pro_size']]['price'] = $size_info['price_new'];
-			//$cart[$param['pro_size']]['size'] = $size_info['size'];
-		}
-			
+		$key = $this->get_key($param);
+		if( $cart != NULL && isset($cart[$key])){
+			$cart[$key]['qty'] +=  $param['pro_qty'];				
+		}else{			
+			$cart[$key]['qty'] =  $param['pro_qty'];
+			$cart[$key]['color'] = $param['color_sel'];
+			$cart[$key]['size'] = $param['size_sel'];
+		}		
 		$this->session->set('cart_info', $cart);
 		$result['total'] = count($cart);
 		$result['status'] = 'OK';
@@ -77,27 +85,32 @@ class CartController extends PHOController
 		$param = $this->get_param(array(
 			'pro_id',
 			'pro_qty',
-			'pro_size'
+			'pro_size',
+			'color_sel',
+			'size_sel'
 		));	
 		$cart = $this->session->get('cart_info');
-		if($cart != NULL){
-			if(isset($cart[$param['pro_size']])){
-				$cart[$param['pro_size']]= $cart[$param['pro_size']] + $param['pro_qty'];				
-			}else{
-				//$size_info =$this->get_price($param['pro_size']);
-				$cart[$param['pro_size']]=  $param['pro_qty'];
-				//$cart[$param['pro_size']]['price'] = $size_info['price_new'];
-				//$cart[$param['pro_size']]['size'] = $size_info['size'];
-			}
-		}else{
-			//$size_info =$this->get_price($param['pro_size']);
-			$cart[$param['pro_size']] =  $param['pro_qty'];
-			//$cart[$param['pro_size']]['price'] = $size_info['price_new'];
-			//$cart[$param['pro_size']]['size'] = $size_info['size'];
-		}
+		$key = $this->get_key($param);
+		if( $cart != NULL && isset($cart[$key])){
+			$cart[$key]['qty'] +=  $param['pro_qty'];				
+		}else{			
+			$cart[$key]['qty'] =  $param['pro_qty'];
+			$cart[$key]['color'] = $param['color_sel'];
+			$cart[$key]['size'] = $param['size_sel'];
+		}		
 			
 		$this->session->set('cart_info', $cart);		
 		$this->_redirect(BASE_URL_NAME.'cart');
+	}
+	public function get_key($param){
+		$key = $param['pro_size'];
+		if(strlen($param['color_sel'])>0){
+			$key .= '_'.$param['color_sel'];
+		}
+		if(strlen($param['size_sel'])>0){
+			$key .= '_'.$param['size_sel'];
+		}
+		return $key;
 	}
 	public function deleteAction($pro_price_id)
 	{	
