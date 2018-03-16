@@ -19,19 +19,21 @@
 						</div>
 					</div>
 				<form id="from_user">					
-					<div class="row row-margin-bottom">
+					<!--<div class="row row-margin-bottom">
 						<label class="col-md-3 col-sm-3 col-xs-12 title_col">Tên đăng nhập</label>
 						<div class="col-md-7 col-sm-7 col-xs-12">
 							<input type="text" value="{{user.user_no}}" disabled="disabled">
 						</div>
 						<input type="hidden" name="avata" id="avata" value="">
 						<input type="hidden" name="folder_tmp" id="folder_tmp" value="{{folder_tmp}}"/>						
-					</div>
+					</div>-->
 					<div class="row row-margin-bottom">
 						<label class="col-md-3 col-sm-3 col-xs-12 title_col">Email</label>
 						<div class="col-md-7 col-sm-7 col-xs-12">
 							<input type="text" value="{{user.email}}" disabled="disabled">							
 						</div>
+						<input type="hidden" name="avata" id="avata" value="">
+						<input type="hidden" name="folder_tmp" id="folder_tmp" value="{{folder_tmp}}"/>	
 					</div>
 					<div class="row row-margin-bottom">
 						<label class="col-md-3 col-sm-3 col-xs-12 title_col">Họ và tên<span class="lab_red">(*)</span></label>
@@ -45,6 +47,54 @@
 						<div class="col-md-7 col-sm-7 col-xs-12">
 							<input type="text" name="mobile"  value="{{user.mobile}}" id="mobile" required>
 							<label class="lab_red lab_invisible" id="mobile_error">Bạn cần nhập số điện thoại</label>
+						</div>
+					</div>
+					<div class="row row-margin-bottom">
+						<label class="col-md-3 col-sm-3 col-xs-12 title_col">Tỉnh/TP<span class="lab_red">(*)</span></label>
+						<div class="col-md-7 col-sm-7 col-xs-12">
+							<select id="m_provin_id" name="provin_id" required>            			
+		            			<option value="">--Chọn Tỉnh/TP--</option>
+		            			{%for item in provins%}
+		            				{%if user.city==item.m_provin_id%}
+		            					<option value="{{item.m_provin_id}}" selected="selected">{{item.m_provin_name}}</option>
+		            				{%else%}
+		            					<option value="{{item.m_provin_id}}">{{item.m_provin_name}}</option>
+		            				{%endif%}
+		            			{%endfor%}
+		            		</select>
+							<label class="lab_red lab_invisible" id="m_provin_id_error">Bạn cần chọn Tỉnh/TP</label>
+						</div>
+					</div>
+					<div class="row row-margin-bottom">
+						<label class="col-md-3 col-sm-3 col-xs-12 title_col">Quận/Huyện<span class="lab_red">(*)</span></label>
+						<div class="col-md-7 col-sm-7 col-xs-12">
+							<select id="district_id" name="district_id" required>            			
+		            			<option value="">--Chọn Quận/Huyện--</option>
+		            			{%for item in provins%}
+		            				{%if user.city==item.m_provin_id%}
+		            					<option value="{{item.m_provin_id}}" selected="selected">{{item.m_provin_name}}</option>
+		            				{%else%}
+		            					<option value="{{item.m_provin_id}}">{{item.m_provin_name}}</option>
+		            				{%endif%}
+		            			{%endfor%}
+		            		</select>
+							<label class="lab_red lab_invisible" id="district_id_error">Bạn cần chọn Quận/Huyện</label>
+						</div>
+					</div>
+					<div class="row row-margin-bottom">
+						<label class="col-md-3 col-sm-3 col-xs-12 title_col">Phường/xã<span class="lab_red">(*)</span></label>
+						<div class="col-md-7 col-sm-7 col-xs-12">
+							<select id="m_provin_id" name="provin_id" required>            			
+		            			<option value="">--Chọn Phường/xã--</option>
+		            			{%for item in provins%}
+		            				{%if user.city==item.m_provin_id%}
+		            					<option value="{{item.m_provin_id}}" selected="selected">{{item.m_provin_name}}</option>
+		            				{%else%}
+		            					<option value="{{item.m_provin_id}}">{{item.m_provin_name}}</option>
+		            				{%endif%}
+		            			{%endfor%}
+		            		</select>
+							<label class="lab_red lab_invisible" id="m_provin_id_error">Bạn cần chọn Phường/xã</label>
 						</div>
 					</div>
 					<!--<div class="row row-margin-bottom">

@@ -34,6 +34,7 @@ class UserinfoController extends PHOController
 		$login_info =  $this->session->get('auth');
 		$result['user']=$db->get_info($login_info->user_id);
 		$result['folder_tmp']= uniqid('',TRUE);
+		$result['provins'] = $this->get_Provin();
 		$this->set_template_share();
 		$this->ViewVAR($result);
 	}

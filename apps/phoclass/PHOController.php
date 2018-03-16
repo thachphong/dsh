@@ -8,7 +8,7 @@ use Phalcon\Cache\Frontend\Data as FrontData;
 use Phalcon\Cache\Frontend\Output as FrontOutput;
 use Phalcon\Cache\Backend\Memory;
 use Phalcon\Http\Request;
-
+use Multiple\Models\Provincial;
 class PHOController extends Controller
 {
 	protected function get_param($arr_pa)
@@ -86,8 +86,8 @@ class PHOController extends Controller
 			return $this->response->send();
 		}
 	}
-	protected function createCache($options){
-		$frontendCache = new FrontData($options); 	
+	protected function createCache($time){
+		$frontendCache = new FrontData([ 'lifetime' => $time]); 	
  		$cache = new BackFile( $frontendCache,  ['cacheDir' => PHO_CACHE_DIR ]);
  		return $cache;
 	}
@@ -158,5 +158,15 @@ class PHOController extends Controller
 			return number_format($str,0,".",",");
 		}
 		return "";
+	}
+	public function get_Provin(){
+		$cache = $this->createCache(864000);//10 ngay
+		$key="m_provin_list.cache";
+		$data = $cache->get($key);
+		if($data == NULL){
+			$data = Provincial::get_all();
+			$cache->save($key,$data);
+		}
+		return $data; 
 	}
 }

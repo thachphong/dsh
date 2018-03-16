@@ -134,6 +134,7 @@ class ProductController extends PHOController
 			  'price_exp' ,
 			  'price_imp',
 			  'price_seller',
+			  'pro_price_id',
 			  'status' ,
 			  'disp_home' ,
 			  'good_sell',

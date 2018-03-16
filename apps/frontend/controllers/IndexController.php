@@ -26,8 +26,8 @@ class IndexController extends PHOController
 			
 		    try{	
 				//PhoLog::debug_var('test',__LINE__);
-				$options = ['lifetime' => 900 ]; // thoi gian tinh bang giay 
-				$cacheData = $this->createCache($options); //cache data
+				//$options = ['lifetime' => 900 ]; // thoi gian tinh bang giay 
+				$cacheData = $this->createCache(900); //cache data
 				//PhoLog::debug_var('test',__LINE__);
 		 		//$frontendCache = new FrontData($options); 	
 		 		///$cache = new BackFile( $frontendCache,  ['cacheDir' => PHO_CACHE_DIR ]);	
@@ -97,8 +97,8 @@ class IndexController extends PHOController
 			
 		    try{	
 				PhoLog::debug_var('test',__LINE__);
-				$options = ['lifetime' => 900 ]; // thoi gian tinh bang giay 
-				$cacheData = $this->createCache($options); //cache data
+				//$options = ['lifetime' => 900 ]; // thoi gian tinh bang giay 
+				$cacheData = $this->createCache(900); //cache data
 				PhoLog::debug_var('test',__LINE__);
 		 		//$frontendCache = new FrontData($options); 	
 		 		///$cache = new BackFile( $frontendCache,  ['cacheDir' => PHO_CACHE_DIR ]);	
@@ -164,7 +164,7 @@ class IndexController extends PHOController
 	}
 	public function districtAction($m_provin_id){		
 		$ckey ="m_district_$m_provin_id.cache";
-		$cache = $this->createCache(['lifetime' => 864000 ]); // 10 ngay
+		$cache = $this->createCache(864000); // 10 ngay
 		$data = $cache->get($ckey);
 		if($data === null){			
 			$db = new District();
@@ -178,7 +178,7 @@ class IndexController extends PHOController
 	}
 	public function sbasicAction(){		
 		$ckey ="seach_basic.cache";
-		$cache = $this->createCache(['lifetime' => 86400 ]); // 1 ngay
+		$cache = $this->createCache( 86400 ); // 1 ngay
 		$data = $cache->get($ckey);
 		if($data === null){			
 			$db = new District();
@@ -194,7 +194,7 @@ class IndexController extends PHOController
 	}
 	public function sadvanceAction(){		
 		$ckey ="seach_advance.cache";
-		$cache = $this->createCache(['lifetime' => 86400 ]); // 1 ngay
+		$cache = $this->createCache(86400); // 1 ngay
 		$data = $cache->get($ckey);
 		if($data === null){			
 			$mw = new Ward();
@@ -207,7 +207,7 @@ class IndexController extends PHOController
 	
 	public function wardAction($m_district_id){		
 		$ckey ="m_ward_$m_district_id.cache";
-		$cache = $this->createCache(['lifetime' => 864000 ]); // 10 ngay
+		$cache = $this->createCache(864000); // 10 ngay
 		$data = $cache->get($ckey);
 		if($data === null){
 			$db = new Ward();			
@@ -219,7 +219,7 @@ class IndexController extends PHOController
 	}
 	public function streetAction($m_district_id){
 		$ckey ="street_".$m_district_id;
-		$cache = $this->createCache(['lifetime' => 864000 ]); // 10 ngay
+		$cache = $this->createCache(864000); // 10 ngay
 		$data = $cache->get($ckey);
 		if($data === null){			
 			$mw = new Street();	

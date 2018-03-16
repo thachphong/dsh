@@ -49,6 +49,7 @@ class CartController extends PHOController
 			,'total_ck'=>$total_ck
 		));		
 	}
+	
 	public function successAction($order_id)
 	{			
 		$db = new Orders();
@@ -133,31 +134,78 @@ class CartController extends PHOController
 		$param = self::get_param(array(			  
 			  'pro_qty',
 			  'pro_price_id',
-			  'address_ship'
+			  'sizes',
+			  'colors'
 		));	
 		$cart = array();//ACWSession::get("cart_info");
-		foreach($param['pro_price_id'] as $key=>$val){
-			$cart[$val] = $param['pro_qty'][$key];
-		}	
-		$this->session->set('cart_info', $cart);
+		if($_SERVER['REQUEST_METHOD'] =='POST'){
+			foreach($param['pro_price_id'] as $key=>$val){
+				$kpram['pro_size']= $val;
+				$kpram['color_sel']= $param['colors'][$key];
+				$kpram['size_sel']= $param['sizes'][$key];
+				$key_new = $this->get_key($kpram);
+			
+				$cart[$key_new]['qty'] =  $param['pro_qty'][$key];
+				$cart[$key_new]['color'] = $kpram['color_sel'];
+				$cart[$key_new]['size'] = $kpram['size_sel'];
+			}	
+			$this->session->set('cart_info', $cart);
+		}else{
+			$cart = $this->session->get('cart_info');
+		}
+		
+		
 		$result['provins'] = Provincial::get_all();
 		$products = array();
 		$db = new Orders();
+		
 		$total_amount = 0;
+		$total_ck=0;
+		//$list_pro = array();
 		if($cart != NULL){
-			$products = $db->get_products($cart);			
-			foreach($products as &$item){
-				$item['qty'] = $cart[$item['pro_price_id']];
-				$item['amount'] = $item['qty']*$item['price_exp'];
+			$products = $db->get_products($cart);	
+				
+			foreach($cart as $key=>&$item){
+				$exp = explode('_',$key);
+				//PhoLog::debug_var('--cart--',$exp );
+				$pro_price_id = $exp[0];
+				$row = $products[$pro_price_id];
+				//$item['qty'] = $cart[$item['pro_price_id']];
+				$item['amount'] = $item['qty']*$row['price_exp'];
+				$item['chietkhau'] = $item['qty']*($row['price_exp']-$row['price_seller']);
+				$item['price_exp'] = $row['price_exp'];
+				$item['pro_no'] = $row['pro_no'];
+				$item['pro_name'] = $row['pro_name'];
+				$item['price_seller'] = $row['price_seller'];
+				$item['img_path'] = $row['img_path'];
+				$item['pro_price_id'] = $pro_price_id;
 				$total_amount += $item['amount'];
+				$total_ck +=$item['chietkhau'];
+				//$list_pro[$key] = $item;
 			}
 		}
-		$result['carts']=$products;
+		$user = $this->session->get('auth');
+		if($user != NULL){
+			$result['full_name']=$user->user_name;
+			$result['address']=$user->address;
+			$result['provin_id']=$user->city;
+			$result['district_id']=$user->district;
+			$result['email']=$user->email;
+			$result['phone']=$user->mobile;
+		}else{
+			$result['full_name']='';
+			$result['address']='';
+			$result['pro_vin_id']='';
+			$result['district_id']='';
+			$result['email']='';
+			$result['phone']='';
+		}
+		
+		$result['carts']=$cart;
 		$result['total_amount']=$total_amount;
+		$result['total_ck']=$total_ck;
 		$this->set_template_share();
 		$this->ViewVAR($result);
-		
-
 	}
 	public function updateAction(){
 		//ACWLog::debug_var('---cart---',$_POST);

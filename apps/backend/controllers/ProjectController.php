@@ -30,7 +30,7 @@ class ProjectController extends PHOController
 	{	
 		$db = new Project();
 		$ctg = new Category();
-		$cache = $this->createCache( ['lifetime' => 86400 ]); // 1 ngay
+		$cache = $this->createCache(86400); // 1 ngay
 		$cacheKey = 'param_project.cache';
 		$param = $cache->get($cacheKey);
 		if($param === null){	

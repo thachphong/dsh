@@ -79,7 +79,7 @@ class CategoryController extends PHOController
         if(isset($param['page']) && strlen($param['page']) > 0){
             $page=$param['page'];
         }
-        $cache = $this->createCache(['lifetime' => 600 ]); //10 phut
+        $cache = $this->createCache(600); //10 phut
         $cachekey = $ctg_no."_p".$page;
         $param = $cache->get($cachekey);
         if($param == null){
@@ -129,7 +129,7 @@ class CategoryController extends PHOController
         if(isset($param['page']) && strlen($param['page']) > 0){
             $page=$param['page'];
         }
-        $cache = $this->createCache(['lifetime' => 600 ]); //10 phut
+        $cache = $this->createCache( 600); //10 phut
         $cachekey = $ctg_no."_da".$page;
         $param = $cache->get($cachekey);
         if($param == null){

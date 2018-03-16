@@ -135,7 +135,7 @@ class ExchangeController extends PHOController
 		
 	}
 	public function get_define(){
-		$cache = $this->createCache(['lifetime' => 86400 ]); //1 ngay
+		$cache = $this->createCache(86400); //1 ngay
         $cachekey ="paysend.cache";
         $cdata = $cache->get($cachekey);        
         if($cdata == null){

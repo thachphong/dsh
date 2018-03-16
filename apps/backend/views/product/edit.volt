@@ -169,7 +169,9 @@
                             {%if new_flg ==1%} 
                             <tr>
                               <td>Size</td>
-                              <td><input type="text" name="pro_size[]" class="form-control size_format" value="-"></td>
+                              <td><input type="text" name="pro_size[]" class="form-control size_format" value="-">
+                              	  <input type="hidden" name="pro_price_id[]" value="0">
+                              </td>
                               <td>Giá nhập</td>
                               <td><input type="text" name="price_imp[]" class="col-md-3 form-control number_format imp" value=""></td>
                               <td>Giá CTV</td>
@@ -181,7 +183,9 @@
                             {%for pri in price_list%}                           
                             <tr>
                               <td>Size</td>
-                              <td><input type="text" name="pro_size[]" class="form-control size_format" value="{{pri['size']}}"></td>
+                              <td><input type="text" name="pro_size[]" class="form-control size_format" value="{{pri['size']}}">
+                              	  <input type="hidden" name="pro_price_id[]" value="{{pri['pro_price_id']}}">
+                              </td>
                               <td>Giá nhập</td>
                               <td><input type="text" name="price_imp[]" class="col-md-3 form-control number_format imp" value="{{elements.currency_format(pri['price_imp'],',')}}"></td>
                               <td>Giá CTV</td>
@@ -462,7 +466,7 @@
     });
     $(document).off('click','#btn_add_size'); 
     $(document).on('click','#btn_add_size',function(event){
-          var html='<tr><td>Màu sắc</td><td><input type="text" name="pro_size[]" class="form-control size_format" value=""></td><td>Giá nhập</td><td><input type="text" name="price_imp[]" class="form-control number_format imp" value="" ></td><td>Giá CTV</td><td><input type="text" name="price_seller[]" class="form-control number_format" value="" ></td><td>Giá bán lẻ</td><td><input type="text" name="price_exp[]" class="form-control number_format" value="" ></td></tr>';
+          var html='<tr><td>Màu sắc</td><td><input type="text" name="pro_size[]" class="form-control size_format" value=""><input type="hidden" name="pro_price_id[]" value="0"></td><td>Giá nhập</td><td><input type="text" name="price_imp[]" class="form-control number_format imp" value="" ></td><td>Giá CTV</td><td><input type="text" name="price_seller[]" class="form-control number_format" value="" ></td><td>Giá bán lẻ</td><td><input type="text" name="price_exp[]" class="form-control number_format" value="" ></td></tr>';
           $('#list_size').append(html);
     });    
 		var get_avata_id =  function(){

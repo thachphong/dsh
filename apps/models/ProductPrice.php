@@ -29,22 +29,40 @@ class ProductPrice extends DBModel
         return $this->save();
     }
     public function insert_multi($param){
-    	$this->pho_execute("delete from product_price where pro_id=".$param['pro_id']);
+    	//$this->pho_execute("delete from product_price where pro_id=".$param['pro_id']);
 		foreach($param['pro_size'] as $key=>$item){
 			$db = new ProductPrice();
 			if(strlen($item) >0){
-				$db->avata_flg =0;
-				if($key == 0){
-					$db->avata_flg =1;
+				if($param['pro_price_id'][$key]==0){
+					$db->avata_flg =0;
+					if($key == 0){
+						$db->avata_flg =1;
+					}
+					$db->pro_id = $param['pro_id'];
+					$db->size = $item;
+					$db->price_exp = $param['price_exp'][$key];
+					$db->price_imp = $param['price_imp'][$key];
+					$db->price_seller = $param['price_seller'][$key];
+					$db->save();
+				}else{
+					$pa_upd['pro_price_id']=$param['pro_price_id'][$key];
+					$pa_upd['price_exp']=$param['price_exp'][$key];
+					$pa_upd['price_imp']=$param['price_imp'][$key];
+					$pa_upd['price_seller']=$param['price_seller'][$key];
+					$pa_upd['size']=$item;
+					$this->_update($pa_upd);
 				}
-				$db->pro_id = $param['pro_id'];
-				$db->size = $item;
-				$db->price_exp = $param['price_exp'][$key];
-				$db->price_imp = $param['price_imp'][$key];
-				$db->price_seller = $param['price_seller'][$key];
-				$db->save();
 			}
 		}
+	}
+	public function _update($param){
+		$sql="update product_price
+				set price_exp=:price_exp,
+					price_imp =:price_imp,
+					price_seller=:price_seller,
+					size=:size
+				where pro_price_id=:pro_price_id";
+		$this->pho_execute($sql,$param);
 	}
     
     public function get_price_list($pro_id){
