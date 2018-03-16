@@ -63,4 +63,11 @@ class Orders extends DBModel
 		PhoLog::debug_var('sql--',$sql);
 		return $this->query_first($sql);
 	}
+	public function get_list_byuser($user_id,$start_row =0){
+		$sql="selet
+			from orders m
+			inner join orders_detail d on d.ord_id = m.ord_id
+			where m.";
+		return $this->pho_query($sql);
+	}
 }

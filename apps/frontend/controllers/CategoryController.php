@@ -192,7 +192,7 @@ class CategoryController extends PHOController
       	if(isset($param['page']) && strlen($param['page']) > 0){
             $page=$param['page'];
         }
-        $db = new Posts();
+        $db = new Product();
         $ctg = new Category();
         $start_row = 0;
         if( $page > 1){
@@ -208,8 +208,8 @@ class CategoryController extends PHOController
         if(isset($param['addr']) && strlen($param['addr']) > 0){
             $param['address_ascii'] = $this->convert_ascii($param['addr']);
         }   
-        $param['post']=$db->search_posts($param,$start_row);
-        $param['total_post'] = $db->search_posts_count($param);
+        $param['post']=$db->search_product($param['ctg_no'],$start_row);
+        $param['total_post'] = $db->search_product_count($param['ctg_no']);
         $param['total_page']= round($param['total_post']/PAGE_LIMIT_RECORD);
         
         $start = $page - 2;
@@ -230,9 +230,9 @@ class CategoryController extends PHOController
         }
         $param['start'] = $start;
         $param['end'] = $end;
-        $param['dstlist'] = array();
+        //$param['dstlist'] = array();
         //if(isset($param['provin']) && strlen($param['provin']) > 0){
-            $param['dstlist'] = $db->get_bydistrict($param);
+            //$param['dstlist'] = $db->get_bydistrict($param);
         //}
         //PhoLog::debug_var('---abc--',$param['dstlist']);
         //$this->set_template_share();

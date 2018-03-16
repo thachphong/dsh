@@ -297,8 +297,8 @@ class Product extends DBModel
 				ORDER BY p.pro_id desc
 				limit $limit
 				OFFSET $start_row";
-		PhoLog::debug_var('vip',$sql);
-		PhoLog::debug_var('vip',$param);
+		//PhoLog::debug_var('vip',$sql);
+		//PhoLog::debug_var('vip',$param);
 		return $this->pho_query($sql,$param);
 	}	
 	public function get_list_byctg_count($ctg_no){
@@ -327,5 +327,38 @@ class Product extends DBModel
 		}
 		return 0;
 	}
+	public function search_product($search_val,$start_row=0){	
+		$limit = PAGE_LIMIT_RECORD;		
 		
+		$param['pro_no'] =	'%'.str_replace(' ','%',$search_val).'%';			
+		$sql ="select p.pro_id,p.pro_name,p.pro_no,img.img_path,pri.price_exp,pri.price_seller
+				from product p
+				INNER JOIN product_img img on img.pro_id = p.pro_id and img.avata_flg =1
+				INNER JOIN product_price pri on pri.pro_id = p.pro_id and pri.avata_flg = 1
+				where p.del_flg= 0
+				and p.pro_no  like :pro_no
+				ORDER BY p.pro_id desc
+				limit $limit
+				OFFSET $start_row";
+		//PhoLog::debug_var('vip',$sql);
+		//PhoLog::debug_var('vip',$param);
+		return $this->pho_query($sql,$param);
+	}
+	public function search_product_count($search_val){	
+		$limit = PAGE_LIMIT_RECORD;		
+		
+		$param['pro_no'] =	'%'.str_replace(' ','%',$search_val).'%';			
+		$sql ="select count(p.pro_id) cnt
+				from product p
+				INNER JOIN product_img img on img.pro_id = p.pro_id and img.avata_flg =1
+				INNER JOIN product_price pri on pri.pro_id = p.pro_id and pri.avata_flg = 1
+				where p.del_flg= 0
+				and p.pro_no  like :pro_no
+				";
+		$res = $this->query_first($sql,$param);
+		if(count($res)>0){
+			return $res['cnt'];
+		}
+		return 0;
+	}	
 }
