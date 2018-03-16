@@ -17,6 +17,7 @@ class CartController extends PHOController
 		
 		$products = array();
 		$total_amount = 0;
+		$total_ck=0;
 		//$list_pro = array();
 		if($cart != NULL){
 			$products = $db->get_products($cart);	
@@ -28,6 +29,7 @@ class CartController extends PHOController
 				$row = $products[$pro_price_id];
 				//$item['qty'] = $cart[$item['pro_price_id']];
 				$item['amount'] = $item['qty']*$row['price_exp'];
+				$item['chietkhau'] = $item['qty']*($row['price_exp']-$row['price_seller']);
 				$item['price_exp'] = $row['price_exp'];
 				$item['pro_no'] = $row['pro_no'];
 				$item['pro_name'] = $row['pro_name'];
@@ -35,6 +37,7 @@ class CartController extends PHOController
 				$item['img_path'] = $row['img_path'];
 				$item['pro_price_id'] = $pro_price_id;
 				$total_amount += $item['amount'];
+				$total_ck +=$item['chietkhau'];
 				//$list_pro[$key] = $item;
 			}
 		}
@@ -43,6 +46,7 @@ class CartController extends PHOController
 		$this->ViewVAR(array(
 			'carts' =>$cart
 			,'total_amount'=>$total_amount
+			,'total_ck'=>$total_ck
 		));		
 	}
 	public function successAction($order_id)
@@ -112,13 +116,18 @@ class CartController extends PHOController
 		}
 		return $key;
 	}
-	public function deleteAction($pro_price_id)
+	public function deleteAction()
 	{	
+		$param =$this->get_param(array('pro_size','size_sel','color_sel'));
+		$key=$this->get_key($param);
 		$cart = $this->session->get('cart_info');
-		unset($cart[$pro_price_id ]);
+		//PhoLog::debug_var('--del--',$cart );
+		//PhoLog::debug_var('--del--',$key );
+		unset($cart[$key]);
 		
 		$this->session->set('cart_info', $cart);		
-		$this->_redirect(BASE_URL_NAME.'cart');
+		//$this->_redirect(BASE_URL_NAME.'cart');
+		return $this->ViewJSON(array('status'=>'OK'));
 	}
 	public function payAction(){
 		$param = self::get_param(array(			  

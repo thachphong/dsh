@@ -51,7 +51,7 @@
 						{%endfor%}
 					</ul>
 					<span class="lab_red lab_invisible border_red" id="color_error">Bạn cần màu sắc !</span>
-					<input type="hidden" name="pro_size" value="{{pricelist[0].pro_price_id}}"/>
+					<input type="hidden" name="pro_size"  id="pro_size" value="{{pricelist[0].pro_price_id}}"/>
 				</div>
 				<div class="row margin-top10" {%if sizes|length==0%}style="display:none"{%endif%}>
 					<input type="hidden" name="size_sel" id="size_sel" value=""/>
@@ -223,7 +223,9 @@
 	    $(document).off('click','#add_cart');
 	    $(document).on('click','#add_cart',function(){
 	       if(!color_size_validate()){return;}
-	       Pho_json_ajax('POST',"{{url.get('cart/add')}}" ,{'pro_size':$('#pro_size').val(),'pro_qty':$('#pro_qty').val()},function(datas){
+	       Pho_json_ajax('POST',"{{url.get('cart/add')}}" ,{'pro_size':$('#pro_size').val()
+	       		,'pro_qty':$('#pro_qty').val(),'color_sel':$('#color_sel').val(),'size_sel':$('#size_sel').val()
+	       		},function(datas){
 		        if(datas.status =="OK"){
 		          //Pho_modal_close("modal1");
 		          	$('#cart_number').text(datas.total);

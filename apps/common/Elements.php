@@ -424,7 +424,11 @@ class Elements extends Component
 	}
     public function get_cart_number(){
 		$cart = $this->session->get('cart_info');
-		return count($cart);
+		$cnt=0;
+		foreach($cart as $item){
+			$cnt += $item['qty'];
+		}
+		return $cnt;
 	}
     public function getTabs()
     {
