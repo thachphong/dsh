@@ -8,4 +8,4 @@
     {{ javascript_include('templateadm/js/jquery.min.js') }}
     {{ javascript_include('templateadm/js/bootstrap.min.js') }}
     {{ javascript_include('templateadm/js/jquery.modal.js') }}  
-   
+   <link rel="icon" href="{{url.get('templateadm/images/admin.png')}}">

@@ -14,12 +14,23 @@ class UsersController extends PHOController
 	{		
 	}
 	public function registerAction(){
+		$result['provins'] = $this->get_Provin();		
 		$this->set_template_share();
+		$this->ViewVAR($result);
 	}
-	public function loginAction(){
+	public function loginAction(){		
+		if($_SERVER['HTTP_REFERER'] == BASE_URL_NAME.'cart/pay'){
+			$this->session->set('url_refer', $_SERVER['HTTP_REFERER']);
+		}else{
+			$this->session->set('url_refer', BASE_URL_NAME);
+		}
 		$this->set_template_share();
 	}
 	public function successAction(){
+		//$_SERVER		
+		$this->set_template_share();
+	}
+	public function forgetAction(){
 		$this->set_template_share();
 	}
 	public function activeAction(){
@@ -53,9 +64,11 @@ class UsersController extends PHOController
             		$this->_registerSession($user);
                 	$result['status'] ='OK';
                 	$result['msg'] = 'Đăng nhập thành công !';
+                	$result['url_refer'] = $this->session->get('url_refer');
+                	$this->session->set('url_refer', null);
             	}else if($user->status== 0){
             		$result['status'] ='NOT';
-                	$result['msg'] = 'Tài khoản của bạn chưa kích hoạt, vui lòng kiểm tra mail và click vào link kích hoạt tài khoản !';
+                	$result['msg'] = 'Tài khoản của bạn chưa kích hoạt, vui lòng kiểm tra email và click vào link kích hoạt tài khoản !';
             	}
                 
             }
@@ -68,7 +81,7 @@ class UsersController extends PHOController
         $this->session->set('auth', $user);
     }
 	public function updateAction(){
-		$param = $this->get_param(array('user_no','user_name','email','mobile','address','pass','sex'));
+		$param = $this->get_param(array('user_no','user_name','email','mobile','address','pass','sex','city','district','ward','ctv_flg'));
 		$result = array('status' => 'OK');
 		$result['status'] = 'OK';	
 		$result['msg'] = 'Cập nhật thành công!';		
@@ -140,7 +153,8 @@ class UsersController extends PHOController
 		return $this->ViewJSON($result);
 	}
 	public function updateinfoAction(){
-		$param = $this->get_param(array('user_name','address','mobile','facebook','skype','sex','avata','folder_tmp'));
+		$param = $this->get_param(array('user_name','address','mobile','bank_id','bank_acc_no','bank_acc_name','sex'
+		,'avata','folder_tmp','city','district','ward','ctv_flg'));
 		$result = array('status' => 'OK');
 		$result['status'] = 'OK';	
 		$result['msg'] = 'Cập nhật thành công!';	
@@ -161,5 +175,55 @@ class UsersController extends PHOController
 		$db->updateinfo($param);
 		$this->_registerSession($db->get_info($user->user_id));
 		return $this->ViewJSON($result);
+	}
+	public function sendpassAction(){
+		$param = $this->get_param(array('email'));
+		$result = array('status' => 'OK');
+		$result['status'] = 'OK';	
+		$result['msg'] = 'Cập nhật thành công!';		
+		
+		//$msg = '';
+		
+		if($this->sendmailpass($param['email']) === FALSE)
+		{	
+			$result['msg'] = 'Gửi mail không thành công';
+			$result['status'] = 'NOT';	
+		}
+		return $this->ViewJSON($result);
+	}
+	public function sendmailpass($to_mail){
+		$email = new Mail();
+		$usr = new Users();
+		$par = $usr->get_user_bymail($to_mail);
+		
+		$url = BASE_URL_NAME."users/resetpass?email=".$to_mail."&uid=".$par['user_id']. "&rdom=".$par['pass'];
+		$body_tmp="
+			   <p>Vui lòng kích vào đường link dưới đây để đặt lại mật khẩu mới cho tài khoản của bạn:</p>
+			  <a href='".$url ."'>".$url ."</a> 
+
+			<p>Nếu đường link trên không hoạt động, vui lòng copy đường link đó, rồi paste lên thanh địa chỉ của trình duyệt để đặt lại mật khẩu mới cho tài khoản của bạn. </p>
+			<p>Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi!</p>";
+		
+		$replacements['HEADER'] = '<h3><strong>Đặt lại mật khẩu trên '.SITE_NAME.'!</strong></h3>';
+		$replacements['BODY'] = $body_tmp;
+		$db = new Define();
+		$data = $db->get_info(DEFINE_KEY_EMAIL);
+		//$mail_to[]['mail_address']= $data->define_val;
+		$mail_to[]['mail_address']= $to_mail;	
+		PhoLog::debug_var('--mail--',$mail_to);	
+		PhoLog::debug_var('--mail--',$data);
+		$email->AddListAddress($mail_to);
+		$email->add_replyto($data->define_val,SITE_NAME);
+                
+		$email->Subject = 'Đặt lại mật khẩu trên '.SITE_NAME.' - '.date('d/m/Y H:i:s');                
+		$email->loadbody('template_mail.html');
+		$email->replaceBody($replacements);
+		$result = $email->send();
+		if($result){
+			PhoLog::debug_var('--mail--','send mail ok');
+		}else{
+			PhoLog::debug_var('--mail--','send mail error');
+		}
+		return $result;
 	}
 }

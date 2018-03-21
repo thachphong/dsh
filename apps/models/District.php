@@ -20,7 +20,7 @@ class District extends DBModel
         return $this->pho_query($sql);
     }
     public function get_byparent($m_provin_id){
-        $sql ="select m_district_id,m_district_name from m_district where m_provin_id = :m_provin_id";
+        $sql ="select m_district_id,m_district_name from m_district where m_provin_id = :m_provin_id order by m_district_name";
         return $this->pho_query($sql,array('m_provin_id'=>$m_provin_id));
     }
 }

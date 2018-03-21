@@ -331,4 +331,14 @@ class Category extends DBModel
 		$ctg_code2= substr($ctg_code,0,1).'%';
 		return $this->pho_query($sql,array('ctg_code1'=>$ctg_code1,'ctg_code2'=>$ctg_code2));		
 	}
+	public function get_list_search($ctg_no,$limit = 10){
+		$sql = "select ctg_id,ctg_level,parent_id,ctg_no,ctg_name from category 
+				where ctg_no REGEXP :ctg_no
+				and ctg_level = 3
+				ORDER BY ctg_code
+				limit $limit";
+		$param['ctg_no'] = str_replace(' ','|',$ctg_no);
+		return $this->pho_query($sql,$param);
+	}
+	
 }

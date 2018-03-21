@@ -1,3 +1,10 @@
+<div class="row breadcrumb">
+	<div class="container">
+		<a href="{{baseurl}}">Trang chủ</a>	>
+		<a href="{{baseurl}}thanh-vien"> Thành viên</a>		
+		<span>> Thay đổi mật khẩu</span>			
+	</div>
+</div>
 <div class="row">
 	<div class="container">
 		{{ partial('includes/user_left') }}

@@ -84,7 +84,7 @@ var Pho_message_box_error = function (title, msg, closed_func, style) {
 	  }
 	});	
 };
-var Pho_message_confirm = function (title, msg, closed_func, style) { 
+var Pho_message_confirm = function (title, msg, closed_func) { 
 	
 	$('#modal_body2').text(msg);
 	$('#myModalLabel2').text(title);

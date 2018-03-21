@@ -15,6 +15,7 @@ class Users extends DBModel
     public $address;
     public $city;
     public $district;
+    public $ward;
     public $level;
     public $status;
     public $pass;
@@ -23,10 +24,12 @@ class Users extends DBModel
     public $email;
     public $sex;
     public $avata;
-    public $facebook;
-    public $skype;
+    public $bank_id;
+    public $bank_acc_no;
+    public $bank_acc_name;
     public $amount;
     public $del_flg;
+    public $ctv_flg;
     public function initialize()
     {
         $this->setSource("user");
@@ -79,7 +82,7 @@ class Users extends DBModel
 		return FALSE;
     }
     public function _insert($param){
-        $this->user_no =$param['user_no'];
+        $this->user_no =$param['email'];
         $this->user_name=$param['user_name'];
         $this->mobile=$param['mobile'];
         $this->address=$param['address'];
@@ -88,8 +91,13 @@ class Users extends DBModel
         $this->pass = $this->encodepass($param['pass']);
         $this->email =$param['email'];
         $this->sex =$param['sex'];
+        $this->city =$param['city'];
+        $this->district =$param['district'];
+        $this->ward =$param['ward'];
+        $this->ctv_flg =$param['ctv_flg'];
         $this->avata ='0.png';
         $this->del_flg = 0;
+        PhoLog::debug_var('---test---',$param); 
         return $this->save();
     }
     public function get_validation($param){
@@ -120,18 +128,28 @@ class Users extends DBModel
                     'user_name'
                     ,'mobile' 
                     ,'address'                               
-                    ,'sex'
-                    ,'facebook'
-                    ,'skype'
+                    ,'sex'                   
                     ,'user_id'
+                    ,'city'
+                    ,'district'
+                    ,'ward'
+                    ,'ctv_flg'
+                    ,'bank_id'
+                    ,'bank_acc_no'
+                    ,'bank_acc_name'
                    ));
         
 		$sql ="update user set user_name= :user_name
 						,mobile= :mobile
 						,address= :address
-						,sex= :sex
-						,facebook= :facebook
-						,skype= :skype				
+						,sex= :sex					
+						,city=:city
+						,district=:district
+						,ward=:ward	
+						,ctv_flg = :ctv_flg
+						,bank_id = :bank_id
+						,bank_acc_no = :bank_acc_no
+						,bank_acc_name = :bank_acc_name		
 						";
 		if(strlen($param['avata']) >0){
 			$sql .=" ,avata= :avata";
@@ -173,5 +191,9 @@ class Users extends DBModel
 						del_flg = :del_flg	
 				where user_id =:user_id ";		
 		return $this->pho_execute($sql,array('del_flg'=>$lock,'user_id'=>$user_id));
+	}
+	public function get_user_bymail($email){
+		$sql = "select * from user where email=:email";
+		return $this->query_first($sql,array('email'=>$email));
 	}
 }

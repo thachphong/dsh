@@ -29,8 +29,10 @@
     		</div>
     		<div class="col-md-6 col-sm-9 col-xs-12">
     			<div class="div_search">
-    				<input placeholder="Nhập tên sản phẩm cân tìm"/>
-    				<button class="fa fa-search" ></button>
+    				<form action="{{baseurl}}tim" method="GET" enctype="multipart/form-data">
+	    				<input placeholder="Nhập tên sản phẩm cân tìm" name="sp"/>
+	    				<button class="fa fa-search" ></button>
+    				</form>
     			</div>
     			
     		</div>

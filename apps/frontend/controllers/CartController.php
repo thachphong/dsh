@@ -5,7 +5,6 @@ use Multiple\PHOClass\PhoLog;
 use Multiple\Models\Orders;
 use Multiple\Models\OrdersDetail;
 use Multiple\Models\Provincial;
-use Multiple\Models\District;
 use Multiple\Models\Define;
 use Multiple\Library\Mail;
 class CartController extends PHOController
@@ -31,7 +30,7 @@ class CartController extends PHOController
 				$item['amount'] = $item['qty']*$row['price_exp'];
 				$item['chietkhau'] = $item['qty']*($row['price_exp']-$row['price_seller']);
 				$item['price_exp'] = $row['price_exp'];
-				$item['pro_no'] = $row['pro_no'];
+				$item['pro_id'] = $row['pro_id'];
 				$item['pro_name'] = $row['pro_name'];
 				$item['price_seller'] = $row['price_seller'];
 				$item['img_path'] = $row['img_path'];
@@ -41,13 +40,18 @@ class CartController extends PHOController
 				//$list_pro[$key] = $item;
 			}
 		}
-		
-		$this->set_template_share();
-		$this->ViewVAR(array(
+		$result =array(
 			'carts' =>$cart
 			,'total_amount'=>$total_amount
 			,'total_ck'=>$total_ck
-		));		
+		);
+		$user = $this->session->get('auth');
+		$result['ctv_flg'] ='';
+		if($user !=NULL){
+			$result['ctv_flg']=$user->ctv_flg;
+		}
+		$this->set_template_share();
+		$this->ViewVAR($result);		
 	}
 	
 	public function successAction($order_id)
@@ -155,7 +159,7 @@ class CartController extends PHOController
 		}
 		
 		
-		$result['provins'] = Provincial::get_all();
+		$result['provins'] = $this->get_Provin();
 		$products = array();
 		$db = new Orders();
 		
@@ -174,7 +178,7 @@ class CartController extends PHOController
 				$item['amount'] = $item['qty']*$row['price_exp'];
 				$item['chietkhau'] = $item['qty']*($row['price_exp']-$row['price_seller']);
 				$item['price_exp'] = $row['price_exp'];
-				$item['pro_no'] = $row['pro_no'];
+				$item['pro_id'] = $row['pro_id'];
 				$item['pro_name'] = $row['pro_name'];
 				$item['price_seller'] = $row['price_seller'];
 				$item['img_path'] = $row['img_path'];
@@ -183,26 +187,39 @@ class CartController extends PHOController
 				$total_ck +=$item['chietkhau'];
 				//$list_pro[$key] = $item;
 			}
+			$this->session->set('cart_info', $cart);
 		}
 		$user = $this->session->get('auth');
+		$result['districts']=array();
+		$result['wards']=array();
 		if($user != NULL){
 			$result['full_name']=$user->user_name;
 			$result['address']=$user->address;
 			$result['provin_id']=$user->city;
 			$result['district_id']=$user->district;
+			$result['ward_id']=$user->ward;
 			$result['email']=$user->email;
 			$result['phone']=$user->mobile;
+			$result['ctv_flg']=$user->ctv_flg;
+			if($result['provin_id'] > 0){
+				$result['districts']= $this->get_District($result['provin_id']);
+			}
+			if($result['district_id'] > 0){
+				$result['wards']= $this->get_Ward($result['district_id']);
+			}
 		}else{
 			$result['full_name']='';
 			$result['address']='';
-			$result['pro_vin_id']='';
+			$result['provin_id']='';
 			$result['district_id']='';
 			$result['email']='';
 			$result['phone']='';
+			$result['ward_id']='';
+			$result['ctv_flg']=0;
 		}
 		
 		$result['carts']=$cart;
-		$result['total_amount']=$total_amount;
+		$result['total_amount']=$total_amount ;
 		$result['total_ck']=$total_ck;
 		$this->set_template_share();
 		$this->ViewVAR($result);
@@ -216,7 +233,7 @@ class CartController extends PHOController
 			  'provin_id',
 			  'district_id',
 			  'ward_id' ,
-			  'address'			  
+			  'address'				  		  
 		));	
 		$cart = $this->session->get('cart_info');
 		// $cart = array();//
@@ -225,26 +242,37 @@ class CartController extends PHOController
 		// }		
 		$db = new Orders();
 		$detail = new OrdersDetail();
-		$products = $db->get_products($cart);
+		//$products = $db->get_products($cart);
 		$total_amount = 0;
-		foreach($products as &$item){
-			$item['qty'] = $cart[$item['pro_price_id']];
-			$item['amount'] = $item['qty']*$item['price_exp'];
+		$total_ck =0;
+		foreach($cart as $item){
+			//$item['qty'] = $cart[$item['pro_price_id']];
+			//$item['amount'] = $item['qty']*$item['price_exp'];
 			$total_amount += $item['amount'];
+			$total_ck +=$item['chietkhau'];
 		}
 		$param['ship_amount'] = SHIP_AMOUNT;
 		$param['total_amount']=($total_amount + $param['ship_amount']);
+		$param['total_discount'] = $total_ck;
+		$param['discount_flg'] = 0;
+		$param['user_id'] = '';
+		$param['payment_method'] = '1'; //thanh toan tien mat
 		//$param['total_vat'] = $total_amount*0.1;
-		
+		$user = $this->session->get('auth');
+		if($user != NULL){
+			$param['user_id'] = $user->user_id;
+			$param['discount_flg'] = $user->ctv_flg;
+		}
+		PhoLog::debug_var('---order---',$param);
 		$ord_id = $db->_insert($param);
 		$param['ord_id']='D'. $ord_id;
-		$detail->insert_multi($ord_id,$products);
+		$detail->insert_multi($ord_id,$cart);
 		$login_info =  $this->session->get('auth');
 		$email_to = $param['email'];
 		if($login_info != NULL){			
 			$email_to = $login_info->email;
 		}
-     	$this->sendmail($param,$products,$email_to);
+     	$this->sendmail($param,$cart,$email_to);
 		$this->session->set('cart_info', NULL);
 		//return ACWView::template('success.html');		
 		$this->_redirect(BASE_URL_NAME.'cart/success/'.$ord_id);

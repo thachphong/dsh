@@ -129,22 +129,33 @@
                       </div>
                       <div class="form-group">
                         <label class="control-label col-md-2 col-sm-2 col-xs-12">Nguồn sản phẩm</label>
-                        <div class="col-md-8 col-sm-8 col-xs-12">
+                        <div class="col-md-7 col-sm-7 col-xs-12">
                           <input type="text" id="src_link" name="src_link" class="form-control col-md-7 col-xs-12" value="{{src_link}}">                              
-                        </div>  
+                        </div> 
+                         <div class="col-md-1">
+                              <a class="btn btn-default btn-warning" type="button" href="{{src_link}}" target="_blank">Xem</a>
+                        </div> 
                         <label class="control-label col-md-2 col-sm-2 col-xs-12"><input type="checkbox" id="not_src"> không có nguồn</label>
                                             
                       </div>
                       <div class="form-group">
                         <label class="control-label col-md-2 col-sm-2 col-xs-12">Kích thước</label>
-                        <div class="col-md-5 col-sm-5 col-xs-12">
+                        <div class="col-md-6 col-sm-5 col-xs-12">
                         	<a class="btn btn-default btn-xs btn_size" type="button" id="btn_S">S</a>
                         	<a class="btn btn-default btn-xs btn_size" type="button" id="btn_M">M</a>
                         	<a class="btn btn-default btn-xs btn_size" type="button" id="btn_L">L</a>
                         	<a class="btn btn-default btn-xs btn_size" type="button" id="btn_XL">XL</a>
                         	<a class="btn btn-default btn-xs btn_size" type="button" id="btn_XXL">XXL</a>
+                        	<a class="btn btn-default btn-xs btn_size" type="button" id="btn_XXXL">XXXL</a>
+                        	<a class="btn btn-default btn-xs btn_size" type="button" id="btn_26">26</a>
+                        	<a class="btn btn-default btn-xs btn_size" type="button" id="btn_27">27</a>
+                        	<a class="btn btn-default btn-xs btn_size" type="button" id="btn_28">28</a>
+                        	<a class="btn btn-default btn-xs btn_size" type="button" id="btn_29">29</a>
+                        	<a class="btn btn-default btn-xs btn_size" type="button" id="btn_30">30</a>
+                        	<a class="btn btn-default btn-xs btn_size" type="button" id="btn_31">31</a>
+                        	<a class="btn btn-default btn-xs btn_size" type="button" id="btn_32">32</a>
                         </div>
-                        <div class="col-md-5 col-sm-5 col-xs-12">
+                        <div class="col-md-4 col-sm-5 col-xs-12">
                           <input type="text" id="sizelist" name="sizelist" class="form-control" value="{{sizelist}}"> 
                         </div>  
                         
@@ -280,7 +291,8 @@
 		$('#pro_content').froalaEditor({
 		theme: 'royal',
 		language: 'vi',
-		imageUploadURL:"{{url.get('phofile/upload/')}}{{folder_tmp}}"
+		imageUploadURL:"{{url.get('phofile/upload/')}}{{folder_tmp}}",
+		imageManagerLoadURL: "{{url.get('phofile/list/')}}?id={{pro_id}}&folder_tmp={{folder_tmp}}&folder_name=products",
 	  });
 	  $('#tech').froalaEditor({
 		theme: 'royal',

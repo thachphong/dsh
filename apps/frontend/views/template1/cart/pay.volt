@@ -11,7 +11,7 @@
         <div class="col-md-6 col-sm-6 col-xs-6 margin_top " style="border-right: 1px solid #ddd;">
          <!--<div class="pn_posts">-->
             <div class="pn_title">               
-               <h1>Địa chỉ giao hàng <a href="{{baseurl}}dang-nhap" class="link_color" style="float: right;">Đăng nhập để đặt hàng</a></h1>
+               <h1>Địa chỉ giao hàng {%if email==''%}<a href="{{baseurl}}dang-nhap" class="link_color" style="float: right;">Đăng nhập để đặt hàng</a>{%endif%}</h1>
                
             </div> 
             <hr class="line" />           
@@ -52,6 +52,13 @@
             	<div class="col-md-8 col-sm-8 col-xs-12">
             		<select id="m_district_id" name="district_id" required>
             			<option value="">--Chọn Quận/Huyện--</option>
+            			{%for item in districts%}
+            				{%if district_id==item['m_district_id']%}
+            					<option value="{{item['m_district_id']}}" selected="selected">{{item['m_district_name']}}</option>
+            				{%else%}
+            					<option value="{{item['m_district_id']}}">{{item['m_district_name']}}</option>
+            				{%endif%}
+            			{%endfor%}
             		</select>
             		<span class="lab_red lab_invisible" id="m_district_id_error">Bạn cần chọn Quận/Huyện.</span>
             	</div>
@@ -61,6 +68,13 @@
             	<div class="col-md-8 col-sm-8 col-xs-12">
             		<select id="m_ward_id" name="ward_id" required>
             			<option value="">--Chọn Phường/Xã--</option>
+            			{%for item in wards%}
+            				{%if ward_id==item['m_ward_id']%}
+            					<option value="{{item['m_ward_id']}}" selected="selected">{{item['m_ward_name']}}</option>
+            				{%else%}
+            					<option value="{{item['m_ward_id']}}">{{item['m_ward_name']}}</option>
+            				{%endif%}
+            			{%endfor%}
             		</select>
             		<span class="lab_red lab_invisible" id="m_ward_id_error">Bạn cần chọn Phường/Xã.</span>
             	</div>
@@ -78,6 +92,12 @@
             		<input type="text" name="email" placeholder="Email" id="email" value="{{email}}"/>
             		<span class="lab_red lab_invisible" id="email_error">Bạn cần nhập email.</span>
             		<span class="lab_red lab_invisible" id="email_validate">Bạn cần nhập đúng định dạng email !</span>
+            	</div>
+            </div>
+            <div class="row margin-top10">
+            	<div class="col-md-4 col-sm-4 col-xs-12 align_right no_padding"><label class="title_col">Hình thức thanh toán</label></div>
+            	<div class="col-md-8 col-sm-8 col-xs-12">
+            		<label class="title_col col_blue">Tiền mặt</label>     		
             	</div>
             </div>
             </form>     
@@ -121,7 +141,7 @@
 	                </tr>
 	                <tr class="">                                       
 	                        <th colspan="2" class="col_red">Tổng tiền thanh toán</th>	                        
-	                        <th class="col_red">{{elements.currency_format(total_amount)}} ₫</th>
+	                        <th class="col_red">{{elements.currency_format(total_amount + ship_amount)}} ₫</th>
 	                        <td></td>
 	                </tr>
 	                <tr class="">                                       
@@ -132,6 +152,13 @@
             </table>
             <div class="row">
       			<span style="font-style: italic;">Tiền chiết khấu sẽ được cộng vào tài khoản của bạn, khi đơn hàng được giao thành công.</span>
+      			{%if email==''%}
+      				<p class="lab_red">(Bạn chưa đăng ký làm cộng tác viên, nên sẽ không nhận được tiền chiết khấu)</p>
+      				<a class="link_color" href="{{baseurl}}p/huong-dan-dang-ky-ctv"><strong>Hướng dẫn đăng ký làm cộng tác viên</strong></a>
+      			{%elseif ctv_flg==0%}
+      				<p class="lab_red">(Tài khoản của bạn không phải là cộng tác viên, nên sẽ không nhận được tiền chiết khấu)</p>
+      				<a class="link_color" href="{{baseurl}}p/huong-dan-dang-ky-ctv"><strong>Hướng dẫn đăng ký làm cộng tác viên</strong></a>
+      			{%endif%}
       		</div> 
       	</div> 
       	

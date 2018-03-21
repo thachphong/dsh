@@ -86,6 +86,34 @@ class PhofileController extends PHOController
 		$result['link'] = ACW_BASE_URL.$file_name;
 		return ACWView::json($result);
 	}
+	public function listAction(){
+		$param = $this->get_Gparam(array('id','folder_tmp','folder_name'));
+		$file_lb = new FilePHP();
+		$filelist = array();
+		//PhoLog::debug_var('file---',$param);
+		if(strlen($param['id'])>0){
+			$folder_id = $param['folder_name'].'/'.$param['id'];
+			$filelist_1 = $file_lb->FileList(IMG_DATA_PATH.$folder_id);
+			//PhoLog::debug_var('file---',IMG_DATA_PATH.$folder_id);
+			//PhoLog::debug_var('file---',$filelist_1);
+			foreach($filelist_1 as $item){
+				$row['url']= '/images/'.$folder_id.'/'.$item;
+				$row['thumb']=$row['url'];
+				$row['tag']='';
+				$filelist[] = $row;
+			}
+		}
+		if(strlen($param['tmp_name'])>0){
+			$filelist_2 = $file_lb->FileList(IMG_TMP_PATH.$param['tmp_name']);
+			foreach($filelist_2 as $item){
+				$row['url']= '/tmp/'.$param['tmp_name'].'/'.$item;
+				$row['thumb']=$row['url'];
+				$row['tag']='';
+				$filelist[] = $row;
+			}
+		}
+		return $this->ViewJSON($filelist);
+	}
 	public static function thumb_image($file, $width, $height, $folder){	
 
 		if(!file_exists($folder.$file))	return false; // không tìm thấy file

@@ -40,6 +40,7 @@
                                           <th style="text-align:center" align="center">Xóa</th>
                         </tr>
                         {%set idx = 0%}
+                        {%if carts|length >0%}
                         {%for item in carts%}
                         	{%set idx = idx +1%}
                         	<tr class="spline tr_product" id="tr_{{idx}}">                                       
@@ -70,6 +71,7 @@
                                 </td>
                             </tr>
                         {%endfor%}
+                        {%endif%}
                         <tr class="spline">
                         	<td width="40%" class="sanpham" >Tổng cộng</td>
                         	<td width="40%" align="right" colspan="5"><span class="amount" id="total_amount_1">{{elements.currency_format(total_amount)}}<span>₫</span></span></td>
@@ -77,7 +79,7 @@
                         </tr>
                         <tr class="spline">
 	                        <td width="40%" class="sanpham" >Phí ship</td>
-	                        <td width="40%" align="right" colspan="5"><span class="amount" id="total_amount_vat">{{elements.currency_format(20000)}} ₫</span></td>
+	                        <td width="40%" align="right" colspan="5"><span class="amount" id="total_amount_vat">{{elements.currency_format(ship_amount)}} ₫</span></td>
 	                        <td colspan="2"></td>
                         </tr>
                         <tr class="order-total">
@@ -85,12 +87,12 @@
                         <tr class="spline">
                             <td width="40%" class="sanpham col_red" >Tổng tiền phải thanh toán</td>
                             <td width="40%" align="right" colspan="5">
-                            	<strong><span class="amount col_red" id="total_amount_2">{{elements.currency_format(total_amount+ 20000)}} ₫</span></strong>
+                            	<strong><span class="amount col_red" id="total_amount_2">{{elements.currency_format(total_amount+ ship_amount)}} ₫</span></strong>
                             </td>
                             <td colspan="2"></td>
                         </tr>
                         <tr class="spline">
-                            <td width="40%" class="sanpham col_blue" >Tổng tiền chiết khấu được cộng vào tài khoản</td>
+                            <td width="40%" class="sanpham col_blue" >Tổng tiền chiết khấu</td>
                             <td width="40%" align="right" colspan="6">
                             	<strong><span class="amount col_blue" id="total_ck">{{elements.currency_format(total_ck)}} ₫</span></strong>
                             </td>
@@ -100,6 +102,21 @@
                 </table>
                 </form>
                </div>
+               {%if ctv_flg !=1%}
+               <div class="row">
+               		<div class="panel panel-danger" >
+               			<div class="panel-body">
+               				{%if ctv_flg==''%}
+		      				<p class="lab_red">Bạn chưa đăng ký làm cộng tác viên, nên sẽ không nhận được tiền chiết khấu</p>
+		      				<a class="link_color" href="{{baseurl}}p/huong-dan-dang-ky-ctv"><strong>Hướng dẫn đăng ký làm cộng tác viên</strong></a>
+		      				{%elseif ctv_flg==0%}
+		      				<p class="lab_red">Tài khoản của bạn không phải là cộng tác viên, nên sẽ không nhận được tiền chiết khấu</p>
+		      				<a class="link_color" href="{{baseurl}}p/huong-dan-dang-ky-ctv"><strong>Hướng dẫn đăng ký làm cộng tác viên</strong></a>
+		      				{%endif%}
+               			</div>
+					</div>
+               </div>
+               {%endif%}
                <div class="row">
 					<div class="col-md-12 col-sm-12 col-xs-12 no_padding_left" style="padding-bottom: 10px;text-align:right">
 						<a class="btn_buy btn_orange" href="{{baseurl}}" style="float:left">Tiếp tục mua hàng</a>					

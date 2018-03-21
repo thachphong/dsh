@@ -1,3 +1,10 @@
+<div class="row breadcrumb">
+	<div class="container">
+		<a href="{{baseurl}}">Trang chủ</a>	>
+		<a href="{{baseurl}}thanh-vien"> Thành viên</a>		
+		<span>> Thay đổi thông tin cá nhân</span>			
+	</div>
+</div>
 <div class="row">
 	<div class="container">
 		{{ partial('includes/user_left') }}
@@ -52,7 +59,7 @@
 					<div class="row row-margin-bottom">
 						<label class="col-md-3 col-sm-3 col-xs-12 title_col">Tỉnh/TP<span class="lab_red">(*)</span></label>
 						<div class="col-md-7 col-sm-7 col-xs-12">
-							<select id="m_provin_id" name="provin_id" required>            			
+							<select id="m_provin_id" name="city" required>            			
 		            			<option value="">--Chọn Tỉnh/TP--</option>
 		            			{%for item in provins%}
 		            				{%if user.city==item.m_provin_id%}
@@ -68,48 +75,57 @@
 					<div class="row row-margin-bottom">
 						<label class="col-md-3 col-sm-3 col-xs-12 title_col">Quận/Huyện<span class="lab_red">(*)</span></label>
 						<div class="col-md-7 col-sm-7 col-xs-12">
-							<select id="district_id" name="district_id" required>            			
+							<select id="m_district_id" name="district" required>            			
 		            			<option value="">--Chọn Quận/Huyện--</option>
-		            			{%for item in provins%}
-		            				{%if user.city==item.m_provin_id%}
-		            					<option value="{{item.m_provin_id}}" selected="selected">{{item.m_provin_name}}</option>
+		            			{%for item in districts%}
+		            				{%if user.district==item['m_district_id']%}
+		            					<option value="{{item['m_district_id']}}" selected="selected">{{item['m_district_name']}}</option>
 		            				{%else%}
-		            					<option value="{{item.m_provin_id}}">{{item.m_provin_name}}</option>
+		            					<option value="{{item['m_district_id']}}">{{item['m_district_name']}}</option>
 		            				{%endif%}
 		            			{%endfor%}
 		            		</select>
-							<label class="lab_red lab_invisible" id="district_id_error">Bạn cần chọn Quận/Huyện</label>
+							<label class="lab_red lab_invisible" id="m_district_id_error">Bạn cần chọn Quận/Huyện</label>
 						</div>
 					</div>
 					<div class="row row-margin-bottom">
 						<label class="col-md-3 col-sm-3 col-xs-12 title_col">Phường/xã<span class="lab_red">(*)</span></label>
 						<div class="col-md-7 col-sm-7 col-xs-12">
-							<select id="m_provin_id" name="provin_id" required>            			
+							<select id="m_ward_id" name="ward" required>            			
 		            			<option value="">--Chọn Phường/xã--</option>
-		            			{%for item in provins%}
-		            				{%if user.city==item.m_provin_id%}
-		            					<option value="{{item.m_provin_id}}" selected="selected">{{item.m_provin_name}}</option>
+		            			{%for item in wards%}
+		            				{%if user.ward==item['m_ward_id']%}
+		            					<option value="{{item['m_ward_id']}}" selected="selected">{{item['m_ward_name']}}</option>
 		            				{%else%}
-		            					<option value="{{item.m_provin_id}}">{{item.m_provin_name}}</option>
+		            					<option value="{{item['m_ward_id']}}">{{item['m_ward_name']}}</option>
 		            				{%endif%}
 		            			{%endfor%}
 		            		</select>
-							<label class="lab_red lab_invisible" id="m_provin_id_error">Bạn cần chọn Phường/xã</label>
+							<label class="lab_red lab_invisible" id="m_ward_id_error">Bạn cần chọn Phường/xã</label>
 						</div>
-					</div>
-					<!--<div class="row row-margin-bottom">
-						<label class="col-md-4 col-sm-4 col-xs-12 title_col">Thành phố</label>
-						<div class="col-md-7 col-sm-7 col-xs-12">
-							<input type="text" name="re_pass_new"  value="" id="re_pass_new" required>
-							<label class="lab_red lab_invisible" id="re_pass_new_error">Bạn cần nhập lại mật khẩu mới</label>
-							<label class="lab_red lab_invisible" id="pass_validate">Mật khẩu mới không khớp</label>
-						</div>
-					</div>-->
+					</div>					
 					<div class="row row-margin-bottom">
 						<label class="col-md-3 col-sm-3 col-xs-12 title_col">Địa chỉ</label>
 						<div class="col-md-7 col-sm-7 col-xs-12">
 							<input type="text" name="address"  value="{{user.address}}" id="address" >							
 						</div>
+					</div>
+					<div class="row row-margin-bottom">
+							<label class="col-md-3 col-sm-3 col-xs-12 title_col">Thành viên :</label>
+							<div class="col-md-2 col-sm-2 col-xs-12">
+								<label class="control control-radio">
+							        Thường
+							        <input type="radio" name="ctv_flg" {%if user.ctv_flg ==0%}checked="checked"{%else%} disabled{%endif%} value="0" class="m_type_id" />
+							        <div class="control_indicator"></div>
+							    </label>
+							</div>
+							<div class="col-md-4 col-sm-4 col-xs-12">							
+								<label class="control control-radio">
+							        Cộng tác viên(CTV)
+							        <input type="radio" name="ctv_flg"  value="1" class="m_type_id"{%if user.ctv_flg ==1%}checked="checked" disabled{%endif%} />
+							        <div class="control_indicator"></div>
+							    </label>
+							</div>
 					</div>
 					<div class="row row-margin-bottom">
 							<label class="col-md-3 col-sm-3 col-xs-12 title_col">Giới tính :</label>
@@ -127,18 +143,33 @@
 							        <div class="control_indicator"></div>
 							    </label>
 							</div>
-						</div>
+					</div>
 					<hr class="line" />
 					<div class="row row-margin-bottom">
-						<label class="col-md-3 col-sm-3 col-xs-12 title_col">Facebook</label>
+						<label class="col-md-3 col-sm-3 col-xs-12 title_col">Tên ngân hàng</label>
 						<div class="col-md-7 col-sm-7 col-xs-12">
-							<input type="text" name="facebook"  value="{{user.facebook}}" >
+							<select id="bank_id" name="bank_id">            			
+		            			<option value="">--Chọn Ngân hàng--</option>
+		            			{%for item in banks%}
+		            				{%if user.bank_id==item.bank_id%}
+		            					<option value="{{item.bank_id}}" selected="selected">{{item.bank_name}}</option>
+		            				{%else%}
+		            					<option value="{{item.bank_id}}">{{item.bank_name}}</option>
+		            				{%endif%}
+		            			{%endfor%}
+		            		</select>
 						</div>
 					</div>
 					<div class="row row-margin-bottom">
-						<label class="col-md-3 col-sm-3 col-xs-12 title_col">Skype</label>
+						<label class="col-md-3 col-sm-3 col-xs-12 title_col">Số tài khoản</label>
 						<div class="col-md-7 col-sm-7 col-xs-12">
-							<input type="text" name="skype"  value="{{user.skype}}" >							
+							<input type="text" name="bank_acc_no"  value="{{user.bank_acc_no}}" >							
+						</div>
+					</div>
+					<div class="row row-margin-bottom">
+						<label class="col-md-3 col-sm-3 col-xs-12 title_col">Họ và tên chủ tài khoản</label>
+						<div class="col-md-7 col-sm-7 col-xs-12">
+							<input type="text" name="bank_acc_name"  value="{{user.bank_acc_name}}" >							
 						</div>
 					</div>
 				</form>	
@@ -233,5 +264,47 @@
                 
             });
         });
+        $(document).off('change','#m_provin_id');
+		$(document).on('change','#m_provin_id',function(){			
+			change_district_option();			
+		});
+		$(document).off('change','#m_district_id');
+		$(document).on('change','#m_district_id',function(){			
+			change_ward_option();			
+		});
+		var change_district_option= function(){
+			var val = $('#m_provin_id').val();
+			var option = '<option value="">--Chọn Quận/Huyện--</option>';
+			$('#m_district_id').empty();
+			loading_flg = false;
+			Pho_json_ajax('GET',"{{url.get('index/district/')}}"+val ,null,function(datas){
+		        
+		        var list = datas.list;		          
+		        $('#cart_number').text(datas.total);
+		        $.each(list,function(key,item){			
+						option +='<option value="'+item['m_district_id']+'" >'+item['m_district_name']+'</option>';
+				});
+		        $('#m_district_id').empty();
+				$('#m_district_id').append(option);    
+		       	                
+	        });
+		};
+		var change_ward_option= function(){
+			var val = $('#m_district_id').val();
+			var option = '<option value="">--Chọn Phường/Xã--</option>';
+			loading_flg = false;
+			 $('#m_ward_id').empty();
+			Pho_json_ajax('GET',"{{url.get('index/ward/')}}"+val ,null,function(datas){
+		        
+		        var list = datas.list;		          
+		        $('#cart_number').text(datas.total);
+		        $.each(list,function(key,item){			
+						option +='<option value="'+item['m_ward_id']+'" >'+item['m_ward_name']+'</option>';
+				});
+		       
+				$('#m_ward_id').append(option);    
+		       	                
+	        });
+		};
 	});
 </script>

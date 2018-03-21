@@ -173,21 +173,10 @@ class CategoryController extends PHOController
 	}		
 	public function searchAction()
 	{
-        /*$param = $this->get_Gparam('ctgid',
-                  'type',
-                  'provin' ,
-                  'district',
-                  'ward',
-                  'acreage',
-                  'price' ,
-                  'street',
-                  'roomnum',
-                  'directional',
-                  'addr',
-                  'page'
-                  );*/
-        $param = $_GET;
+        $param = $this->get_Gparam(array('sp','page'));
+        //$param = $_GET;
         //PhoLog::debug_var('--testse---',$param);
+        //PhoLog::debug_var('--testse---',$_GET);
         $page = 1;
       	if(isset($param['page']) && strlen($param['page']) > 0){
             $page=$param['page'];
@@ -204,12 +193,10 @@ class CategoryController extends PHOController
         $param['ctg_no'] = str_replace('/','', $_SERVER['REQUEST_URI']);
         $exp = explode('&page',$param['ctg_no'])  ;
         $param['ctg_no']=  $exp[0]; 
-        
-        if(isset($param['addr']) && strlen($param['addr']) > 0){
-            $param['address_ascii'] = $this->convert_ascii($param['addr']);
-        }   
-        $param['post']=$db->search_product($param['ctg_no'],$start_row);
-        $param['total_post'] = $db->search_product_count($param['ctg_no']);
+        $sp_search = $this->convert_ascii($param['sp']);
+         
+        $param['list']=$db->search_product($sp_search,$start_row);
+        $param['total_post'] = $db->search_product_count($sp_search);
         $param['total_page']= round($param['total_post']/PAGE_LIMIT_RECORD);
         
         $start = $page - 2;
@@ -230,6 +217,7 @@ class CategoryController extends PHOController
         }
         $param['start'] = $start;
         $param['end'] = $end;
+        $param['rel_menu'] =$ctg->get_list_search($sp_search,15);
         //$param['dstlist'] = array();
         //if(isset($param['provin']) && strlen($param['provin']) > 0){
             //$param['dstlist'] = $db->get_bydistrict($param);

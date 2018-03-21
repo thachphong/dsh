@@ -27,9 +27,10 @@ class Product extends DBModel
     {
         $this->setSource("product");
     }
-	public function get_product_all(){
+	public function get_product_all($param){
 		$sql="select p.pro_id,
-				p.pro_name,				
+				p.pro_name,		
+				p.pro_no,			
 				(case when p.status = 0 then 'còn hàng' else 'hết hàng' end) status,
 				--(case when p.disp_home= 1 then 'hiện' else 'không' end) disp_home,
 				p.disp_home,
@@ -40,16 +41,80 @@ class Product extends DBModel
 				FROM
 				product p
 				INNER JOIN category  c on c.ctg_id = p.ctg_id 
-				order by p.pro_id desc
+				where 1=1
 				";
-		return $this->pho_query($sql);
+		$pasql = array();
+		if(strlen($param['status']) > 0){
+			$sql .=" and p.status = :status";	
+			$pasql['status'] = $param['status'];		
+		}		
+        if (isset($param['fdate']) && empty($param['fdate'])==FALSE && isset($param['tdate']) && empty($param['tdate'])==FALSE) {
+			$pasql['tdate'] = $param['tdate'].' 23:59';
+			$pasql['fdate'] = $param['fdate'];
+            $sql .= " and p.add_date between STR_TO_DATE(:fdate,'%d/%m/%Y') and STR_TO_DATE(:tdate,'%d/%m/%Y %H:%i')";
+		}elseif(isset($param['fdate']) && empty($param['fdate'])==FALSE){
+            $sql .= " and p.add_date >= STR_TO_DATE(:fdate,'%d/%m/%Y %H:%i')";
+            $pasql['fdate'] = $param['fdate'];
+        }elseif(isset($param['tdate']) && empty($param['tdate'])==FALSE){
+			$pasql['tdate'] = $param['tdate'].' 23:59';
+			$sql .= " and p.add_date <= STR_TO_DATE(:tdate,'%d/%m/%Y %H:%i')";
+		}
+        if(strlen($param['ctgid']) > 0){
+			$sql .=" and p.ctg_id in (
+					select ctg_id from category 
+					where del_flg =0
+					and ctg_id = :ctg_id
+					union all
+					select ctg_id from category 
+					where parent_id = :ctg_id
+					)	";
+			$pasql['ctg_id'] = $param['ctgid'];
+		}
+		if(strlen($param['pid']) > 0){
+			$sql .=" and p.pro_id = :pro_id";	
+			$pasql['pro_id'] = $param['pid'];
+		}
+		$sql .=" order by p.pro_id desc";
+		return $this->pho_query($sql,$pasql);
 	}
 	public function get_product_all_count(){
 		$sql="select count(p.pro_id) cnt
 				FROM
 				product p
 				";
-		$res = $this->query_first($sql);
+		$pasql = array();
+		if(strlen($param['status']) > 0){
+			$sql .=" and p.status = :status";	
+			$pasql['status'] = $param['status'];		
+		}		
+        if (isset($param['fdate']) && empty($param['fdate'])==FALSE && isset($param['tdate']) && empty($param['tdate'])==FALSE) {
+			$pasql['tdate'] = $param['tdate'].' 23:59';
+			$pasql['fdate'] = $param['fdate'];
+            $sql .= " and p.add_date between STR_TO_DATE(:fdate,'%d/%m/%Y') and STR_TO_DATE(:tdate,'%d/%m/%Y %H:%i')";
+		}elseif(isset($param['fdate']) && empty($param['fdate'])==FALSE){
+            $sql .= " and p.add_date >= STR_TO_DATE(:fdate,'%d/%m/%Y %H:%i')";
+            $pasql['fdate'] = $param['fdate'];
+        }elseif(isset($param['tdate']) && empty($param['tdate'])==FALSE){
+			$pasql['tdate'] = $param['tdate'].' 23:59';
+			$sql .= " and p.add_date <= STR_TO_DATE(:tdate,'%d/%m/%Y %H:%i')";
+		}
+        if(strlen($param['ctgid']) > 0){
+			$sql .=" and p.ctg_id in (
+					select ctg_id from category 
+					where del_flg =0
+					and ctg_id = :ctg_id
+					union all
+					select ctg_id from category 
+					where parent_id = :ctg_id
+					)	";
+			$pasql['ctg_id'] = $param['ctgid'];
+		}
+		if(strlen($param['pid']) > 0){
+			$sql .=" and p.pro_id = :pro_id";	
+			$pasql['pro_id'] = $param['pid'];
+		}
+
+		$res = $this->query_first($sql,$pasql);
 		return $res['cnt'];
 	}
 	public function get_img_path($pro_img_id){

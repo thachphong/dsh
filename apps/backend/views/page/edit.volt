@@ -54,7 +54,8 @@
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <input type="text" id="page_name" required="required" name="page_name" class="form-control col-md-7 col-xs-12" value="{{page.page_name}}">                          
-                          <input type="hidden"  name="page_id" value="{{page.page_id}}">                        
+                          <input type="hidden"  name="page_id" value="{{page.page_id}}">  
+                          <input type="hidden" name="folder_tmp" value="{{folder_tmp}}">                      
                         </div>
                       </div>
                       <div class="form-group">

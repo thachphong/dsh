@@ -6,24 +6,19 @@ use Multiple\PHOClass\PHOController;
 use Multiple\Models\Product;
 use Multiple\Models\ProductPrice;
 use Multiple\Models\ProductImg;
-use Multiple\Models\PostsContract;
-
+use Multiple\Models\Orders;
+use Multiple\Models\OrdersDetail;
 use Multiple\Models\Tags;
 use Multiple\Models\CheckView;
-use Multiple\Models\Provincial;
-use Multiple\Models\District;
-use Multiple\Models\Ward;
-use Multiple\Models\Street;
-use Multiple\Models\Directional;
-use Multiple\Models\Unit;
+
 use Multiple\Models\Category;
 use Multiple\Library\FilePHP;
 use Multiple\PHOClass\PhoLog;
-class ProductController extends PHOController
+class OrdersController extends PHOController
 {
 	public function initialize()
     {        
-        //$this->check_login();
+        $this->check_login();
     }
 	public function indexAction($url)
 	{
@@ -46,10 +41,10 @@ class ProductController extends PHOController
 			$result['imglist'] = $img->get_img_bypro($id);			
 			$result['pricelist'] = $price->get_list_bypro($id);
 			$result['breadcrumbs'] = $ctg->get_breadcrumb($result['ctg_id']);
-			$color_flg = 0;
+			$color_flg = FALSE;
 			foreach($result['imglist'] as $item){
 				if($item->color !=''){
-					$color_flg = 1;
+					$color_flg = TRUE;
 				}
 			}
 			$result['color_flg']=$color_flg;
@@ -64,7 +59,7 @@ class ProductController extends PHOController
 			//$db->update_traffic($traffic);			
 			
 			$result['relations']= $db->get_relation($result['ctg_id'],$result['pro_id'],6);
-			//PhoLog::debug_var('view----',$result['relations']);
+			PhoLog::debug_var('view----',$result['relations']);
 	        
 			$this->ViewVAR($result);	
 		} catch (\Exception $e) {
@@ -75,23 +70,32 @@ class ProductController extends PHOController
 		
 		
 	}
-	public function viewAction($id)
-	{
-		//$url =  $this->request->getURI();
-        //$abc =1;
-       // $post_data= Posts::findFirst
+	public function viewAction($ord_id)
+	{		
+		$db= new Orders();
+		$detail = new OrdersDetail();
+		$result = $db->get_info($ord_id);
+		$result['list'] = $detail->get_list($ord_id);
         $this->set_template_share();
-		//$this->ViewVAR($result);
+		$this->ViewVAR($result);
+	}
+	public function cancelAction($order_id){
+		$db = new Orders();
+		$user = $this->session->get('auth');
+		$db->update_status($order_id,4,$user->user_id);
+		$result['status']='OK';
+		//return $this->ViewJSON($result);
+		$this->_redirect($_SERVER['HTTP_REFERER']);
 	}
 	public function listAction(){
 		
-		$param = $_GET;
+		$param = $this->get_Gparam(array('orders_id','fdate','tdate','status','page'));
         //PhoLog::debug_var('---search---',$param);
         $page = 1;
       	if(isset($param['page']) && strlen($param['page']) > 0){
             $page=$param['page'];
         }
-        $db = new Posts();
+		$db = new Orders();
         $ctg = new Category();
         $user = $this->session->get('auth');
 		//$result['list']=$db->get_list_byuser($user->user_id);
@@ -103,7 +107,7 @@ class ProductController extends PHOController
 
         $param['page'] = $page;
         //$param['ctg_name'] ='Kết quả tìm';
-        $param['ctg_no'] = str_replace('/','', $_SERVER['REQUEST_URI']);
+        $param['ctg_no'] = trim( $_SERVER['REQUEST_URI'],'/');
         $exp = explode('&page',$param['ctg_no'])  ;
         $param['ctg_no']=  $exp[0]; 
                   
@@ -129,14 +133,12 @@ class ProductController extends PHOController
         }
         $param['start'] = $start;
         $param['end'] = $end;
-        if(!isset($param['plevel']) ){
-			$param['plevel'] = '';
-		}
+        
 		if(!isset($param['status']) ){			
 			$param['status'] = '';
 		}
-		if(!isset($param['postno']) ){			
-			$param['postno'] = '';
+		if(!isset($param['orders_id']) ){			
+			$param['orders_id'] = '';
 		}
 		if(!isset($param['fdate'])){			
 			$param['fdate'] = '';
@@ -144,6 +146,9 @@ class ProductController extends PHOController
 		if(!isset($param['tdate'])){			
 			$param['tdate'] = '';
 		}
+		
+		PhoLog::debug_var('---search---',$_SERVER['REQUEST_URI']);
+		PhoLog::debug_var('---search---',$param);
         $this->set_template_share();
         $this->ViewVAR($param);
 		

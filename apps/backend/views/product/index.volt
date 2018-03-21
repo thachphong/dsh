@@ -37,7 +37,7 @@
 			  <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
-                    <h2>Danh sách tin rao<!--<small>Users</small>--></h2>
+                    <h2>Danh sách sản phẩm<!--<small>Users</small>--></h2>
                     <ul class="nav navbar-rigth panel_toolbox" style="min-width: auto;">                     
                       <li><input class="btn btn-info" id="btn_add" type="button" value="Thêm mới"></li>
                     </ul>
@@ -46,12 +46,12 @@
                   <div class="x_content">
                   	<form method="GET" action="{{url.get('product')}}">
                     <div class="row form-group">
-                    	<label class="col-sm-1">Loại BĐS</label>
+                    	<label class="col-sm-1">Danh mục</label>
                     	<div class="col-sm-2">
                     		<select class="form-control" name="ctgid">
                     			<option value=""></option>
                     			{%for item in categorys%}
-                    				<option value="{{item['ctg_id']}}" {%if item['cnt_child'] >0%}class="optionGroup"{%endif%}>{%if item['ctg_level'] >=2%}&nbsp;&nbsp;&nbsp;{%endif%}{{item['ctg_name']}}</option>
+                    				<option value="{{item['ctg_id']}}" {%if item['cnt_child'] >0%}class="optionGroup"{%endif%} {%if ctgid==item['ctg_id']%}} selected {%endif%}>{%if item['ctg_level'] >=2%}&nbsp;&nbsp;&nbsp;{%endif%}{{item['ctg_name']}}</option>
                     			{%endfor%}
                     		</select>                		
                     	</div>                    	
@@ -103,11 +103,12 @@
                         </tr>
                       </thead>
                       <tbody id="fbody">
+                      {%if list|length >0%}
                       {%for key,item in list%}
                       	<tr>
                           <td>{{item['pro_id']}}</td>  
                           <td>{{item['ctg_name']}}</td>  
-                          <td><a href="{{url.get('b/')}}{{item['pro_name']}}_{{item['pro_id']}}" target="_blank" id="name_{{item['pro_id']}}">{{item['pro_name']}}</a></td>                     
+                          <td><a href="{{url.get('sp/')}}{{item['pro_no']}}_{{item['pro_id']}}" target="_blank" id="name_{{item['pro_id']}}">{{item['pro_name']}}</a></td>                     
                           <td id="status_{{item['pro_id']}}">{{item['status']}}</td>
                           <td>                            
                             <span class="fa {%if item['good_sell'] == 0%}fa-square-o{%else%}fa-check-square{%endif%}" style="font-size: 16px;"></span>                            
@@ -117,13 +118,14 @@
                             <span class="fa {%if item['del_flg'] == 1%}fa-square-o{%else%}fa-check-square{%endif%}" style="font-size: 16px;"></span>                            
                           </td>
                           <td>
-                            <a class="btn btn-warning btn-xs btn_edit" href="{{url.get('product/edit/')}}{{item['pro_id']}}">Sửa</a>
+                            <a target="_blank" class="btn btn-warning btn-xs btn_edit" href="{{url.get('product/edit/')}}{{item['pro_id']}}">Sửa</a>
                           </td>
                           <td>
                             <button class="btn btn btn-danger btn-xs btn_delete" id="del_{{item['pro_id']}}">Xóa</button>
                           </td>
                         </tr>
-                      {%endfor%}                        
+                      {%endfor%} 
+                      {%endif%}                       
                       </tbody>
                     </table>
                     {%if total_page > 1%}

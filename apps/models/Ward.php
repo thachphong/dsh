@@ -17,7 +17,7 @@ class Ward extends DBModel
         return Ward::find();
     }
     public function get_byparent($m_district_id){
-        $sql ="select m_ward_id,m_ward_name from m_ward where m_district_id=:m_district_id";
+        $sql ="select m_ward_id,m_ward_name from m_ward where m_district_id=:m_district_id order by m_ward_name";
         return $this->pho_query($sql,array('m_district_id'=>$m_district_id));
     }
     public function get_rows(){

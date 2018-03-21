@@ -45,7 +45,8 @@ class PageController extends PHOController
 			  'upd_user',			 
 			  'del_flg',
 			  'img_path',
-			  'disp_home'
+			  'disp_home',
+			  'folder_tmp'
 			));
 		
 		$result = array('status' => 'OK');
@@ -60,7 +61,7 @@ class PageController extends PHOController
         	$param['user_id'] = $login_info->user_id;
 			if(strlen($param['page_id'])==0){
 				$id =$db->_insert($param);
-				$imglist = $this->move_file($id,$listfile['tmp']);
+				$imglist = $this->move_file($id,$listfile['tmp'],$param['folder_tmp']);
 				//PhoLog::debug_Var('---img--',$imglist);
 				$db->content = $this->replace_image_path($imglist,$param['content']);
 				//PhoLog::debug_Var('---img--',$db->content);				
@@ -70,7 +71,7 @@ class PageController extends PHOController
 				$file_old = $this->get_listfile_old($page_id);
 				$img_main_path = $this->get_img_main_path($page_id);
 
-				$imglist = $this->move_file($param['page_id'],$listfile['tmp']);
+				$imglist = $this->move_file($param['page_id'],$listfile['tmp'],$param['folder_tmp']);
 				$param['content'] = $this->replace_image_path($imglist,$param['content']);
 				
 				$db->_update($param);
@@ -88,7 +89,8 @@ class PageController extends PHOController
 		return $this->ViewJSON($result);
 	}
 	public function get_listfile($content){
-		$pattern ='/(src="' .str_replace('/', '\/', BASE_URL_NAME).')(.*?)(\")/' ;
+		//$pattern ='/(src="' .str_replace('/', '\/', BASE_URL_NAME).')(.*?)(\")/' ;
+		$pattern ='/(src="\\/image|src="\\/tmp)(.*?)(\\")/' ;
 		preg_match_all($pattern,$content,$match);
 		//PhoLog::debug_Var('---rrrr--',$pattern);
 		$result = array();
@@ -106,9 +108,9 @@ class PageController extends PHOController
 		return $result;
 		//PhoLog::debug_Var('---rrrr--',$result);	
 	}
-	public function move_file($page_id,$listfile){
+	public function move_file($page_id,$listfile,$folder_tmp){
 		$dest_folder = PHO_PUBLIC_PATH.'images/pages';
-		//$src_folder= PHO_PUBLIC_PATH.'tmp/'.$folder_tmp;
+		$src_folder= PHO_PUBLIC_PATH.'tmp/'.$folder_tmp;
 		$result = array();
 		$file = new FilePHP();
 	
@@ -120,12 +122,12 @@ class PageController extends PHOController
 		foreach ($listfile as $key => $value){
 			$exp = explode('/', $value);
 			$src_file = 'images/pages/'.$page_id.'/'.$exp[count($exp)-1];
-			$file->CopyFile(PHO_PUBLIC_PATH.$value,PHO_PUBLIC_PATH.$src_file);
+			$file->CopyFile($src_folder.'/'.$exp[count($exp)-1],PHO_PUBLIC_PATH.$src_file);
 			//PhoLog::debug_Var('---rrrr--','from:'.PHO_PUBLIC_PATH.$value);	
 			//PhoLog::debug_Var('---rrrr--','to:'.PHO_PUBLIC_PATH.$src_file);	
-			$file->DeleteFile(PHO_PUBLIC_PATH.$value);
+			$file->DeleteFile($src_folder.'/'.$exp[count($exp)-1]);
 			$result[$key]['old'] = $value;
-			$result[$key]['new'] = $src_file;
+			$result[$key]['new'] ='/'. $src_file;
 		}
 		return $result;
 	}

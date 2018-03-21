@@ -12,22 +12,25 @@ class OrdersDetail extends DBModel
     public $qty;
     public $total;
     public $size;
-    
+    public $color;
+    public $discount;
   
     public function initialize()
     {
         $this->setSource("orders_detail");
     }    
     
-	public function insert_multi($ord_id,$param){
-		foreach($param as $item){
+	public function insert_multi($ord_id,$cart){
+		foreach($cart as $item){
 			$db = new OrdersDetail();
 			$db->ord_id = $ord_id;
 			$db->pro_id = $item['pro_id'];
-			$db->price = $item['price'];
+			$db->price = $item['price_exp'];
 			$db->qty = $item['qty'];
-			$db->total = $item['total'];
+			$db->total = $item['amount'];
 			$db->size = $item['size'];
+			$db->color = $item['color'];
+			$db->discount = $item['chietkhau'];
 			$db->save();
 		}
 		return TRUE;

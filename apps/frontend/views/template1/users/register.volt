@@ -15,13 +15,21 @@
 				<hr class="line" />		
 				<div class="pn_content padding-bottom20">					
 					<form enctype="multipart/form-data" id="from_post">
-						<div class="row margin-top10">
+						<!--<div class="row margin-top10">
 							<label class="col-md-3 col-sm-3 col-xs-12 title_col align_right">Tên đăng nhập <span class="lab_red">(*)</span>:</label>
 							<div class="col-md-6 col-sm-8 col-xs-12">
 								<input type="text" name="user_no"  value="" id="user_no" required>
 								<span class="lab_red lab_invisible" id="user_no_error">Bạn cần nhập tên đăng nhập !</span>
 								<span class="lab_red lab_invisible" id="user_no_validate">Tên đăng nhập này đã có, vui lòng nhập tên khác !</span>
 							</div>
+						</div>-->
+						<div class="row margin-top10">
+							<label class="col-md-3 col-sm-3 col-xs-12 title_col align_right">Email <span class="lab_red">(*)</span>:</label>
+							<div class="col-md-6 col-sm-8 col-xs-12">
+								<input type="Email" name="email"  value="" id="email" required>
+								<span class="lab_red lab_invisible" id="email_error">Bạn cần nhập email !</span>
+								<span class="lab_red lab_invisible" id="email_validate">Bạn cần nhập đúng định dạng email !</span>
+							</div>							
 						</div>
 						<div class="row margin-top10">
 							<label class="col-md-3 col-sm-3 col-xs-12 title_col align_right">Mật khẩu <span class="lab_red">(*)</span>:</label>
@@ -39,14 +47,6 @@
 							</div>
 						</div>
 						<div class="row margin-top10">
-							<label class="col-md-3 col-sm-3 col-xs-12 title_col align_right">Email <span class="lab_red">(*)</span>:</label>
-							<div class="col-md-6 col-sm-8 col-xs-12">
-								<input type="Email" name="email"  value="" id="email" required>
-								<span class="lab_red lab_invisible" id="email_error">Bạn cần nhập email !</span>
-								<span class="lab_red lab_invisible" id="email_validate">Bạn cần nhập đúng định dạng email !</span>
-							</div>							
-						</div>
-						<div class="row margin-top10">
 							<label class="col-md-3 col-sm-3 col-xs-12 title_col align_right">Di động <span class="lab_red">(*)</span>:</label>
 							<div class="col-md-6 col-sm-8 col-xs-12">
 								<input type="text" name="mobile"  value="" id="mobie" required>
@@ -61,9 +61,56 @@
 							</div>
 						</div>
 						<div class="row margin-top10">
+							<label class="col-md-3 col-sm-3 col-xs-12 title_col align_right">Tỉnh/TP</label>
+							<div class="col-md-6 col-sm-8 col-xs-12">
+								<select id="m_provin_id" name="city">            			
+			            			<option value="">--Chọn Tỉnh/TP--</option>
+			            			{%for item in provins%}
+			            				<option value="{{item.m_provin_id}}">{{item.m_provin_name}}</option>
+			            			{%endfor%}
+			            		</select>
+								<label class="lab_red lab_invisible" id="m_provin_id_error">Bạn cần chọn Tỉnh/TP</label>
+							</div>
+						</div>
+						<div class="row margin-top10">
+							<label class="col-md-3 col-sm-3 col-xs-12 title_col align_right">Quận/Huyện</label>
+							<div class="col-md-6 col-sm-8 col-xs-12">
+								<select id="m_district_id" name="district">            			
+			            			<option value="">--Chọn Quận/Huyện--</option>
+			            		</select>
+								<label class="lab_red lab_invisible" id="m_district_id_error">Bạn cần chọn Quận/Huyện</label>
+							</div>
+						</div>
+						<div class="row margin-top10">
+							<label class="col-md-3 col-sm-3 col-xs-12 title_col align_right">Phường/Xã</label>
+							<div class="col-md-6 col-sm-8 col-xs-12">
+								<select id="m_ward_id" name="ward">            			
+			            			<option value="">--Chọn Phường/Xã--</option>
+			            		</select>
+								<label class="lab_red lab_invisible" id="m_ward_id_error">Bạn cần chọn Phường/Xã</label>
+							</div>
+						</div>						
+						<div class="row margin-top10">
 							<label class="col-md-3 col-sm-3 col-xs-12 title_col align_right">Địa chỉ :</label>
 							<div class="col-md-6 col-sm-8 col-xs-12">
 								<input type="text" name="address"  value="" >
+							</div>
+						</div>
+						<div class="row margin-top10">
+							<label class="col-md-3 col-sm-3 col-xs-12 title_col align_right">Thành viên :</label>
+							<div class="col-md-2 col-sm-2 col-xs-12">
+								<label class="control control-radio">
+							        Thường
+							        <input type="radio" name="ctv_flg" checked="checked" value="0" class="m_type_id" />
+							        <div class="control_indicator"></div>
+							    </label>
+							</div>
+							<div class="col-md-4 col-sm-4 col-xs-12">							
+								<label class="control control-radio">
+							        Cộng tác viên (CTV)
+							        <input type="radio" name="ctv_flg"  value="1" class="m_type_id"/>
+							        <div class="control_indicator"></div>
+							    </label>
 							</div>
 						</div>
 						<div class="row margin-top10">
@@ -166,5 +213,47 @@
 		  var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
 		  return emailReg.test( $email );
 		}	
+		$(document).off('change','#m_provin_id');
+		$(document).on('change','#m_provin_id',function(){			
+			change_district_option();			
+		});
+		$(document).off('change','#m_district_id');
+		$(document).on('change','#m_district_id',function(){			
+			change_ward_option();			
+		});
+		var change_district_option= function(){
+			var val = $('#m_provin_id').val();
+			var option = '<option value="">--Chọn Quận/Huyện--</option>';
+			$('#m_district_id').empty();
+			loading_flg = false;
+			Pho_json_ajax('GET',"{{url.get('index/district/')}}"+val ,null,function(datas){
+		        
+		        var list = datas.list;		          
+		        $('#cart_number').text(datas.total);
+		        $.each(list,function(key,item){			
+						option +='<option value="'+item['m_district_id']+'" >'+item['m_district_name']+'</option>';
+				});
+		        $('#m_district_id').empty();
+				$('#m_district_id').append(option);    
+		       	                
+	        });
+		};
+		var change_ward_option= function(){
+			var val = $('#m_district_id').val();
+			var option = '<option value="">--Chọn Phường/Xã--</option>';
+			loading_flg = false;
+			 $('#m_ward_id').empty();
+			Pho_json_ajax('GET',"{{url.get('index/ward/')}}"+val ,null,function(datas){
+		        
+		        var list = datas.list;		          
+		        $('#cart_number').text(datas.total);
+		        $.each(list,function(key,item){			
+						option +='<option value="'+item['m_ward_id']+'" >'+item['m_ward_name']+'</option>';
+				});
+		       
+				$('#m_ward_id').append(option);    
+		       	                
+	        });
+		};
 	});
 </script>
