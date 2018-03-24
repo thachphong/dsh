@@ -107,7 +107,7 @@ class ProductController extends PHOController
 			$param['parent_id'] = 0;
 			$param['src_link'] = '';
 			$param['sizelist'] ='';
-			
+			$param['description']='';
 			/*if(strlen($param['parent_id'])==0){
 				$param['parent_id'] = 0;
 			}*/
@@ -123,7 +123,9 @@ class ProductController extends PHOController
 			$param['new_flg'] =0;
 			//PhoLog::debug_var('---edit---',$param['img_list'] );
 		}
+		
 		$param['folder_tmp'] = uniqid("",true);
+		$param['url_refer']= $_SERVER['HTTP_REFERER'];
 		$this->ViewVAR($param);		
 	}
 	public function updateAction(){
@@ -151,6 +153,7 @@ class ProductController extends PHOController
 			  ,'src_link'
 			  ,'sizelist'
 			  ,'color'
+			  ,'description'
 			));
 				
 		$result['status'] = 'OK';	

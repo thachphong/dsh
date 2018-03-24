@@ -33,7 +33,7 @@
 					{%for item in list%}					
 					<div class="col-md-3 col-sm-3 col-xs-6 pro_list_item">
 						<a href="{{url.get('sp/')}}{{item['pro_no']}}_{{item['pro_id']}}">					
-						<img src="{{url.get('')}}{{item['img_path']}}"/>
+						<img src="{{url.get('')}}{{item['img_path']}}" title="{{item['pro_name']}}" alt="{{item['pro_name']}}"/>
 						<div>
 							<span class="lst-it-title">{{item['pro_name']}}</span>
 						</div>

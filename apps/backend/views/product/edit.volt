@@ -157,9 +157,13 @@
                         </div>
                         <div class="col-md-4 col-sm-5 col-xs-12">
                           <input type="text" id="sizelist" name="sizelist" class="form-control" value="{{sizelist}}"> 
-                        </div>  
-                        
-                                            
+                        </div>              
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-2 col-sm-2 col-xs-12">Description</label>
+                        <div class="col-md-10 col-sm-10 col-xs-12">
+                          <input type="text" id="description" name="description" class="form-control" value="{{description}}">
+                        </div>              
                       </div>
                       <div class="form-group">
                         <div class="col-md-2 col-sm-2 col-xs-12">
@@ -261,7 +265,7 @@
                       <div class="ln_solid"></div>
                       <div class="form-group">
                         <div class="col-md-12 col-sm-12" style="text-align: center">
-                          <a class="dialog_close btn btn-primary" href="{{url.get('product')}}">Thoát</a>
+                          <a class="dialog_close btn btn-primary" href="{{url_refer}}">Thoát</a>
                           <a class="btn btn-success" id="btn_save" >Cập nhật</a>
                         </div>
                       </div>
@@ -354,7 +358,7 @@
 				if(datas.status =="OK"){
 					//Pho_modal_close("modal1");
 					//Pho_message_box("Thông báo",datas.msg);
-					Pho_direct("{{url.get('')}}product");
+					Pho_direct("{{url_refer}}");
 				}else{
 					Pho_message_box_error("Lỗi",datas.msg);
 				}
@@ -382,6 +386,9 @@
         	}
         	if($("#src_link").val()=='' && $('#not_src').prop('checked')==false){
         		return "Bạn chưa nhập nguồn sản phẩm";
+        	}
+        	if($("#description").val()==''){
+        		return "Bạn chưa nhập Description";
         	}
           var msg ="";
           $('#list_size').find('tr').each(function(){

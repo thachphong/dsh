@@ -5,7 +5,7 @@
                <div class="col-md-12 col-sm-12 col-xs-12 no_padding_right">               	  
                	  <div class="row">
                   <ul class="top_menu">                  	 
-                     <!--<li><span class="fa fa-pencil"></span><a href="{{url.get('dang-tin/0')}}">Đăng tin miễn phí</a></li>-->
+                     <li><strong >Hotline:<span class="col_blue"> {{define['comp_phone']}}</span></strong></li>
                      {%if login_info is defined%}
                         <li><span class="fa fa-users"></span><a href="{{url.get('thanh-vien')}}">{{login_info.user_name}}</a></li>
                         <li><span class="fa fa-sign-out"></span><a href="{{url.get('users/logout')}}">Thoát</a></li>
@@ -54,10 +54,10 @@
 					{{elements.getMenu()}}			
 				</ul>
     		</li>
-    		<li><a>Xu hướng</a></li>
+    		<li><a>Sản phẩm mới</a></li>    		
     		<li><a>Bán chạy</a></li>
-    		<li><a>Khuyến mãi</a></li>
-    		<li><a>Quyền lợi CTV</a></li>
+    		<li><a>Top chiết khấu</a></li>    		
+    		<li><a href="{{baseurl}}p/quyen-loi-cong-tac-vien">Quyền lợi CTV</a></li>
     		<li><a>Hướng đẫn đăng ký CTV</a></li>
     	</ul>
     </div>

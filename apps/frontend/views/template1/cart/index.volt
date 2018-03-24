@@ -44,7 +44,7 @@
                         {%for item in carts%}
                         	{%set idx = idx +1%}
                         	<tr class="spline tr_product" id="tr_{{idx}}">                                       
-                                <td><img src="{{baseurl}}crop/50x50{{item['img_path']}}" style="margin-right:10px">{{item['pro_name']}}</td>
+                                <td><img src="{{baseurl}}crop/50x50{{item['img_path']}}" style="margin-right:10px" title="{{item['pro_name']}}" alt="{{item['pro_name']}}">{{item['pro_name']}}</td>
                                 <td>{{item['color']}}</td>
                                 <td>{{item['size']}}</td>
                                 <td align="right">

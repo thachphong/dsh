@@ -35,6 +35,9 @@ class CategoryController extends PHOController
         if($ctg_no != 'allnew'){
             $info = $ctg->get_ctg_byno($ctg_no);
             $param['ctg_name'] = $info->ctg_name;
+            $param['description'] = $info->description;
+        	$param['keywords'] = $info->keywords;
+            $param['title'] = $info->title;
             $param['ctg_no'] ='c/'. $ctg_no;
             if($info->ctg_id =='1' || $info->ctg_id=='2'){
 				$param['type'] = $info->ctg_id;
@@ -47,7 +50,7 @@ class CategoryController extends PHOController
         }        
         $param['list']=$db->get_list_byctg($ctg_no,$start_row);
         $param['total_post'] = $db->get_list_byctg_count($ctg_no);
-        $param['total_page']= round($param['total_post']/PAGE_LIMIT_RECORD);
+        $param['total_page']=  ceil($param['total_post']/PAGE_LIMIT_RECORD);
         
         $start = $page - 2;
         $end = $page + 2;

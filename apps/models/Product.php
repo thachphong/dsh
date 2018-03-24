@@ -23,6 +23,7 @@ class Product extends DBModel
 	public 	$pro_code;
 	public 	$src_link;
 	public  $sizelist;
+	public  $description;
 	public function initialize()
     {
         $this->setSource("product");
@@ -37,9 +38,11 @@ class Product extends DBModel
 				c.ctg_name,
 				DATE_FORMAT(p.upd_date ,'%d/%m/%Y')  upd_date,
 				p.del_flg,
-				good_sell
+				good_sell,
+				img.img_path
 				FROM
 				product p
+				left join product_img img on  img.avata_flg = 1 and img.pro_id =p.pro_id
 				INNER JOIN category  c on c.ctg_id = p.ctg_id 
 				where 1=1
 				";
@@ -168,7 +171,8 @@ class Product extends DBModel
 		    $this->pro_code++;
 		    $this->pro_no = $param['pro_no'] .'-'.strtolower($this->pro_code);
 		    $this->pro_name   = $param['pro_name'].' '.$this->pro_code;
-		    $this->sizelist = $param['sizelist'];		     
+		    $this->sizelist = $param['sizelist'];	
+		    $this->description =$param['description'];	     
 		    $this->save();
 	    } catch (\Exception $e) {
 			PhoLog::debug_var('update----',$e);
@@ -198,7 +202,8 @@ class Product extends DBModel
 					  promotions = :promotions,
 					  good_sell =:good_sell,
 					  src_link =:src_link,
-					  sizelist =:sizelist					 
+					  sizelist =:sizelist,
+					  description =:description					 
 					where pro_id = :pro_id
 				";
 		
@@ -218,7 +223,8 @@ class Product extends DBModel
 					  'technology',
 					  'user_id'	,
 					  'src_link',
-					  'sizelist'
+					  'sizelist',
+					  'description'
 					));
 		$this->pho_execute($sql,$sql_par );			
 		return TRUE;	
@@ -307,7 +313,8 @@ class Product extends DBModel
 					  technology,
 					  full_box,
 					  src_link,
-					  sizelist
+					  sizelist,
+					  description
 			  from product where pro_id = :pro_id";
 		$res = $this->pho_query($sql ,array('pro_id'=>$pro_id));
 		if(count($res)> 0){

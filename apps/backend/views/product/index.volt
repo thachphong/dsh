@@ -4,6 +4,12 @@
     font-weight: bold;
     font-style: italic;
 }
+.opt_blue{
+		color: #0202fd;
+	}
+	.opt_red{
+		color: #dc010c;
+	}
 .pager .active a{
 		 background-color: rgba(10, 75, 166, 0.86);
     		color: #fff;
@@ -49,10 +55,14 @@
                     	<label class="col-sm-1">Danh mục</label>
                     	<div class="col-sm-2">
                     		<select class="form-control" name="ctgid">
-                    			<option value=""></option>
-                    			{%for item in categorys%}
-                    				<option value="{{item['ctg_id']}}" {%if item['cnt_child'] >0%}class="optionGroup"{%endif%} {%if ctgid==item['ctg_id']%}} selected {%endif%}>{%if item['ctg_level'] >=2%}&nbsp;&nbsp;&nbsp;{%endif%}{{item['ctg_name']}}</option>
-                    			{%endfor%}
+                    			<option value=""></option>                    			
+                    			{%for ctg in categorys%}
+                          	 	{%if ctg['cnt_child'] > 0%}
+                          	 		<option   class="optionGroup {%if ctg['ctg_level'] == 1%}opt_blue{%elseif ctg['ctg_level'] == 2%}opt_red{%endif%}" value="{{ctg['ctg_id']}}" {%if ctg['ctg_id'] == ctgid%}selected="selected"{%endif%}>{%if ctg['ctg_level'] == 2%}&nbsp;&nbsp;&nbsp;{%elseif ctg['ctg_level'] == 3%}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{%endif%}{{ctg['ctg_name']}}</option>
+                          	 	{%else%}
+                          	 		<option class="{%if ctg['ctg_level'] == 1%}opt_blue{%elseif ctg['ctg_level'] == 2%}opt_red{%endif%}"  value="{{ctg['ctg_id']}}" {%if ctg['ctg_id'] == ctgid%}selected="selected"{%endif%}>{%if ctg['ctg_level'] == 2%}&nbsp;&nbsp;&nbsp;{%elseif ctg['ctg_level'] == 3%}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{%endif%}{{ctg['ctg_name']}}</option>
+                          	 	{%endif%}
+                          	 {%endfor%}
                     		</select>                		
                     	</div>                    	
                     	<label class="col-sm-1">Từ ngày</label>
@@ -90,8 +100,9 @@
                     	<div class="col-sm-12">
                       <thead>
                         <tr>
-                          <th>Mã SP</th>
+                          <th>ID SP</th>
                           <th>Danh mục</th>
+                          <th>Hình ảnh</th>
                           <th>Tên Sản Phẩm</th>
                           <th>Trạng thái</th>
                           <!-- <th>Giá cũ</th>  -->                      
@@ -107,7 +118,8 @@
                       {%for key,item in list%}
                       	<tr>
                           <td>{{item['pro_id']}}</td>  
-                          <td>{{item['ctg_name']}}</td>  
+                          <td>{{item['ctg_name']}}</td>                            
+                          <td><img src="{{baseurl}}crop/50x50{{item['img_path']}}"></td>
                           <td><a href="{{url.get('sp/')}}{{item['pro_no']}}_{{item['pro_id']}}" target="_blank" id="name_{{item['pro_id']}}">{{item['pro_name']}}</a></td>                     
                           <td id="status_{{item['pro_id']}}">{{item['status']}}</td>
                           <td>                            

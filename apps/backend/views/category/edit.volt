@@ -52,19 +52,29 @@
                       {%endif%}
                       <div class="form-group">
                         <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Thứ tự hiển thị</label>
-                        <div class="col-md-3 col-sm-3 col-xs-12">
-                          <input id="ctg_sort" class="form-control col-md-7 col-xs-12" type="number" name="ctg_sort" value="{{sort}}" >
+                        <div class="col-md-2 col-sm-2 col-xs-12">
+                          <input id="ctg_sort" class="form-control" type="number" name="ctg_sort" value="{{sort}}" >
                         </div>
-                      </div>
-                      <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Hiện/Ẩn</label>
-                        <div class="col-md-3 col-sm-3 col-xs-12">
+                        <label class="control-label col-md-2 col-sm-2 col-xs-12">Hiện/Ẩn</label>
+                        <div class="col-md-2 col-sm-2 col-xs-12">
                           <select class="form-control" name="del_flg">
                              <option value="0" {%if del_flg == 0%}selected="selected"{%endif%}>Hiện</option>
                              <option value="1" {%if del_flg == 1%}selected="selected"{%endif%}>Ẩn</option>
                           </select>                          
                         </div>
-                      </div>                      
+                      </div>
+                      <div class="form-group">
+                        <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Title</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <input id="title" class="form-control" type="text" name="title" value="{{title}}" >
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Description</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <textarea id="description" class="form-control" name="description" rows="3">{{description}}</textarea>
+                        </div>
+                      </div>                                               
                       <div class="ln_solid"></div>
                       <div class="form-group">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">

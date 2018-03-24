@@ -21,6 +21,8 @@ class Category extends DBModel
     public $sort;
     public $news_flg;  //0 tin post, 1 tin tuc, 2 du án
     public $m_type_id;
+    public $description;
+    public $title;
     public function initialize()
     {
         $this->setSource("category");
@@ -86,6 +88,8 @@ class Category extends DBModel
                     ,c.news_flg
                     ,c.m_type_id
                     ,c.ctg_code
+                    ,c.title               
+                    ,c.description
                 from category c
 								LEFT JOIN category p1 on p1.ctg_id = c.parent_id
                 where c.ctg_id = :ctg_id
@@ -113,49 +117,7 @@ class Category extends DBModel
         }else if(isset($param['parent_id_1']) && strlen($param['parent_id_1'])>0){
             $param['parent_id'] = $param['parent_id_1'];
         }
-        // $sql = "INSERT INTO category
-        //             (
-        //             ctg_name
-        //             ,ctg_no
-        //             ,parent_id
-        //             ,del_flg
-        //             ,add_date
-        //             ,add_user
-        //             ,upd_date
-        //             ,upd_user
-        //             ,ctg_level
-        //             ,sort
-        //             ,news_flg
-        //             )
-        //         VALUES
-        //             (
-        //             :ctg_name
-        //             ,:ctg_no
-        //             ,:parent_id
-        //             ,0
-        //             ,now()
-        //             ,:user_id
-        //             ,now()
-        //             ,:user_id
-        //             ,:ctg_level
-        //             ,:ctg_sort
-        //             ,:news_flg
-        //             )
-        //         ";
         
- 
-        // $this->execute($sql, ACWArray::filter($param, array(
-        //             'ctg_name'
-        //             ,'ctg_no'
-        //             ,'parent_id'                    
-        //             ,'ctg_sort'
-        //             ,'ctg_level'
-        //             ,'user_id'
-        //             ,'news_flg'
-        //             )));            
-        // $result = $this->query("SELECT LAST_INSERT_ID() AS ctg_id");            
-        // $new_id = $result[0]['ctg_id']; 
-        // $this->commit();
         $this->ctg_name = $param['ctg_name'];
         $this->ctg_no = $param['ctg_no'];
         $this->parent_id = $param['parent_id'];
@@ -168,6 +130,8 @@ class Category extends DBModel
         $this->sort = $param['ctg_sort'];
         $this->news_flg = $param['news_flg'];
         $this->m_type_id = $param['m_type_id'];
+        $this->description = $param['description'];     
+        $this->title= $param['title'];
         if($param['ctg_level'] ==1){
 			$this->ctg_code = $this->get_code_max($param['parent_id']);
 			$this->ctg_code++;
@@ -201,7 +165,9 @@ class Category extends DBModel
                     ,upd_user =:user_id
                     ,sort = :ctg_sort
                     ,m_type_id = :m_type_id
-                    ,parent_id=:parent_id
+                    ,parent_id=:parent_id                
+                    ,description =:description
+                    ,title =:title
                     where ctg_id = :ctg_id
                 ";
         
@@ -214,7 +180,9 @@ class Category extends DBModel
                     ,'user_id'
                     ,'del_flg'
                     ,'m_type_id'
-                    ,'parent_id'
+                    ,'parent_id'                  
+                    ,'description'
+                    ,'title'
                     )));  
         return TRUE;
     }

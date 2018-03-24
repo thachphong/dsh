@@ -103,10 +103,10 @@ class PhofileController extends PHOController
 				$filelist[] = $row;
 			}
 		}
-		if(strlen($param['tmp_name'])>0){
-			$filelist_2 = $file_lb->FileList(IMG_TMP_PATH.$param['tmp_name']);
+		if(strlen($param['folder_tmp'])>0){
+			$filelist_2 = $file_lb->FileList(IMG_TMP_PATH.$param['folder_tmp']);
 			foreach($filelist_2 as $item){
-				$row['url']= '/tmp/'.$param['tmp_name'].'/'.$item;
+				$row['url']= '/tmp/'.$param['folder_tmp'].'/'.$item;
 				$row['thumb']=$row['url'];
 				$row['tag']='';
 				$filelist[] = $row;

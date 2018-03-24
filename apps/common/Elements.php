@@ -274,8 +274,10 @@ class Elements extends Component
             $html = '';
             foreach($data as $key=>$item){
                 $html .= '<div class="col-md-12 pro_list_item">';                
-				$html .= '<a href="'.$item['pro_no'].'_'.$item['pro_id'].'">					
-						<img src="'.BASE_URL_NAME.$item['img_path'].'"/>
+				$html .= '<a href="'.$item['pro_no'].'_'.$item['pro_id'].'">
+						<div class="div_img">					
+							<img src="'.BASE_URL_NAME.$item['img_path'].'"/>
+						</div>
 						<div>
 							<span class="lst-it-title">'.$item['pro_name'].'</span>
 						</div>

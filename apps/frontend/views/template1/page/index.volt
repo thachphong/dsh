@@ -1,4 +1,3 @@
-
 <div class="row breadcrumb">
 	<div class="container">
 		<a href="{{baseurl}}">Trang chủ</a>		
@@ -14,10 +13,10 @@
                <h1>{{page.page_name}} </h1>
             </div> 
             <hr class="line" />           
-            <div class="pn_content pn_background pn_border margin_top">               
+            <div class="pn_content pn_background pn_border margin_top"> 
                <div class="row">
                   <div class="fr-element fr-view">
-                     {{page.content}}
+                    {{page.content}}
                   </div>
                   <hr class="line" />
 		            <div class="row">

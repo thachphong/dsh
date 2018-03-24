@@ -8,14 +8,14 @@
 				<li><a>Hỏi đáp</a></li>
 				<li><a>Quy chế hoạt động</a></li>				
 				<li><a>Chính sách bảo mật</a></li>
-				<li><a>Thông tin thanh toán</a></li>
+				<!--<li><a>Thông tin thanh toán</a></li>-->
 			</ul>
 		</div>		
 		<div class="col-md-3 col-sm-3 col-xs-12">
 			<p class="footer_title">Cộng tác viên</p>
 			<ul class="menu_footer">
 				<li><a>Hướng dẫn đăng ký</a></li>
-				<li><a>Quyền lợi cộng tác viên</a></li>
+				<li><a href="{{baseurl}}p/quyen-loi-cong-tac-vien">Quyền lợi cộng tác viên</a></li>
 				<li><a>Hướng dẫn đặt hàng</a></li>				
 			</ul>
 		</div>

@@ -90,6 +90,7 @@ class Module
             ]);
 			$view->setVar('baseurl', BASE_URL_NAME);
 			$view->setVar('ship_amount', SHIP_AMOUNT);
+			$view->setVar('sitename', SITE_NAME);
             return $view;
 
         });

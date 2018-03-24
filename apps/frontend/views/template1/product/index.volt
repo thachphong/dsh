@@ -20,7 +20,7 @@
 					</ul>
 				</div>
 				<div class="col-md-11 col-sm-11 col-xs-12 no_padding_right">
-					<img id="zoom_08" class="img_main" src="{{baseurl}}{{imglist[0].img_path}}" data-zoom-image="{{baseurl}}{{imglist[0].img_path}}"/>
+					<img id="zoom_08" class="img_main" src="{{baseurl}}{{imglist[0].img_path}}" data-zoom-image="{{baseurl}}{{imglist[0].img_path}}" title="{{pro_name}}" alt="{{pro_name}}"/>
 				</div>
 			</div>
 			<div class="col-md-6 col-sm-6 col-xs-12 no_padding_left">
@@ -126,17 +126,19 @@
 					</div>
 					
 				</div>
-				<div class="row pro_list">
+				<div class="row pro_list relation">
 					{%for item in relations%}					
 					<div class="col-md-3 col-sm-3 col-xs-6 pro_list_item">
-						<a href="{{url.get('sp/')}}{{item['pro_no']}}_{{item['pro_id']}}">					
-						<img src="{{url.get('')}}{{item['img_path']}}"/>
+						<a href="{{url.get('sp/')}}{{item['pro_no']}}_{{item['pro_id']}}">	
+						<div class="div_img">				
+							<img src="{{url.get('')}}{{item['img_path']}}"/>
+						</div>
 						<div>
 							<span class="lst-it-title">{{item['pro_name']}}</span>
 						</div>
 						<div>
 							<div>Giá bán lẻ: <strong class="font_size14 col_red">{{elements.currency_format(item['price_exp'])}} đ</strong></div>
-							<div>Giá CTV: <strong class="font_size14 col_blue">{{elements.currency_format(item['price_seller'])}} đ</strong></div>
+							<div>Chiết khấu CTV: <strong class="font_size14 col_blue">{{elements.currency_format(item['price_exp']-item['price_seller'])}} đ</strong></div>
 						</div>						
 						</a>
 					</div>

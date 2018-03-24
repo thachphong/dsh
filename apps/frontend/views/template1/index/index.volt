@@ -24,17 +24,34 @@
                </div>
 	</div>
 	<div class="container">
+		<div class="row panel_bg">
+			<div class="col-md-9">
+				<img src="{{url.get('template1/images/quy_trinh2.png')}}"/>
+			</div>
+			<div class="col-md-3" style="border-left: 1px solid #ddd;">
+				<h4>Lợi ích làm cộng tác viên</h4>
+				<ul class="loi_ich">
+					<li>Không cần vốn</li>
+					<li>Không trữ hàng</li>
+					<li>Không cần giao hàng</li>
+					<li>Không mất khách hàng</li>
+					<li>Dễ dàng tăng thu nhập</li>
+				</ul>
+			</div>
+		</div>
 		<div class="row margin-top-10">
 			<div class="pn-header-top">
 				<div class="pn-title">
-					<h2>Xu hướng</h2>
+					<h2>Sản phẩm mới</h2>
 				</div>				
 			</div>
 			<div class="row pro_list">
 					{%for item in newlist%}					
 					<div class="col-md-20 col-sm-3 col-xs-6 pro_list_item">
-						<a href="{{url.get('sp/')}}{{item['pro_no']}}_{{item['pro_id']}}">					
-						<img src="{{url.get('')}}{{item['img_path']}}"/>
+						<a href="{{url.get('sp/')}}{{item['pro_no']}}_{{item['pro_id']}}">	
+						<div class="div_img">
+							<img src="{{url.get('')}}{{item['img_path']}}"/>
+						</div>
 						<div>
 							<span class="lst-it-title">{{item['pro_name']}}</span>
 						</div>
@@ -56,8 +73,35 @@
 			<div class="row pro_list">
 					{%for item in goodsells%}					
 					<div class="col-md-20 col-sm-3 col-xs-6 pro_list_item">
-						<a href="{{url.get('sp/')}}{{item['pro_no']}}_{{item['pro_id']}}">					
-						<img src="{{url.get('')}}{{item['img_path']}}"/>
+						<a href="{{url.get('sp/')}}{{item['pro_no']}}_{{item['pro_id']}}">	
+						<div class="div_img">				
+							<img src="{{url.get('')}}{{item['img_path']}}"/>
+						</div>
+						<div>
+							<span class="lst-it-title">{{item['pro_name']}}</span>
+						</div>
+						<div>
+							<div>Giá bán lẻ: <strong class="font_size14 col_red">{{elements.currency_format(item['price_exp'])}} đ</strong></div>
+							<div>Chiết khấu CTV: <strong class="font_size14 col_blue">{{elements.currency_format(item['price_exp']-item['price_seller'])}} đ</strong></div>
+						</div>						
+						</a>
+					</div>
+					{%endfor%}
+			</div>
+		</div>
+		<div class="row margin-top-10">
+			<div class="pn-header-top">
+				<div class="pn-title">
+					<h2>Top chiết khấu</h2>
+				</div>
+			</div>
+			<div class="row pro_list">
+					{%for item in goodsells%}					
+					<div class="col-md-20 col-sm-3 col-xs-6 pro_list_item">
+						<a href="{{url.get('sp/')}}{{item['pro_no']}}_{{item['pro_id']}}">	
+						<div class="div_img">				
+							<img src="{{url.get('')}}{{item['img_path']}}"/>
+						</div>
 						<div>
 							<span class="lst-it-title">{{item['pro_name']}}</span>
 						</div>

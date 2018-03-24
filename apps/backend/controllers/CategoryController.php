@@ -61,6 +61,9 @@ class CategoryController extends PHOController
 		$param['del_flg'] = 0;	
 		$param['sort'] = 1;	
 		$param['m_type_id'] = 0;
+		$param['title'] = '';
+		$param['description'] = '';
+		$param['keywords'] = '';
 		$mt = new MType();
 		$param['mtypelist'] = $mt->get_all();	
 		if(strlen($param['ctg_level'])==0){
@@ -154,6 +157,9 @@ class CategoryController extends PHOController
 			, 'parent_id_2'
 			,'news_flg'
 			,'m_type_id'
+			,'description'
+			,'title'
+			,'keywords'
 			));
 		//$param['news_flg'] =0;
 		$result = array('status' => 'OK');
