@@ -265,14 +265,16 @@ class CartController extends PHOController
 		}
 		PhoLog::debug_var('---order---',$param);
 		$ord_id = $db->_insert($param);
-		$param['ord_id']='D'. $ord_id;
+		$param['ord_id']= $ord_id;
 		$detail->insert_multi($ord_id,$cart);
 		$login_info =  $this->session->get('auth');
 		$email_to = $param['email'];
 		if($login_info != NULL){			
 			$email_to = $login_info->email;
 		}
-     	$this->sendmail($param,$cart,$email_to);
+		$odb = new Orders();
+		$ord_info = $odb->get_info($ord_id);
+     	$this->sendmail($param,$cart,$email_to,$ord_info);
 		$this->session->set('cart_info', NULL);
 		//return ACWView::template('success.html');		
 		$this->_redirect(BASE_URL_NAME.'cart/success/'.$ord_id);
@@ -280,10 +282,10 @@ class CartController extends PHOController
 	
 	
 		
-	public function sendmail($param,$cart,$email_to){
+	public function sendmail($param,$cart,$email_to,$ord_info){
 		$email = new Mail();
 		
-		$body_tmp = $this->get_body($param,$cart);		
+		$body_tmp = $this->get_body($param,$cart,$ord_info);		
 		$replacements['HEADER'] = '<h2><strong>Thông tin đặt hàng </strong></h2>';
 		$replacements['BODY'] = $body_tmp;
 		$db = new Define();
@@ -303,20 +305,29 @@ class CartController extends PHOController
 		$email->replaceBody($replacements);
 		$result = $email->send();
 	}
-	public function get_body($param,$cart){
-		$html="<h3>Thông tin khách hàng</h3><table>";
+	public function get_body($param,$cart,$ord_info){
+		$html="<h3>Địa chỉ nhận hàng</h3><table>";
 		
 		if(strlen($param['fullname']) > 0){
 			$html .= "<tr><td><strong>Họ tên: </strong></td><td>".$param['fullname']."</td></tr>"."\r\n";
 		} 
 		/*if(strlen($param['bill_company']) > 0){
 			$html .= "<tr><td><strong>Công ty: </strong></td><td>".$param['bill_company']."</td></tr>"."\r\n";
-		}*/
+		}
 		if(strlen($param['email']) > 0){
 			$html .= "<tr><td><strong>Email: </strong></td><td>".$param['email']."</td></tr>"."\r\n";
-		}
+		}*/
 		if(strlen($param['phone']) > 0){
 			$html .= "<tr><td><strong>Điện thoại: </strong></td><td>".$param['phone']."</td></tr>"."\r\n";
+		}
+		if(strlen($ord_info['provin_name']) > 0){
+			$html .= "<tr><td><strong>TP/Tỉnh: </strong></td><td>".$ord_info['provin_name']."</td></tr>"."\r\n";
+		}
+		if(strlen($ord_info['district_name']) > 0){
+			$html .= "<tr><td><strong>Quận/Huyện: </strong></td><td>".$ord_info['district_name']."</td></tr>"."\r\n";
+		}
+		if(strlen($ord_info['ward_name']) > 0){
+			$html .= "<tr><td><strong>Phường/Xã: </strong></td><td>".$ord_info['ward_name']."</td></tr>"."\r\n";
 		}
 		if(strlen($param['address']) > 0){
 			$html .= "<tr><td><strong>Địa chỉ: </strong></td><td>".$param['address']."</td></tr>"."\r\n";
@@ -338,24 +349,28 @@ class CartController extends PHOController
 		$html .="<h3>Thông tin đơn hàng</h3><p><strong>Mã đơn hàng: ".$param['ord_id']."</strong></p><table style=\"border-collapse: collapse;\">";
 		$html .= "<tr><td style=\"border: 1px solid #d7dbdb;padding:10px;\">STT</td>
 				  <td style=\"border: 1px solid #d7dbdb;padding:10px;\">Tên hàng</td>
+				  <td style=\"border: 1px solid #d7dbdb;padding:10px;\">Màu sắc</td>
 				  <td style=\"border: 1px solid #d7dbdb;padding:10px;\">Kích thước</td>
 				  <td style=\"border: 1px solid #d7dbdb;padding:10px;\">Giá</td>
 				  <td style=\"border: 1px solid #d7dbdb;padding:10px;\">Số lượng</td>
 				  <td style=\"border: 1px solid #d7dbdb;padding:10px;\">Thành tiền</td>
 				  </tr>";
-		foreach($cart as $key=>$item){			
-			$html .= "<tr><td style=\"border: 1px solid #d7dbdb;padding:5px;\">".($key+1)."</td>
+		$stt=0;
+		foreach($cart as $key=>$item){	
+			$stt++;
+			$html .= "<tr><td style=\"border: 1px solid #d7dbdb;padding:5px;\">".$stt."</td>
 			<td style=\"border: 1px solid #d7dbdb;padding:10px;\">".$item['pro_name']."</td>
+			<td style=\"border: 1px solid #d7dbdb;padding:10px;\">".$item['color']."</td>
 			<td style=\"border: 1px solid #d7dbdb;padding:10px;\">".$item['size']."</td>
 			<td style=\"border: 1px solid #d7dbdb;padding:10px;\">".self::currency_format($item['price_exp'])." VNĐ</td>
 			<td style=\"border: 1px solid #d7dbdb;padding:10px;\">".self::currency_format($item['qty'])."</td>
 			<td style=\"border: 1px solid #d7dbdb;padding:10px;\">".self::currency_format($item['amount'])." VNĐ</td></tr>";
 		}
-		$html .='<tr><td colspan="5" style="border: 1px solid #d7dbdb;padding:10px;">Tổng tiền</td>
+		$html .='<tr><td colspan="6" style="border: 1px solid #d7dbdb;padding:10px;">Tổng tiền</td>
 		<td style="border: 1px solid #d7dbdb;padding:10px;">'.self::currency_format($param['total_amount']-$param['ship_amount']).' VNĐ</td></tr>';
-		$html .='<tr><td colspan="5" style="border: 1px solid #d7dbdb;padding:10px;">Phí ship</td>
+		$html .='<tr><td colspan="6" style="border: 1px solid #d7dbdb;padding:10px;">Phí ship</td>
 		<td style="border: 1px solid #d7dbdb;padding:10px;">'.self::currency_format($param['ship_amount']).' VNĐ</td></tr>';
-		$html .='<tr><td colspan="5" style="border: 1px solid #d7dbdb;padding:10px;">Tổng tiền thanh toán</td>
+		$html .='<tr><td colspan="6" style="border: 1px solid #d7dbdb;padding:10px;">Tổng tiền thanh toán</td>
 		<td style="border: 1px solid #d7dbdb;padding:10px;">'.self::currency_format($param['total_amount']).' VNĐ</td></tr>';
 		$html .="</table>";
 		return $html;

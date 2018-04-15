@@ -19,27 +19,30 @@ class ImageController extends PHOController
 			$QUERY_STRING = $_SERVER['QUERY_STRING'];
 			$url = str_replace('_url=/crop/'.$size.'/', '', $QUERY_STRING);
 			$url = str_replace('&', '', $url);
-			//PhoLog::debug_var('---img---',$url);
+			PhoLog::debug_var('---img---',$url);
 			$file_cache = PHO_CACHE_HTML. str_replace('/', '_', $url);
 			if(!file_exists($file_cache)){
 						
 			//}else{
 				$file_name =PHO_PUBLIC_PATH. $url;
 				//PhoLog::debug_var('---img---','1:'.$file_name);
-				//PhoLog::debug_var('---img---','2:'.$file_cache);
-				//PhoLog::debug_var('---img---',$exp);
+				PhoLog::debug_var('---img---','2:'.$file_cache);
+				
 				$exp = explode('x', $size);
+				PhoLog::debug_var('---img---',$exp);
 				/*$img = new GD($file_name);			
 				$img->resize($exp[0],null,\Phalcon\Image::WIDTH);//->crop($exp[0],$exp[1]);*/
 			    self::thumb_image($file_name,$exp[0],$exp[1],$file_cache);
+				PhoLog::debug_var('---img---',$file_name);
 				//$this->view->disable();	
 				//$this->response->setContent(file_get_contents($file_cache));		
 				//$this->response->setContent($img->render('jpg'));
 				//$img->save($file_cache);
 			}	
-			$this->view->disable();			
+			$this->view->disable();	
+			PhoLog::debug_var('---img---','view');
 			$this->response->setContent(file_get_contents($file_cache));		
-	        
+	        PhoLog::debug_var('---img---',$exp);
 	        return $this->response;
         } catch (\Exception $e) {
 			PhoLog::debug_var('---Error---','------------------------------');
@@ -53,9 +56,10 @@ class ImageController extends PHOController
 		if ($cursize = getimagesize ($file_src)) {					
 			$newsize = self::setWidthHeight($cursize[0], $cursize[1], $width, $height);
 			$info = pathinfo($file_src);
-			//PhoLog::debug_var('---img---',$cursize);
-			//PhoLog::debug_var('---img---',$newsize);
-			$dst = imagecreatetruecolor ($newsize[0],$newsize[1]);
+			PhoLog::debug_var('---img---',$cursize);
+			PhoLog::debug_var('---img---',$newsize);
+			PhoLog::debug_var('---img---','imagecreatetruecolor');
+			$dst = imagecreatetruecolor($newsize[0],$newsize[1]);
 			
 			$types = array('jpg' => array('imagecreatefromjpeg', 'imagejpeg'),
 						'gif' => array('imagecreatefromgif', 'imagegif'),
@@ -65,12 +69,15 @@ class ImageController extends PHOController
 						'JPG' => array('imagecreatefromjpeg', 'imagejpeg'),
 						'JPEG' => array('imagecreatefromJPEG', 'imageJPEG'),
 						'PNG' => array('imagecreatefromPNG', 'imagePNG'));
+			PhoLog::debug_var('---img---','2');
 			$func = $types[$info['extension']][0];
+			PhoLog::debug_var('---img---','3');
 			$src = $func($file_src); 
+			PhoLog::debug_var('---img---','imagecopyresampled');
 			imagecopyresampled($dst, $src, 0, 0, 0, 0,$newsize[0], $newsize[1],$cursize[0], $cursize[1]);
 			$func = $types[$info['extension']][1];
 			//$new_file = str_replace('.'.$info['extension'],'_thumb.'.$info['extension'],$file);
-			//PhoLog::debug_var('---img---','ok');
+			PhoLog::debug_var('---img---','ok');
 			return $func($dst, $new_file) ? TRUE : false;
 		}
 	}

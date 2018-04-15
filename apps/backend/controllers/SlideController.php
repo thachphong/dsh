@@ -78,7 +78,7 @@ class SlideController extends PHOController
 			}else{				
 				$slide = $db->get_info($param['slide_id']);
 				if($slide->img_path != '' && $slide->img_path != $param['img_path']){
-					$file->DeleteFile(PHO_PUBLIC_PATH.'images/slides/'.$user->img_path);
+					$file->DeleteFile(PHO_PUBLIC_PATH.'images/slides/'.$slide->img_path);
 				}	
 				$db->_update($param);
 			}

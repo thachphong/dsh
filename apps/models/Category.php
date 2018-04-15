@@ -23,6 +23,7 @@ class Category extends DBModel
     public $m_type_id;
     public $description;
     public $title;
+    public $img_path;
     public function initialize()
     {
         $this->setSource("category");
@@ -66,13 +67,13 @@ class Category extends DBModel
     public function get_ctg_list($level,$news_flg=0)
     {
         return $this->pho_query("select m.ctg_id,m.parent_id, m.ctg_no,m.ctg_name,m.ctg_level,m.del_flg,m.sort,m1.ctg_name ctg_name_1,t.m_type_name,m.ctg_code
-        ,m2.ctg_name ctg_name_2
+        ,m2.ctg_name ctg_name_2,m.img_path
                 from category m
                 LEFT JOIN category m1 on m1.ctg_id = m.parent_id 
                 LEFT JOIN category m2 on m2.ctg_id = m1.parent_id
                 LEFT JOIN m_type t on t.m_type_id = m.m_type_id
                 where m.ctg_level = $level
-                and  m.news_flg = $news_flg
+                and  m.news_flg = $news_flg                
                 ORDER BY m.sort" );
     }
     public function get_ctg_info($ctg_id)
@@ -90,6 +91,7 @@ class Category extends DBModel
                     ,c.ctg_code
                     ,c.title               
                     ,c.description
+                    ,c.img_path
                 from category c
 								LEFT JOIN category p1 on p1.ctg_id = c.parent_id
                 where c.ctg_id = :ctg_id
@@ -132,6 +134,7 @@ class Category extends DBModel
         $this->m_type_id = $param['m_type_id'];
         $this->description = $param['description'];     
         $this->title= $param['title'];
+        $this->img_path= $param['img_path'];
         if($param['ctg_level'] ==1){
 			$this->ctg_code = $this->get_code_max($param['parent_id']);
 			$this->ctg_code++;
@@ -168,6 +171,7 @@ class Category extends DBModel
                     ,parent_id=:parent_id                
                     ,description =:description
                     ,title =:title
+                    ,img_path =:img_path
                     where ctg_id = :ctg_id
                 ";
         
@@ -183,6 +187,7 @@ class Category extends DBModel
                     ,'parent_id'                  
                     ,'description'
                     ,'title'
+                    ,'img_path'
                     )));  
         return TRUE;
     }
@@ -284,14 +289,14 @@ class Category extends DBModel
             return null;
 	}
 	public function get_list_relation($ctg_code,$limit = 10){
-		$sql="select ctg_id,ctg_level,parent_id,ctg_no,ctg_name  from 
+		$sql="select ctg_id,ctg_level,parent_id,ctg_no,ctg_name ,img_path from 
 				(select * from category
 				where ctg_code like :ctg_code1
-				and ctg_level = 3
+				and ctg_level = 2
 				UNION 
 				select * from category
 				where ctg_code like :ctg_code2
-				and ctg_level = 3
+				and ctg_level = 2
 				) t
 				limit $limit
 				";		
@@ -308,5 +313,22 @@ class Category extends DBModel
 		$param['ctg_no'] = str_replace(' ','|',$ctg_no);
 		return $this->pho_query($sql,$param);
 	}
-	
+	public function check_before_delete($ctg_id){
+        $sql="select count(*) cnt from category where parent_id = :parent_id";
+        $res = $this->query_first($sql,array('parent_id'=>$ctg_id));
+        if( $res['cnt'] > 0){
+            return "Có danh mục con, không thể xóa !";
+        }
+        return '';
+    }
+    public function get_ctg_rows($level,$news_flg=0)
+    {
+        return $this->pho_query("select m.ctg_id,m.parent_id, m.ctg_no,m.ctg_name,m.ctg_level,m.del_flg,m.sort,m.ctg_code
+        ,m.img_path
+                from category m              
+                where m.ctg_level = $level
+                and  m.news_flg = $news_flg 
+                and m.del_flg =0              
+                ORDER BY m.sort" );
+    }
 }

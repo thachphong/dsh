@@ -8,7 +8,7 @@
 <div class="row content_bg">	
    <div class="container panel_bg margin-top10">
      <div class="row margin_top" >
-        <div class="col-md-6 col-sm-6 col-xs-6 margin_top " style="border-right: 1px solid #ddd;">
+        <div class="col-md-6 col-sm-6 col-xs-12 margin_top " style="border-right: 1px solid #ddd;">
          <!--<div class="pn_posts">-->
             <div class="pn_title">               
                <h1>Địa chỉ giao hàng {%if email==''%}<a href="{{baseurl}}dang-nhap" class="link_color" style="float: right;">Đăng nhập để đặt hàng</a>{%endif%}</h1>
@@ -17,14 +17,14 @@
             <hr class="line" />           
             <form id="from_post" enctype="multipart/form-data" method="post" action="{{baseurl}}cart/update">
             <div class="row">
-            	<div class="col-md-4 col-sm-4 col-xs-12 align_right no_padding"><label class="title_col">Họ và Tên<span class="lab_red">(*)</span></label></div>
+            	<div class="col-md-4 col-sm-4 col-xs-12 align_repon no_padding"><label class="title_col">Họ và Tên<span class="lab_red">(*)</span></label></div>
             	<div class="col-md-8 col-sm-8 col-xs-12">
             		<input type="text" name="fullname" placeholder="Họ và tên" id="fullname" value="{{full_name}}" required/>
             		<span class="lab_red lab_invisible" id="fullname_error">Bạn cần nhập họ và tên.</span>
             	</div>
             </div>
             <div class="row margin-top10">
-            	<div class="col-md-4 col-sm-4 col-xs-12 align_right no_padding"><label class="title_col">Số điện thoại<span class="lab_red">(*)</span></label></div>
+            	<div class="col-md-4 col-sm-4 col-xs-12 align_repon no_padding"><label class="title_col">Số điện thoại<span class="lab_red">(*)</span></label></div>
             	<div class="col-md-8 col-sm-8 col-xs-12">
             		<input type="text" name="phone" placeholder="Số điện thoại" id="phone_number" value="{{phone}}" required/>
             		<span class="lab_red lab_invisible" id="phone_number_error">Bạn cần nhập số điện thoại.</span>
@@ -32,7 +32,7 @@
             	</div>
             </div>            
             <div class="row margin-top10">
-            	<div class="col-md-4 col-sm-4 col-xs-12 align_right no_padding"><label class="title_col">Tỉnh/TP<span class="lab_red">(*)</span></label></div>
+            	<div class="col-md-4 col-sm-4 col-xs-12 align_repon no_padding"><label class="title_col">Tỉnh/TP<span class="lab_red">(*)</span></label></div>
             	<div class="col-md-8 col-sm-8 col-xs-12">
             		<select id="m_provin_id" name="provin_id" required>            			
             			<option value="">--Chọn Tỉnh/TP--</option>
@@ -48,7 +48,7 @@
             	</div>
             </div>
             <div class="row margin-top10">
-            	<div class="col-md-4 col-sm-4 col-xs-12 align_right no_padding"><label class="title_col">Quận/Huyện<span class="lab_red">(*)</span></label></div>
+            	<div class="col-md-4 col-sm-4 col-xs-12 align_repon no_padding"><label class="title_col">Quận/Huyện<span class="lab_red">(*)</span></label></div>
             	<div class="col-md-8 col-sm-8 col-xs-12">
             		<select id="m_district_id" name="district_id" required>
             			<option value="">--Chọn Quận/Huyện--</option>
@@ -64,7 +64,7 @@
             	</div>
             </div>
             <div class="row margin-top10">
-            	<div class="col-md-4 col-sm-4 col-xs-12 align_right no_padding"><label class="title_col">Phường/Xã<span class="lab_red">(*)</span></label></div>
+            	<div class="col-md-4 col-sm-4 col-xs-12 align_repon no_padding"><label class="title_col">Phường/Xã<span class="lab_red">(*)</span></label></div>
             	<div class="col-md-8 col-sm-8 col-xs-12">
             		<select id="m_ward_id" name="ward_id" required>
             			<option value="">--Chọn Phường/Xã--</option>
@@ -80,14 +80,14 @@
             	</div>
             </div>
             <div class="row margin-top10">
-            	<div class="col-md-4 col-sm-4 col-xs-12 align_right no_padding"><label class="title_col">Địa chỉ nhận hàng (tầng, số nhà, đường)<span class="lab_red">(*)</span></label></div>
+            	<div class="col-md-4 col-sm-4 col-xs-12 align_repon no_padding"><label class="title_col">Địa chỉ nhận hàng (tầng, số nhà, đường)<span class="lab_red">(*)</span></label></div>
             	<div class="col-md-8 col-sm-8 col-xs-12">            		
             		<textarea name="address" cols="" rows="3" placeholder="Địa chỉ nhận hàng" id="address"  required>{{address}}</textarea>
             		<span class="lab_red lab_invisible" id="address_error">Bạn cần nhập địa chỉ nhận hàng.</span>
             	</div>
             </div>
             <div class="row margin-top10">
-            	<div class="col-md-4 col-sm-4 col-xs-12 align_right no_padding"><label class="title_col">Email</label></div>
+            	<div class="col-md-4 col-sm-4 col-xs-12 align_repon no_padding"><label class="title_col">Email</label></div>
             	<div class="col-md-8 col-sm-8 col-xs-12">
             		<input type="text" name="email" placeholder="Email" id="email" value="{{email}}"/>
             		<span class="lab_red lab_invisible" id="email_error">Bạn cần nhập email.</span>
@@ -95,7 +95,7 @@
             	</div>
             </div>
             <div class="row margin-top10">
-            	<div class="col-md-4 col-sm-4 col-xs-12 align_right no_padding"><label class="title_col">Hình thức thanh toán</label></div>
+            	<div class="col-md-4 col-sm-4 col-xs-12 align_repon no_padding"><label class="title_col">Hình thức thanh toán</label></div>
             	<div class="col-md-8 col-sm-8 col-xs-12">
             		<label class="title_col col_blue">Tiền mặt</label>     		
             	</div>
@@ -107,7 +107,7 @@
 					</div>
 			</div>
       	</div>
-      	<div class="col-md-6 col-sm-6 col-xs-6 margin_top ">
+      	<div class="col-md-6 col-sm-6 col-xs-12 margin_top ">
       		<div class="pn_title">               
                <h3>Thông tin đơn hàng </h3>
             </div> 
@@ -131,22 +131,19 @@
 	                {%endfor%}
 	                <tr class="">                                       
 	                        <th colspan="2">Tổng tiền</th>	                        
-	                        <th>{{elements.currency_format(total_amount)}} ₫</th>
-	                        <td></td>
+	                        <th colspan="2">{{elements.currency_format(total_amount)}} ₫</th>
 	                </tr>
 	                <tr class="">                                       
 	                        <th colspan="2">Phí ship</th>	                        
-	                        <th>{{elements.currency_format(ship_amount)}} ₫</th>
-	                        <td></td>
+	                        <th colspan="2">{{elements.currency_format(ship_amount)}} ₫</th>
 	                </tr>
 	                <tr class="">                                       
 	                        <th colspan="2" class="col_red">Tổng tiền thanh toán</th>	                        
-	                        <th class="col_red">{{elements.currency_format(total_amount + ship_amount)}} ₫</th>
-	                        <td></td>
+	                        <th class="col_red" colspan="2">{{elements.currency_format(total_amount + ship_amount)}} ₫</th>
 	                </tr>
 	                <tr class="">                                       
-	                        <th colspan="3" class="col_blue">Tổng tiền Chiết khấu</th>	                        
-	                        <th class="col_blue">{{elements.currency_format(total_ck)}} ₫</th>
+	                        <th colspan="2" class="col_blue">Tổng tiền Chiết khấu</th>	                        
+	                        <th colspan="2" class="col_blue">{{elements.currency_format(total_ck)}} ₫</th>
 	                </tr>
                 </tbody>
             </table>

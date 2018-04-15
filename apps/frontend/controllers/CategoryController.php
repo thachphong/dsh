@@ -28,17 +28,19 @@ class CategoryController extends PHOController
         }
 
         $param['page'] = $page;
-        $param['ctg_name'] ='Tin rao mới';
-        $param['ctg_no'] ='tin-moi';
+        $param['ctg_name'] ='Sản phẩm mới';
+        $param['ctg_no'] ='san-pham-moi';
         $param['breadcrumbs'] = array();
         $param['rel_menu']= array();
-        if($ctg_no != 'allnew'){
+        $arr_chk=array('san-pham-moi','ban-chay','top-chiet-khau');
+        //PhoLog::debug_var('---abc--',$ctg_no);
+        $param['disp_dm'] = 0;
+        if(!in_array($ctg_no,$arr_chk) ){
             $info = $ctg->get_ctg_byno($ctg_no);
             $param['ctg_name'] = $info->ctg_name;
             $param['description'] = $info->description;
-        	$param['keywords'] = $info->keywords;
-            $param['title'] = $info->title;
-            $param['ctg_no'] ='c/'. $ctg_no;
+        	//$param['keywords'] = $info->keywords;
+            $param['title'] = $info->title;            
             if($info->ctg_id =='1' || $info->ctg_id=='2'){
 				$param['type'] = $info->ctg_id;
 			}else{
@@ -47,7 +49,20 @@ class CategoryController extends PHOController
 			}
 			$param['breadcrumbs'] =$ctg->get_breadcrumb($info->parent_id);
 			$param['rel_menu'] =$ctg->get_list_relation($info->ctg_code,15);
-        }        
+            
+            $param['disp_dm'] = $info->ctg_level;
+                      
+        }else{
+			$param['description'] = 'Thời trang nam, thời trang, nữ phụ kiện công nghệ, bán lẻ giá sỉ';
+			$param['title'] = 'Thời trang nam, thời trang, nữ phụ kiện công nghệ, bán lẻ giá sỉ';
+			$param['rel_menu'] =$ctg->get_list_relation('',15);
+			if($ctg_no=='ban-chay'){
+				$param['ctg_name']="Bán chạy";
+			}elseif($ctg_no=='top-chiet-khau'){
+				$param['ctg_name']="Top chiết khấu";
+			}
+		}
+		$param['ctg_no'] ='c/'. $ctg_no;
         $param['list']=$db->get_list_byctg($ctg_no,$start_row);
         $param['total_post'] = $db->get_list_byctg_count($ctg_no);
         $param['total_page']=  ceil($param['total_post']/PAGE_LIMIT_RECORD);

@@ -1,7 +1,13 @@
-<div class="row">
+<div class="row breadcrumb">
 	<div class="container">
-		{{ partial('includes/user_left') }}
-		<div class="col-md-9 col-sm-12 col-xs-12 no_padding_right margin-top20">
+		<a href="{{baseurl}}">Trang chủ</a>	>
+		<a href="{{baseurl}}thanh-vien"> Thành viên</a>		
+		<span>> Thông báo</span>			
+	</div>
+</div>
+<div class="row">
+	<div class="container">		
+		<div class="col-md-9 col-sm-12 col-xs-12 no_padding_right margin-top20" style="float:right">
 			<div class="row panel_bg padding10">				
 				<div class="pn_title" >						
 					<h1 class="margin-top10">Thông báo</h1>
@@ -14,6 +20,7 @@
 	            </div>
             </div>
 		</div>
+		{{ partial('includes/user_left') }}
 	</div>
 </div>
 {{ partial('includes/pho_ajax') }}

@@ -6,9 +6,8 @@
 	</div>
 </div>
 <div class="row">
-	<div class="container">
-		{{ partial('includes/user_left') }}
-		<div class="col-md-9 col-sm-12 col-xs-12 margin-top20 no_padding_right">
+	<div class="container">		
+		<div class="col-md-9 col-sm-12 col-xs-12 margin-top20 no_padding_right" style="float:right">
 		  <div class="row panel_bg padding10">
 			<div class="pn_title margin_top">
 				<h1 class="margin-top10">Thay đổi thông tin cá nhân </h1>
@@ -183,6 +182,7 @@
          </div>
          </div>			
 		</div>
+		{{ partial('includes/user_left') }}
 	</div>
 </div>
 {{ partial('includes/pho_ajax') }}

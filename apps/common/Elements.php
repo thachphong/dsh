@@ -277,13 +277,11 @@ class Elements extends Component
 				$html .= '<a href="'.$item['pro_no'].'_'.$item['pro_id'].'">
 						<div class="div_img">					
 							<img src="'.BASE_URL_NAME.$item['img_path'].'"/>
-						</div>
-						<div>
-							<span class="lst-it-title">'.$item['pro_name'].'</span>
-						</div>
-						<div>
+						</div>						
+						<div class="div_desc">
+                            <span class="lst-it-title">'.$item['pro_name'].'</span>
 							<div>Giá bán lẻ: <strong class="font_size14 col_red">'.$this->currency_format($item['price_exp']).' đ</strong></div>
-							<div>Giá CTV: <strong class="font_size14 col_blue">'.$this->currency_format($item['price_seller']).' đ</strong></div>
+							<div>Chiết khấu: <strong class="font_size14 col_blue">'.$this->currency_format($item['price_exp'] - $item['price_seller']).' đ</strong></div>
 						</div>						
 						</a>
 					</div>';                             

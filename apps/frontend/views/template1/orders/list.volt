@@ -6,16 +6,15 @@
 	</div>
 </div>
 <div class="row">
-	<div class="container">
-		{{ partial('includes/user_left') }}
-		<div class="col-md-9 col-sm-12 col-xs-12 margin-top20 no_padding_right">
+	<div class="container">		
+		<div class="col-md-9 col-sm-12 col-xs-12 margin-top20 no_padding_right" style="float:right">
 			<div class="row panel_bg padding10">
 				<div class="pn_title">			
 						<h1 class="margin-top10">Quản lý đơn đặt hàng </h1>
 				</div>
 				<hr class="line"/>
 				<div class="row margin_top pn_background pn_border post_pn" >											
-					<div class="row row-margin-bottom">
+					<div class="row">
 						<form enctype="multipart/form-data" id="from_post" action="{{url.get('orders/list')}}" method="get">
 								<div class="col-md-2 col-sm-3 col-xs-12 no_padding_left">
 									<input type="text" name="orders_id" value="{{orders_id}}" id="orders_id" placeholder="Mã đơn đặt">
@@ -26,7 +25,7 @@
 								<div class="col-md-2 col-sm-3 col-xs-12">
 									<input name="tdate" id="tdate" class="datetimepicker datepost" placeholder="đến ngày" value="{{tdate}}"/>
 								</div>
-								<div class="col-md-3 col-sm-3 col-xs-12">
+								<div class="col-md-3 col-sm-3 col-xs-12 row-margin-bottom">
 									<select name="status" id="status" >
 											<option value="">--Trạng thái--</option>
 											<option value="0" {%if status == '0'%}selected{%endif%}>Đang chờ xử lý</option>
@@ -37,10 +36,10 @@
 									</select>
 									
 								</div>	
-								<div class="col-md-1 col-sm-2 col-xs-12 no_padding">
+								<div class="col-md-1 col-sm-2 col-xs-6 no_padding">
 									<button class="btn_dangtin"><i class="fa fa-search"></i>Tìm</button>		
 								</div>
-								<div class="col-md-2 col-sm-2 col-xs-12" style="padding-top:5px">
+								<div class="col-md-2 col-sm-2 col-xs-6" style="padding-top:5px">
 									<a class="btn_dangtin" id="clear_input" style="padding:6px" href="javascript:void(0)">Xóa bộ lọc</a>		
 								</div>
 						</form>
@@ -56,15 +55,15 @@
 	            <div class="post_head">
 	               <div class="row">
 	               	<div class="table-responsive"> 
-							<table class="table table-bordered " style="font-size: 12px;">
-								<tr>								
+							<table class="table table-bordered table_repon table_orderlist" style="font-size: 12px;">
+								<tr class="tr_head">								
 									<th>Mã đơn</th>
 									<th>Ngày đặt hàng</th>
 									<!--<th>Ngày giao hàng</th>-->
 									<th>Tổng tiền</th>									
 									<th>Chiết khấu</th>	
 									<th>Trạng thái</th>
-									<th>Tiền được cộng vào tài khoản</th>	
+									<th>Tiền được cộng vào TK</th>	
 									<th>Chi tiết</th>					
 									<th>Hủy</th>
 								</tr>
@@ -100,16 +99,20 @@
 	            <div class="col-md-12 col-sm-12 col-xs-12" style="display: flex;justify-content: center;">
 	               <ul class="page_number">
 	                  {%if page > 1%}
-	                     <li><a href="{{url.get('')}}{{ctg_no}}&page=1">Trang đầu</a></li>
-	                     <li><a href="{{url.get('')}}{{ctg_no}}&page={{(page-1)}}">Trang trước</a></li>
+	                     <li class="hide_mobile"><a href="{{url.get('')}}{{ctg_no}}&page=1">Trang đầu</a></li>
+	                     <li class="hide_mobile"><a href="{{url.get('')}}{{ctg_no}}&page={{(page-1)}}">Trang trước</a></li>
+	                     <li class="hide_desk"><a href="{{url.get('')}}{{ctg_no}}?page=1"><<</a></li>
+                     	 <li class="hide_desk"><a href="{{url.get('')}}{{ctg_no}}?page={{(page-1)}}"><</a></li>
 	                  {%endif%}                 
 	                  
 	                  {%for i in  start..end%} 
 	                    <li {%if page == i%}class="active"{%endif%}><a href="{{url.get('')}}{{ctg_no}}&page={{i}}">{{i}}</a></li>
 	                  {%endfor%}
 	                  {%if page < total_page%}
-	                     <li><a href="{{url.get('')}}{{ctg_no}}&page={{page+1}}">Trang sau</a></li>
-	                     <li><a href="{{url.get('')}}{{ctg_no}}&page={{total_page}}">Trang cuối</a></li>
+	                     <li class="hide_mobile"><a href="{{url.get('')}}{{ctg_no}}&page={{page+1}}">Trang sau</a></li>
+	                     <li class="hide_mobile"><a href="{{url.get('')}}{{ctg_no}}&page={{total_page}}">Trang cuối</a></li>
+	                     <li class="hide_desk"><a href="{{url.get('')}}{{ctg_no}}?page={{page+1}}">></a></li>
+                     	 <li class="hide_desk"><a href="{{url.get('')}}{{ctg_no}}?page={{total_page}}">>></a></li>
 	                  {%endif%}       
 	               </ul>
 	            </div>
@@ -119,7 +122,8 @@
 	            <!--<hr class="line" />-->
 	            
 	         </div>	
-         </div>		
+         </div>	
+         {{ partial('includes/user_left') }}	
 		</div>
 	</div>
 </div>

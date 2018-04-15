@@ -3,7 +3,7 @@
             <div class="row" >	
                {% set login_info= elements.getuser()%}
                <div class="col-md-12 col-sm-12 col-xs-12 no_padding_right">               	  
-               	  <div class="row">
+               	  <div class="row" style="text-align:right">
                   <ul class="top_menu">                  	 
                      <li><strong >Hotline:<span class="col_blue"> {{define['comp_phone']}}</span></strong></li>
                      {%if login_info is defined%}
@@ -27,7 +27,7 @@
     				<img src="{{url.get('template1/images/logo.png')}}" class="logo margin-top10"/>
     			</a>
     		</div>
-    		<div class="col-md-6 col-sm-9 col-xs-12">
+    		<div class="col-md-6 col-sm-8 col-xs-9">
     			<div class="div_search">
     				<form action="{{baseurl}}tim" method="GET" enctype="multipart/form-data">
 	    				<input placeholder="Nhập tên sản phẩm cân tìm" name="sp"/>
@@ -36,7 +36,7 @@
     			</div>
     			
     		</div>
-    		<div class="col-md-3 col-sm-3 col-xs-12">
+    		<div class="col-md-3 col-sm-1 col-xs-3">
     			<div class="shopping_cart" style="">
     				<a href="{{baseurl}}cart"><i class="fa fa-shopping-cart"></i>
     					<span class="cart_number" id="cart_number">{{elements.get_cart_number()}}</span>
@@ -49,16 +49,16 @@
 <div class="row top-container-bg">
     <div class="container">  
     	<ul class="main_menu">
-    		<li onclick="show_menu()"><label>Danh mục sản phẩm <i id="icon_dm" class="fa fa-sort-down"></i></label>
+    		<!--<li onclick="show_menu()"><label>Danh mục sản phẩm <i id="icon_dm" class="fa fa-sort-down"></i></label>
     			<ul class="dm-sp" id="dm-sp">			
-					{{elements.getMenu()}}			
+					elements.getMenu()			
 				</ul>
-    		</li>
-    		<li><a>Sản phẩm mới</a></li>    		
-    		<li><a>Bán chạy</a></li>
-    		<li><a>Top chiết khấu</a></li>    		
-    		<li><a href="{{baseurl}}p/quyen-loi-cong-tac-vien">Quyền lợi CTV</a></li>
-    		<li><a>Hướng đẫn đăng ký CTV</a></li>
+    		</li>-->
+    		<li><a href="{{baseurl}}c/san-pham-moi">Sản phẩm mới</a></li>    		
+    		<li><a href="{{baseurl}}c/ban-chay">Bán chạy</a></li>
+    		<li><a href="{{baseurl}}c/top-chiet-khau">Top chiết khấu</a></li>    		
+    		<li class="hide_mobile"><a href="{{baseurl}}p/quyen-loi-cong-tac-vien">Quyền lợi CTV</a></li>
+    		<li class="hide_mobile"><a>Hướng đẫn đăng ký CTV</a></li>
     	</ul>
     </div>
 </div>

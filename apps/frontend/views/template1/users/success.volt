@@ -58,7 +58,7 @@
 							</div>
 					</div>
 					<div class="row row-margin-bottom" style="text-align: center;">
-							<label class="col-md-12 col-sm-12 col-xs-12 title_col">Nếu bạn chưa có tài khoản của {{ constant("DOMAIN_NAME") }}, vui lòng <a class="link_color" href="{{url.get('dang-ky')}}"><strong>đăng ký tại đây</strong></a></label>
+							<label class="col-md-12 col-sm-12 col-xs-12 title_col">Nếu bạn chưa có tài khoản của , vui lòng <a class="link_color" href="{{url.get('dang-ky')}}"><strong>đăng ký tại đây</strong></a></label>
 							
 					</div>-->
 				</div>

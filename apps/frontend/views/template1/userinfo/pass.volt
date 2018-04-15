@@ -6,9 +6,8 @@
 	</div>
 </div>
 <div class="row">
-	<div class="container">
-		{{ partial('includes/user_left') }}
-		<div class="col-md-9 col-sm-12 col-xs-12 margin-top20 no_padding_right">
+	<div class="container">		
+		<div class="col-md-9 col-sm-12 col-xs-12 margin-top20 no_padding_right" style="float:right">
 			<div class="row panel_bg padding10">
 			<div class="pn_title margin_top">					
 				<h1 class="margin-top10">Thay đổi mật khẩu </h1>
@@ -19,21 +18,21 @@
                <div class="row pn_content">
 				<form id="from_user">
 					<div class="row row-margin-bottom">
-						<label class="col-md-4 col-sm-4 col-xs-12 align_right title_col">Mật khẩu cũ</label>
+						<label class="col-md-4 col-sm-4 col-xs-12 align_repon title_col">Mật khẩu cũ</label>
 						<div class="col-md-7 col-sm-7 col-xs-12">
 							<input type="password" name="pass_old"  value="" id="pass_old" required>
 							<label class="lab_red lab_invisible" id="pass_old_error">Bạn cần nhập mật khẩu cũ</label>
 						</div>
 					</div>
 					<div class="row row-margin-bottom">
-						<label class="col-md-4 col-sm-4 col-xs-12 align_right title_col">Mật khẩu mới</label>
+						<label class="col-md-4 col-sm-4 col-xs-12 align_repon title_col">Mật khẩu mới</label>
 						<div class="col-md-7 col-sm-7 col-xs-12">
 							<input type="password" name="pass_new"  value="" id="pass_new" required>
 							<label class="lab_red lab_invisible" id="pass_new_error">Bạn cần nhập mật khẩu mới</label>
 						</div>
 					</div>
 					<div class="row row-margin-bottom">
-						<label class="col-md-4 col-sm-4 col-xs-12 align_right title_col">Nhập lại mật khẩu mới</label>
+						<label class="col-md-4 col-sm-4 col-xs-12 align_repon title_col">Nhập lại mật khẩu mới</label>
 						<div class="col-md-7 col-sm-7 col-xs-12">
 							<input type="password" name="re_pass_new"  value="" id="re_pass_new" required>
 							<label class="lab_red lab_invisible" id="re_pass_new_error">Bạn cần nhập lại mật khẩu mới</label>
@@ -50,6 +49,7 @@
             </div>
          </div>			
 		</div>
+		{{ partial('includes/user_left') }}
 	</div>
 </div>
 {{ partial('includes/pho_ajax') }}

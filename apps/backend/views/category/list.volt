@@ -193,16 +193,17 @@
             id = id.replace("del_","");
           Pho_message_confirm("Thông báo","Bạn có chắc chắn muốn xóa danh mục này ?",function(){
             
-        Pho_json_ajax('GET',"{{url.get('category/delete/')}}" + id,null ,function(datas){
-          if(datas.status == "OK"){
-            //Pho_modal_close("modal1");
-            //Pho_message_box("Thông báo",datas.msg);
-            location.href="{{url.get('category/list/')}}{{level_flg}}/{{news_flg}}";
-          }else{
-            Pho_message_box_error("Lỗi",datas.msg);
-          }
-                  
-              });
+            Pho_json_ajax('GET',"{{url.get('category/delete/')}}" + id,null ,function(datas){
+              if(datas.status == "OK"){
+                //Pho_modal_close("modal1");
+                //Pho_message_box("Thông báo",datas.msg);
+                location.href="{{url.get('category/list/')}}{{level_flg}}/{{news_flg}}";
+              }else{
+                console.log(datas.msg);
+                Pho_message_box_error("Lỗi",datas.msg);
+              }
+                      
+            });
           });
           
         });

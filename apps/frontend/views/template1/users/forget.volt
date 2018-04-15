@@ -6,7 +6,7 @@
 </div>
 <div class="row content_bg margin-top10">
 	<div class="container register_form panel_bg">		
-		<div class="col-md-12 col-sm-12 col-xs-12">
+		<div class="col-md-12 col-sm-12 col-xs-12 padding-mobi">
 			<div class="pn_posts">
 				<div class="pn_title">					
 					<h1>Quên mật khẩu </h1>
@@ -19,7 +19,7 @@
 							
 						</div>
 						<div class="row row-margin-bottom">
-							<label class="col-md-4 col-sm-4 col-xs-12 title_col align_right">Email đã đăng ký</label>
+							<label class="col-md-4 col-sm-4 col-xs-12 title_col align_renpon">Email đã đăng ký</label>
 							<div class="col-md-7 col-sm-7 col-xs-12">
 								<input type="text" name="email"  value="" id="user_no" required>							
 							</div>							

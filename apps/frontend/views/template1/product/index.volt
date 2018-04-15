@@ -12,25 +12,25 @@
 	<div class="container panel_bg margin-top10">		
 		<div class="row padding-bottom10">
 			<div class="col-md-6 col-sm-6 col-xs-12">
-				<div class="col-md-1 col-sm-1 col-xs-12 no_padding">
+				<div class="col-md-1 col-sm-1 col-xs-2 no_padding">
 					<ul class="img_list">
 					{%for key,img in imglist%}
 						<li class="img_item {%if key==0%}img_active{%endif%}" id="img_{{img.pro_img_id}}"><img src="{{baseurl}}{{img.img_path}}"/></li>
 					{%endfor%}
 					</ul>
 				</div>
-				<div class="col-md-11 col-sm-11 col-xs-12 no_padding_right">
+				<div class="col-md-11 col-sm-11 col-xs-10 no_padding_right">
 					<img id="zoom_08" class="img_main" src="{{baseurl}}{{imglist[0].img_path}}" data-zoom-image="{{baseurl}}{{imglist[0].img_path}}" title="{{pro_name}}" alt="{{pro_name}}"/>
 				</div>
 			</div>
-			<div class="col-md-6 col-sm-6 col-xs-12 no_padding_left">
+			<div class="col-md-6 col-sm-6 col-xs-12 no_padding_left mobi_lpad">
 				<h1>{{pro_name}}</h1>
 				<hr/>
 				<div class="col-md-6 col-sm-6 col-xs-12 no_padding_left">
 					<h5>Giá bán lẻ: <strong class="price col_red">{{elements.currency_format(pricelist[0].price_exp)}} đ</strong></h5>
 				</div>
 				<div class="col-md-6 col-sm-6 col-xs-12">
-					<h5>Chiết khấu CTV: <strong class="price col_blue">{{elements.currency_format(pricelist[0].price_exp-pricelist[0].price_seller)}} đ</strong></h5>
+					<h5>Chiết khấu: <strong class="price col_blue">{{elements.currency_format(pricelist[0].price_exp-pricelist[0].price_seller)}} đ</strong></h5>
 				</div>
 				<div class="row margin-top10">
 					<span>Trạng thái: {{status_name}}</span>					
@@ -132,13 +132,11 @@
 						<a href="{{url.get('sp/')}}{{item['pro_no']}}_{{item['pro_id']}}">	
 						<div class="div_img">				
 							<img src="{{url.get('')}}{{item['img_path']}}"/>
-						</div>
-						<div>
+						</div>						
+						<div class="div_desc">
 							<span class="lst-it-title">{{item['pro_name']}}</span>
-						</div>
-						<div>
 							<div>Giá bán lẻ: <strong class="font_size14 col_red">{{elements.currency_format(item['price_exp'])}} đ</strong></div>
-							<div>Chiết khấu CTV: <strong class="font_size14 col_blue">{{elements.currency_format(item['price_exp']-item['price_seller'])}} đ</strong></div>
+							<div>Chiết khấu: <strong class="font_size14 col_blue">{{elements.currency_format(item['price_exp']-item['price_seller'])}} đ</strong></div>
 						</div>						
 						</a>
 					</div>
@@ -148,7 +146,7 @@
 			</div>
 		</div>
 		<div class="col-md-20 col-sm-3 col-xs-12 no_padding">
-			<div class="pn-header-top">
+			<div class="row pn-header-top">
 				<div class="pn-title">
 					<h2>Sản phẩm bán chạy</h2>
 				</div>

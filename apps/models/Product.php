@@ -156,7 +156,7 @@ class Product extends DBModel
 		    $this->ctg_id  = $param['ctg_id'];
 		    $this->disp_home   = $param['disp_home'];
 		    $this->status  = 0;
-		    $this->good_sell = $param['good_sell'];
+		    
 		    $this->content   = $param['content'];   
 		    $this->content = $param['content'];
 		    $this->technology    = $param['technology'];
@@ -172,7 +172,13 @@ class Product extends DBModel
 		    $this->pro_no = $param['pro_no'] .'-'.strtolower($this->pro_code);
 		    $this->pro_name   = $param['pro_name'].' '.$this->pro_code;
 		    $this->sizelist = $param['sizelist'];	
-		    $this->description =$param['description'];	     
+		    $this->description =$param['description'];	
+		    if(strlen($param['good_sell'])>0){
+				$this->good_sell = $param['good_sell'];  
+			}else{
+				$this->good_sell = 0;
+			}  
+		     
 		    $this->save();
 	    } catch (\Exception $e) {
 			PhoLog::debug_var('update----',$e);
@@ -345,11 +351,24 @@ class Product extends DBModel
 //		PhoLog::debug_var('vip',$sql);
 		return $this->pho_query($sql);
 	}
+	public function get_topdiscount($limit = 10){		
+		$sql ="select p.pro_id,p.pro_name,p.pro_no,img.img_path,pri.price_exp,pri.price_seller,(pri.price_exp-pri.price_seller) disctount
+				from product p
+				INNER JOIN product_img img on img.pro_id = p.pro_id and img.avata_flg =1
+				INNER JOIN product_price pri on pri.pro_id = p.pro_id and pri.avata_flg = 1
+				where p.del_flg= 0				
+				ORDER BY (pri.price_exp-pri.price_seller)			desc
+				limit $limit";
+//		PhoLog::debug_var('vip',$sql);
+		return $this->pho_query($sql);
+	}
 	public function get_list_byctg($ctg_no,$start_row=0){	
 		$limit = PAGE_LIMIT_RECORD;
 		$where ="";
 		$param = array();
-		if($ctg_no != 'allnew'){
+		$arr_chk=array('san-pham-moi','ban-chay','top-chiet-khau');
+		$order = "ORDER BY p.pro_id desc";
+		if(!in_array($ctg_no,$arr_chk) ){
 			$where =" and p.ctg_id in (
 					select ctg_id from category 
 					where del_flg =0
@@ -359,6 +378,10 @@ class Product extends DBModel
 					where parent_id =(select ctg_id from category where del_flg =0  and ctg_no = :ctg_no)
 					)	";
 			$param['ctg_no'] = $ctg_no;
+		}elseif($ctg_no == 'ban-chay'){
+			$where = " and p.good_sell =1" ;			
+		}elseif($ctg_no == 'top-chiet-khau'){
+			$order = "ORDER BY (pri.price_exp-pri.price_seller)	desc";
 		}	
 		$sql ="select p.pro_id,p.pro_name,p.pro_no,img.img_path,pri.price_exp,pri.price_seller
 				from product p
@@ -366,7 +389,7 @@ class Product extends DBModel
 				INNER JOIN product_price pri on pri.pro_id = p.pro_id and pri.avata_flg = 1
 				where p.del_flg= 0
 				$where
-				ORDER BY p.pro_id desc
+				$order
 				limit $limit
 				OFFSET $start_row";
 		//PhoLog::debug_var('vip',$sql);
@@ -376,7 +399,9 @@ class Product extends DBModel
 	public function get_list_byctg_count($ctg_no){
 		$where ="";
 		$param = array();
-		if($ctg_no != 'allnew'){
+		$arr_chk=array('san-pham-moi','ban-chay','top-chiet-khau');
+		
+		if(!in_array($ctg_no,$arr_chk)){
 			$where =" and p.ctg_id in (
 					select ctg_id from category 
 					where del_flg =0
@@ -386,10 +411,12 @@ class Product extends DBModel
 					where parent_id =(select ctg_id from category where del_flg =0  and ctg_no = :ctg_no)
 					)	";
 			$param['ctg_no'] = $ctg_no;
-		}	
-		$sql ="select count(*) cnt
-				from product p
-				where p.del_flg= 0
+		}elseif($ctg_no == 'ban-chay'){
+			$where = " and p.good_sell =1" ;			
+		}		
+		$sql ="select count(p.pro_id) cnt
+				from product p				
+				where p.del_flg= 0				
 				$where
 				";
 //		PhoLog::debug_var('vip',$sql);

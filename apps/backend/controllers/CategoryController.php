@@ -6,6 +6,7 @@ use Multiple\PHOClass\PHOController;
 use Multiple\Models\Category;
 use Multiple\Models\MType;
 use Multiple\PHOClass\PhoLog;
+use Multiple\Library\FilePHP;
 class CategoryController extends PHOController
 {
 
@@ -64,6 +65,7 @@ class CategoryController extends PHOController
 		$param['title'] = '';
 		$param['description'] = '';
 		$param['keywords'] = '';
+		$param['img_path']='';
 		$mt = new MType();
 		$param['mtypelist'] = $mt->get_all();	
 		if(strlen($param['ctg_level'])==0){
@@ -72,6 +74,7 @@ class CategoryController extends PHOController
 		$level_id =$param['ctg_level'];
 		$param['parent_id_1']= NULL;
 		$param['parent_id_2']= NULL;
+		$param['folder_tmp'] = uniqid('',TRUE);
 		$db = new Category();
 		if($level_id > 1){			
 			$param['parent_list1']= $db->get_ctg_list(1,$param['news_flg']);
@@ -140,6 +143,7 @@ class CategoryController extends PHOController
 				$result['parent_list2']= json_encode($db->get_ctg_list(2,$result['news_flg']));
 			}
 		}
+		$result['folder_tmp'] = uniqid('',TRUE);
 		$mt = new MType();
 		$result['mtypelist'] = $mt->get_all();	
 		return $this->ViewHtml('category/edit',$result);
@@ -160,6 +164,8 @@ class CategoryController extends PHOController
 			,'description'
 			,'title'
 			,'keywords'
+			,'img_path'
+			,'folder_tmp'
 			));
 		//$param['news_flg'] =0;
 		$result = array('status' => 'OK');
@@ -167,13 +173,25 @@ class CategoryController extends PHOController
 		$result['msg'] = 'Cập nhật thành công!';		
 		$db = new Category();
 		$msg = $this->check_validate_update($param);
+		$file = new FilePHP();
 		if($msg ==""){
 			$login_info =  $this->session->get('auth');
         	$param['user_id'] = $login_info->user_id;
-			if(strlen($param['ctg_id'])==0){
+        	if(strlen($param['img_path'])>0 && strpos($param['img_path'],'tmp')!== FALSE){				
+					$ext = $file->GetExtensionName($param['img_path']);				
+					$file_name = uniqid('',TRUE).'.'.$ext;	
+					$file->CopyFile(PHO_PUBLIC_PATH.$param['img_path'],PHO_PUBLIC_PATH.'images/category/'.$file_name);
+					$file->DeleteFolder(PHO_PUBLIC_PATH.'tmp/'.$param['folder_tmp']);
+					$param['img_path'] ='images/category/'.$file_name;
+			}
+			if(strlen($param['ctg_id'])==0){				
 				$ctg_id = $db->_insert($param);
 			}else{
 				//PhoLog::debug_var('---d---',$param);
+				$info = $db->get_ctg_info($param['ctg_id']);
+				if($info['img_path'] != '' && $info['img_path'] != $param['img_path']){
+					$file->DeleteFile(PHO_PUBLIC_PATH.$info['img_path']);
+				}	
 				$db->_update($param);
 			}
 		}else{
@@ -184,14 +202,16 @@ class CategoryController extends PHOController
 	}
 	public function deleteAction($ctg_id)
 	{
-		// $param = self::get_param(array('acw_url'));	
-		// if (self::get_validate_result() == false)  {
-		// 	ACWError::add('acw_url', 'Tham số không hợp lệ');
-		// }
+		
 		$db = new Category();
-		$msg = "";//$db->check_before_delete($ctg_id);
+		$msg = $db->check_before_delete($ctg_id);
 		$result['status']="OK";
+		$file = new FilePHP();
 		if($msg== ""){
+			$info = $db->get_ctg_info($ctg_id);
+			if($info['img_path'] != '' && $info['img_path'] != $param['img_path']){
+				$file->DeleteFile(PHO_PUBLIC_PATH.$info['img_path']);				
+			}	
 			$db->ctg_id = $ctg_id;
 			$db->delete();
 		}else{
@@ -201,6 +221,7 @@ class CategoryController extends PHOController
 		
 		return $this->ViewJSON($result);
 	}
+	
 	public function check_validate_update(&$param){
 		if(strlen($param['ctg_name'])== 0){
 			return "Bạn chưa nhập tên danh mục !";

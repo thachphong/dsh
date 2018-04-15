@@ -6,9 +6,8 @@
 	</div>
 </div>
 <div class="row">
-	<div class="container">
-		{{ partial('includes/user_left') }}
-		<div class="col-md-9 col-sm-12 col-xs-12 margin-top20 no_padding_right">
+	<div class="container">		
+		<div class="col-md-9 col-sm-12 col-xs-12 margin-top20 no_padding_right" style="float:right">
 			<div class="row panel_bg padding10">
 			<div class="pn_title margin_top">					
 				<h1 class="margin-top10">Yêu cầu rút tiền </h1>
@@ -28,7 +27,7 @@
 						{%endif%}
 					</div>
 					<div class="row row-margin-bottom">
-						<label class="col-md-4 col-sm-4 col-xs-12 align_right title_col">Ngân hàng</label>
+						<label class="col-md-4 col-sm-4 col-xs-12 align_repon title_col">Ngân hàng</label>
 						<div class="col-md-7 col-sm-7 col-xs-12">
 							<select id="bank_id" name="bank_id" required>            			
 		            			<option value="">--Chọn Ngân hàng--</option>
@@ -44,27 +43,27 @@
 						</div>
 					</div>
 					<div class="row row-margin-bottom">
-						<label class="col-md-4 col-sm-4 col-xs-12 align_right title_col">Phí chuyển khoản</label>
+						<label class="col-md-4 col-sm-4 col-xs-12 align_repon title_col">Phí chuyển khoản</label>
 						<div class="col-md-7 col-sm-7 col-xs-12">
 							<input type="text" name="fee"  value="{%if user.bank_id==1%}3.300{%else%}7.700{%endif%}" id="fee" disabled="disabled">
 						</div>
 					</div>
 					<div class="row row-margin-bottom">
-						<label class="col-md-4 col-sm-4 col-xs-12 align_right title_col">Số tài khoản</label>
+						<label class="col-md-4 col-sm-4 col-xs-12 align_repon title_col">Số tài khoản</label>
 						<div class="col-md-7 col-sm-7 col-xs-12">
 							<input {%if user.amount < 100000%}disabled{%endif%} type="text" name="bank_acc_no"  value="{{user.bank_acc_no}}" id="bank_acc_no" required maxlength="20">
 							<span class="lab_red lab_invisible" id="bank_acc_no_error">Bạn cần nhập số tài khoản</span>
 						</div>
 					</div>
 					<div class="row row-margin-bottom">
-						<label class="col-md-4 col-sm-4 col-xs-12 align_right title_col">Tên chủ tài khoản</label>
+						<label class="col-md-4 col-sm-4 col-xs-12 align_repon title_col">Tên chủ tài khoản</label>
 						<div class="col-md-7 col-sm-7 col-xs-12">
 							<input {%if user.amount < 100000%}disabled{%endif%} type="text" name="bank_acc_name"  value="{{user.bank_acc_name}}" id="bank_acc_name" required maxlength="50">
 							<span class="lab_red lab_invisible" id="bank_acc_name_error">Bạn cần nhập tên chủ tài khoản</span>
 						</div>
 					</div>
 					<div class="row row-margin-bottom">
-						<label class="col-md-4 col-sm-4 col-xs-12 align_right title_col">Số tiền rút</label>
+						<label class="col-md-4 col-sm-4 col-xs-12 align_repon title_col">Số tiền rút</label>
 						<div class="col-md-7 col-sm-7 col-xs-12">
 							<input type="hidden" id="max_amount"  value="{{user.amount}}" required>
 							<input {%if user.amount < 100000%}disabled{%endif%} type="text" class="number_format" name="amount"  value="" id="amount" required>
@@ -84,6 +83,7 @@
             </div>
          </div>			
 		</div>
+		{{ partial('includes/user_left') }}
 	</div>
 </div>
 {{ partial('includes/pho_ajax') }}

@@ -90,10 +90,16 @@ class Users extends DBModel
         $this->status = 0; // chưa kích hoạt
         $this->pass = $this->encodepass($param['pass']);
         $this->email =$param['email'];
-        $this->sex =$param['sex'];
-        $this->city =$param['city'];
-        $this->district =$param['district'];
-        $this->ward =$param['ward'];
+        $this->sex =$param['sex'];      
+		if(strlen($param['district'])>0){
+			$this->district =$param['district'];
+		} 
+		if(strlen($param['city'])>0){
+			$this->city =$param['city'];
+		} 
+		if(strlen($param['ward'])>0){
+			$this->ward =$param['ward'];
+		}        
         $this->ctv_flg =$param['ctv_flg'];
         $this->avata ='0.png';
         $this->del_flg = 0;

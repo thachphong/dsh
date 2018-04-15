@@ -17,7 +17,7 @@
             <div class="pn_content pn_background pn_border margin_top">               
                <div class="row">
                	<form action="{{baseurl}}cart/pay" method="post" id="frm_order">
-                  <table class="table" style="font-size: 14px;">
+                  <table class="table table_repon" style="font-size: 14px;">
                   	<colgroup>
                   		<col width="30%">
                   		<col width="9%">
@@ -50,7 +50,7 @@
                                 <td align="right">
                                 <span class="amount pro_price" data="{{item['price_exp']}}">{{elements.currency_format(item['price_exp'])}}<span>₫</span></span>                    
                                           </td>
-                                <td style="text-align:center"> 
+                                <td align="center"> 
                                 <!--<input value="{{item['qty']}}" name="pro_qty[]" id="pro_qty_{{item['pro_price_id']}}" type="number" style="width:43px;text-align: center;" class="pro_qty" >-->
                                 <input type="hidden" name="pro_price_id[]" value="{{item['pro_price_id']}}" id="pro_price_{{idx}}">  
                                 <input type="hidden" name="sizes[]" value="{{item['size']}}" id="size_{{idx}}">
@@ -67,12 +67,12 @@
                                 <td align="right">
                                 <span  class="itemck pro_price" id="chietkhau_{{idx}}" data="{{item['price_exp']}}">{{elements.currency_format(item['chietkhau'])}} ₫</span>                    
                                           </td>
-                                <td style="text-align:center"><a class="btn_del" id="del_{{idx}}" style="color: red" href="javascript:void(0)">X</a>
+                                <td align="right"><a class="btn_del" id="del_{{idx}}" style="color: red" href="javascript:void(0)">X</a>
                                 </td>
                             </tr>
                         {%endfor%}
                         {%endif%}
-                        <tr class="spline">
+                        <!-- <tr class="spline">
                         	<td width="40%" class="sanpham" >Tổng cộng</td>
                         	<td width="40%" align="right" colspan="5"><span class="amount" id="total_amount_1">{{elements.currency_format(total_amount)}}<span>₫</span></span></td>
                                          <td colspan="2"></td>
@@ -97,8 +97,34 @@
                             	<strong><span class="amount col_blue" id="total_ck">{{elements.currency_format(total_ck)}} ₫</span></strong>
                             </td>
                             <td></td>
-                        </tr>
+                        </tr> -->
                     </tbody>
+                </table>
+                <table class="table table_sum" style="font-size: 14px;">
+                  <tbody>
+                    <tr class="spline">
+                          <td align="right" class="sanpham" >Tổng cộng</td>
+                          <td align="right"><span class="amount" id="total_amount_1">{{elements.currency_format(total_amount)}}<span>₫</span></span></td>
+                        </tr>
+                        <tr class="spline">
+                          <td align="right" class="sanpham" >Phí ship</td>
+                          <td align="right"><span class="amount" id="total_amount_vat">{{elements.currency_format(ship_amount)}} ₫</span></td>
+                        </tr>
+                        <tr class="order-total">
+                        </tr>
+                        <tr class="spline">
+                            <td align="right" class="sanpham col_red" >Tổng tiền phải thanh toán</td>
+                            <td align="right">
+                              <strong><span class="amount col_red" id="total_amount_2">{{elements.currency_format(total_amount+ ship_amount)}} ₫</span></strong>
+                            </td>
+                        </tr>
+                        <tr class="spline">
+                            <td align="right" class="sanpham col_blue" >Tổng tiền chiết khấu</td>
+                            <td align="right">
+                              <strong><span class="amount col_blue" id="total_ck">{{elements.currency_format(total_ck)}} ₫</span></strong>
+                            </td>
+                        </tr>
+                  </tbody>
                 </table>
                 </form>
                </div>

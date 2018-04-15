@@ -28,22 +28,23 @@ class ProductController extends PHOController
 	public function indexAction($url)
 	{
 		try{	
-			
+			//PhoLog::debug_var('view----',$url);
 			$db = new Product();
 			$img = new ProductImg();
 			$price = new ProductPrice();
 			$ctg = new Category();
 			$exp  = explode('_', $url)	;	
 			$id = $exp[count($exp)-1];
-			
+			//PhoLog::debug_var('view----',__LINE__);
 			$result = $db->get_product_info($id);
 			//$result['des']= substr($result['content'],0,150).'...';	
 			$sizelist =array();
 			if(strlen($result['sizelist'])>0){
 				$sizelist= explode(';',$result['sizelist']);
-			}		
+			}	
+			//PhoLog::debug_var('view----',__LINE__);	
 			$result['sizes'] = $sizelist;
-			$result['imglist'] = $img->get_img_bypro($id);			
+			$result['imglist'] =  $img->get_img_bypro($id);			
 			$result['pricelist'] = $price->get_list_bypro($id);
 			$result['breadcrumbs'] = $ctg->get_breadcrumb($result['ctg_id']);
 			$color_flg = 0;
@@ -54,7 +55,7 @@ class ProductController extends PHOController
 			}
 			$result['color_flg']=$color_flg;
 			//update traffic
-			//PhoLog::debug_var('view----',$result);
+			//PhoLog::debug_var('view----',__LINE__);
 			//$time = time();
 			//$traffic['time'] = $time;//-600;  //10phut		
 			//$traffic['section_id'] = session_id();
@@ -65,8 +66,9 @@ class ProductController extends PHOController
 			
 			$result['relations']= $db->get_relation($result['ctg_id'],$result['pro_id'],6);
 			//PhoLog::debug_var('view----',$result['relations']);
-	        
-			$this->ViewVAR($result);	
+	        //PhoLog::debug_var('view----',__LINE__);
+	        //PhoLog::debug_var('view----',$result);
+			return $this->ViewVAR($result);	
 		} catch (\Exception $e) {
 			PhoLog::debug_var('---Error---',$e);
 		}

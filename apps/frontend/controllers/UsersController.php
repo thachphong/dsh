@@ -81,26 +81,35 @@ class UsersController extends PHOController
         $this->session->set('auth', $user);
     }
 	public function updateAction(){
-		$param = $this->get_param(array('user_no','user_name','email','mobile','address','pass','sex','city','district','ward','ctv_flg'));
-		$result = array('status' => 'OK');
-		$result['status'] = 'OK';	
-		$result['msg'] = 'Cập nhật thành công!';		
-		$db = new Users();
-	
-		$msg = $db->get_validation($param);
-		
-		if($msg === true){	
-			$db->_insert($param);		
-			if($this->sendmail($db)){
+		try{
+			//PhoLog::debug_var('---user_upd---',__LINE__);
+			$param = $this->get_param(array('user_no','user_name','email','mobile','address','pass','sex','city','district','ward','ctv_flg'));
+			$result = array('status' => 'OK');
+			$result['status'] = 'OK';	
+			$result['msg'] = 'Cập nhật thành công!';		
+			$db = new Users();
+			//PhoLog::debug_var('---user_upd---',__LINE__);
+			$msg = $db->get_validation($param);
+			//PhoLog::debug_var('---user_upd---',__LINE__);
+			if($msg === true){	
+				$db->_insert($param);	
+				$send_status = $this->sendmail($db);	
+				PhoLog::debug_var('---SEND_MAIL_REG---',$db->email .' :'.$send_status);			
+				if(!$send_status){
+					$result['status'] = 'NOT';	
+					$result['msg'] = 'Có lỗi xảy ra trong quá trình gửi mail kích hoạt tài khoản';
+					$db->delete();
+				}
+			}else{			
+				$result = $msg;
 				$result['status'] = 'NOT';	
-				$result['msg'] = 'Có lỗi xảy ra trong quá trình gửi mail kích hoạt tài khoản';
-				$db->delete();
 			}
-		}else{			
-			$result = $msg;
-			$result['status'] = 'NOT';	
+			//PhoLog::debug_var('---user_upd---',__LINE__);
+			return $this->ViewJSON($result);
+		} catch (\Exception $e) {
+			PhoLog::debug_var('---SYS_Error---',$e->getMessage());			
+			throw $e;
 		}
-		return $this->ViewJSON($result);
 	}
 	public function sendmail($usr){
 		$email = new Mail();
@@ -125,14 +134,13 @@ class UsersController extends PHOController
 	public function get_body($usr){
 		$url = BASE_URL_NAME."users/active?email=".$usr->email."&rd=".$usr->user_id;
 		$html="<p>Dưới đây là thông tin đăng nhập của bạn: </p>
-			   <p><strong>Tên đăng nhập:</strong> ".$usr->user_no."</p>
 			   <p><strong>Email:</strong> ".$usr->email."</p>
 			   <p><strong>Điện thoại:</strong> ".$usr->mobile." </p>
 			   <br/>
 			   <p>Vui lòng kích vào đường link dưới đây để kích hoạt tài khoản của bạn:</p>
 			  <a href='".$url ."'>".$url ."</a> 
 
-			<p>Nếu đường link trên không hoạt động, vui lòng copy đường link đó, rồi paste lên thanh địa chỉ của trình duyệt để link tới trang kích hoạt trên hệ thống. </p>
+			<p>Nếu đường link trên không hoạt động, vui lòng copy đường link đó, rồi dán lên thanh địa chỉ của trình duyệt để link tới trang kích hoạt trên hệ thống. </p>
 			<p>Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi!</p>";
 		return $html;
 	}

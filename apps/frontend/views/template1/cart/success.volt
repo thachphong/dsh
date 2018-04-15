@@ -23,7 +23,7 @@
                <div class="row padding10">
 					<div class="col-md-12 col-sm-12 col-xs-12 no_padding_left" style="padding-bottom: 10px;text-align:center">
 						<a class="btn_buy btn_orange" href="{{baseurl}}" >Tiếp tục mua hàng</a>
-						<a class="btn_buy btn_red" href="{{baseurl}}" >Quản lý đơn hàng</a>
+						<a class="btn_buy btn_red" href="{{baseurl}}orders/list" >Quản lý đơn hàng</a>
 					</div>
 				</div>
             </div>

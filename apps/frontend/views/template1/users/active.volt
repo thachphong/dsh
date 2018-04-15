@@ -27,7 +27,7 @@
 							{%endif%}
 						</div>
 						<div class="row margin-top10">
-							<label class="col-md-4 col-sm-4 col-xs-12 title_col align_right">Tên đăng nhập hoặc mail</label>
+							<label class="col-md-4 col-sm-4 col-xs-12 title_col align_right">Email</label>
 							<div class="col-md-5 col-sm-7 col-xs-12">
 								<input type="text" name="email"  value="" id="user_no" required>							
 							</div>
@@ -73,7 +73,7 @@
 		        if(datas.status =="OK"){
 		          //Pho_modal_close("modal1");
 		          //Pho_message_box("Thông báo",'Đăng tin thành công !');
-		          Pho_direct("{{url.get('thanh-vien')}}" );
+		          Pho_direct("{{url.get('')}}" );
 		        }else{
 		        	//Pho_message_box_error("Lỗi",datas.msg);
 		        	$('#msg_err').text(datas.msg);

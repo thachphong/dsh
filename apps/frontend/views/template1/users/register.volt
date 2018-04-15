@@ -6,7 +6,7 @@
 </div>
 <div class="row content_bg margin-top10">
 	<div class="container register_form panel_bg">		
-		<div class="col-md-12 col-sm-12 col-xs-12">
+		<div class="col-md-12 col-sm-12 col-xs-12 padding-mobi">
 			<div class="pn_posts">
 				<div class="pn_title">
 					<!--<span class="bg_icon"><i class="fa post-pencil"></i></span>-->
@@ -24,7 +24,7 @@
 							</div>
 						</div>-->
 						<div class="row margin-top10">
-							<label class="col-md-3 col-sm-3 col-xs-12 title_col align_right">Email <span class="lab_red">(*)</span>:</label>
+							<label class="col-md-3 col-sm-3 col-xs-12 title_col align_repon">Email <span class="lab_red">(*)</span>:</label>
 							<div class="col-md-6 col-sm-8 col-xs-12">
 								<input type="Email" name="email"  value="" id="email" required>
 								<span class="lab_red lab_invisible" id="email_error">Bạn cần nhập email !</span>
@@ -32,14 +32,14 @@
 							</div>							
 						</div>
 						<div class="row margin-top10">
-							<label class="col-md-3 col-sm-3 col-xs-12 title_col align_right">Mật khẩu <span class="lab_red">(*)</span>:</label>
+							<label class="col-md-3 col-sm-3 col-xs-12 title_col align_repon">Mật khẩu <span class="lab_red">(*)</span>:</label>
 							<div class="col-md-6 col-sm-8 col-xs-12">
 								<input type="password" name="pass"  value="" id="pass" required>
 								<span class="lab_red lab_invisible" id="pass_error">Bạn cần nhập mật khẩu !</span>
 							</div>
 						</div>
 						<div class="row margin-top10">
-							<label class="col-md-3 col-sm-3 col-xs-12 title_col align_right">Xác nhận lại mật khẩu <span class="lab_red">(*)</span>:</label>
+							<label class="col-md-3 col-sm-3 col-xs-12 title_col align_repon">Xác nhận lại mật khẩu <span class="lab_red">(*)</span>:</label>
 							<div class="col-md-6 col-sm-8 col-xs-12">
 								<input type="password" name="re_pass"  value="" id="re_pass" required>
 								<span class="lab_red lab_invisible" id="re_pass_error">Bạn cần nhập xác nhận lại mật khẩu !</span>
@@ -47,21 +47,21 @@
 							</div>
 						</div>
 						<div class="row margin-top10">
-							<label class="col-md-3 col-sm-3 col-xs-12 title_col align_right">Di động <span class="lab_red">(*)</span>:</label>
+							<label class="col-md-3 col-sm-3 col-xs-12 title_col align_repon">Di động <span class="lab_red">(*)</span>:</label>
 							<div class="col-md-6 col-sm-8 col-xs-12">
 								<input type="text" name="mobile"  value="" id="mobie" required>
 								<span class="lab_red lab_invisible" id="mobie_error">Bạn cần nhập số điện thoại di động !</span>
 							</div>
 						</div>
 						<div class="row margin-top10">
-							<label class="col-md-3 col-sm-3 col-xs-12 title_col align_right">Họ và tên <span class="lab_red">(*)</span>:</label>
+							<label class="col-md-3 col-sm-3 col-xs-12 title_col align_repon">Họ và tên <span class="lab_red">(*)</span>:</label>
 							<div class="col-md-6 col-sm-8 col-xs-12">
 								<input type="text" name="user_name"  value="" id="user_name" required>
 								<span class="lab_red lab_invisible" id="user_name_error">Bạn cần nhập số điện thoại di động !</span>
 							</div>
 						</div>
 						<div class="row margin-top10">
-							<label class="col-md-3 col-sm-3 col-xs-12 title_col align_right">Tỉnh/TP</label>
+							<label class="col-md-3 col-sm-3 col-xs-12 title_col align_repon">Tỉnh/TP</label>
 							<div class="col-md-6 col-sm-8 col-xs-12">
 								<select id="m_provin_id" name="city">            			
 			            			<option value="">--Chọn Tỉnh/TP--</option>
@@ -73,7 +73,7 @@
 							</div>
 						</div>
 						<div class="row margin-top10">
-							<label class="col-md-3 col-sm-3 col-xs-12 title_col align_right">Quận/Huyện</label>
+							<label class="col-md-3 col-sm-3 col-xs-12 title_col align_repon">Quận/Huyện</label>
 							<div class="col-md-6 col-sm-8 col-xs-12">
 								<select id="m_district_id" name="district">            			
 			            			<option value="">--Chọn Quận/Huyện--</option>
@@ -82,7 +82,7 @@
 							</div>
 						</div>
 						<div class="row margin-top10">
-							<label class="col-md-3 col-sm-3 col-xs-12 title_col align_right">Phường/Xã</label>
+							<label class="col-md-3 col-sm-3 col-xs-12 title_col align_repon">Phường/Xã</label>
 							<div class="col-md-6 col-sm-8 col-xs-12">
 								<select id="m_ward_id" name="ward">            			
 			            			<option value="">--Chọn Phường/Xã--</option>
@@ -91,21 +91,21 @@
 							</div>
 						</div>						
 						<div class="row margin-top10">
-							<label class="col-md-3 col-sm-3 col-xs-12 title_col align_right">Địa chỉ :</label>
+							<label class="col-md-3 col-sm-3 col-xs-12 title_col align_repon">Địa chỉ :</label>
 							<div class="col-md-6 col-sm-8 col-xs-12">
 								<input type="text" name="address"  value="" >
 							</div>
 						</div>
 						<div class="row margin-top10">
-							<label class="col-md-3 col-sm-3 col-xs-12 title_col align_right">Thành viên :</label>
-							<div class="col-md-2 col-sm-2 col-xs-12">
+							<label class="col-md-3 col-sm-3 col-xs-12 title_col align_repon">Thành viên :</label>
+							<div class="col-md-2 col-sm-2 col-xs-5">
 								<label class="control control-radio">
 							        Thường
 							        <input type="radio" name="ctv_flg" checked="checked" value="0" class="m_type_id" />
 							        <div class="control_indicator"></div>
 							    </label>
 							</div>
-							<div class="col-md-4 col-sm-4 col-xs-12">							
+							<div class="col-md-4 col-sm-4 col-xs-7">							
 								<label class="control control-radio">
 							        Cộng tác viên (CTV)
 							        <input type="radio" name="ctv_flg"  value="1" class="m_type_id"/>
@@ -114,15 +114,15 @@
 							</div>
 						</div>
 						<div class="row margin-top10">
-							<label class="col-md-3 col-sm-3 col-xs-12 title_col align_right">Giới tính :</label>
-							<div class="col-md-2 col-sm-2 col-xs-12">
+							<label class="col-md-3 col-sm-3 col-xs-12 title_col align_repon">Giới tính :</label>
+							<div class="col-md-2 col-sm-2 col-xs-5">
 								<label class="control control-radio">
 							        Nam
 							        <input type="radio" name="sex" checked="checked" value="1" class="m_type_id" />
 							        <div class="control_indicator"></div>
 							    </label>
 							</div>
-							<div class="col-md-2 col-sm-2 col-xs-12">							
+							<div class="col-md-2 col-sm-2 col-xs-7">							
 								<label class="control control-radio">
 							        Nữ
 							        <input type="radio" name="sex"  value="2" class="m_type_id"/>

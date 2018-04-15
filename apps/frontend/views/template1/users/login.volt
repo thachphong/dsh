@@ -6,7 +6,7 @@
 </div>
 <div class="row content_bg">
 	<div class="container register_form panel_bg margin-top10">		
-		<div class="col-md-12 col-sm-12 col-xs-12 margin_top">
+		<div class="col-md-12 col-sm-12 col-xs-12 margin_top padding-mobi">
 			<div class="pn_posts">
 				<div class="pn_title">
 					<!--<span class="bg_icon"><i class="fa post-pencil"></i></span>-->
@@ -26,13 +26,13 @@
 							
 						</div>
 						<div class="row margin-top10">
-							<label class="col-md-4 col-sm-4 col-xs-12 title_col align_right">Email</label>
+							<label class="col-md-4 col-sm-4 col-xs-12 title_col align_repon">Email</label>
 							<div class="col-md-5 col-sm-7 col-xs-12">
 								<input type="text" name="email"  value="" id="user_no" placeholder="Vui lòng nhập email" required>							
 							</div>
 						</div>
 						<div class="row margin-top10">
-							<label class="col-md-4 col-sm-4 col-xs-12 title_col align_right">Mật khẩu</label>
+							<label class="col-md-4 col-sm-4 col-xs-12 title_col align_repon">Mật khẩu</label>
 							<div class="col-md-5 col-sm-7 col-xs-12">
 								<input type="password" name="password"  value="" id="password" placeholder="Vui lòng nhập mật khẩu" required>								
 							</div>
