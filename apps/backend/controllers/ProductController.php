@@ -44,7 +44,7 @@ class ProductController extends PHOController
 	        //    $param['address_ascii'] = $this->convert_ascii($param['addr']);
 	        //}   
 	        //$param['post']=$db->get_list_all($param,$start_row);
-	        $param['total_post'] = $db->get_product_all_count();
+	        $param['total_post'] = $db->get_product_all_count($param);
 	        $param['total_page']= round($param['total_post']/$param['limit']);
 	        
 	        $start = $page - 2;

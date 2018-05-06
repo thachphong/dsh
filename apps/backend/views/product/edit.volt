@@ -21,7 +21,25 @@
 	table.list_file{
 		margin-bottom: 10px;
 	}
-	
+  .icon_move{
+    display: block;
+    bottom: 50px;
+    position: fixed;
+    z-index: 99;
+    width: 50px;
+    height: 50px;
+    right: 40px;
+  }
+	.top{
+    background-image: url("{{url.get('templateadm/images/top.png')}}");     
+    background-repeat: no-repeat;   
+    background-position: center; 
+  }
+  .down{
+    background-image: url("{{url.get('templateadm/images/down.png')}}");     
+    background-repeat: no-repeat;   
+    background-position: center; 
+  }
 	</style>
 	
         <!-- page content -->
@@ -287,6 +305,8 @@
             </div>
          <!-- </div>-->
         
+           <a class="icon_move top"></a>
+       
         </div>
         <!-- /page content -->
 <script>
@@ -425,6 +445,21 @@
         		$('#sizelist').val(val+';'+id);
         	}
         });
+        $(document).off('click','.icon_move'); 
+        $(document).on('click','.icon_move',function(event){
+            if($(this).hasClass('top')){
+                $(this).removeClass('top');
+                $(this).addClass('down');
+                document.body.scrollTop = 0; // For Chrome, Safari and Opera 
+                document.documentElement.scrollTop = 0; // For IE and Firefox                
+            }else{
+                $(this).removeClass('down');
+                $(this).addClass('top');
+                document.body.scrollTop = $(document).height(); // For Chrome, Safari and Opera 
+                document.documentElement.scrollTop = $(document).height(); // For IE and Firefox
+                
+            }
+        }); 
         $(document).off('click','#btn_upload'); 
         $(document).on('click','#btn_upload',function(event){
         	$('#upload_file').click();

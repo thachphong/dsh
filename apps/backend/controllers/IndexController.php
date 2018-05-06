@@ -5,6 +5,8 @@ namespace Multiple\Backend\Controllers;
 use Multiple\PHOClass\PHOController;
 use Multiple\Library\FilePHP;
 use Multiple\PHOClass\PhoLog;
+use Multiple\Models\Users;
+use Multiple\Models\Orders;
 class IndexController extends PHOController
 {
 
@@ -14,7 +16,12 @@ class IndexController extends PHOController
     }
 	public function indexAction()
 	{
+		$us = new Users();
+		$resul['user_info'] = $us->get_total_info();
+		$db = new Orders();
+		$resul['order_info'] = $db->get_total_info();
 		$this->set_template_share();
+		$this->ViewVAR($resul);
 		//return $this->response->forward('login');
        // $this->view->name= 'aaaa';
 	}

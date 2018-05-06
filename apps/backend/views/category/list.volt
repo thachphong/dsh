@@ -87,7 +87,7 @@
                               <td>{{item['ctg_name_1']}}</td>
                           {%endif%}
                            
-                          <td >{{item['ctg_name']}}</td>
+                          <td >{{item['ctg_name']}}({{item['cnt_pro']}})</td>
                           <td>
                             
                             <span class="fa {%if item['del_flg'] == 1%}fa-square-o{%else%}fa-check-square{%endif%}" style="font-size: 16px;"></span>
