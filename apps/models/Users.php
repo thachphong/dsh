@@ -202,4 +202,11 @@ class Users extends DBModel
 		$sql = "select * from user where email=:email";
 		return $this->query_first($sql,array('email'=>$email));
 	}
+    public function get_total_info(){
+        $sql="select 
+                (select count(*) from user ) total
+                ,(select count(*) from user where `status` = 0) not_active
+                ,(select count(*) from user where `status` = 1 and ctv_flg = 1) total_ctv";
+        return $this->query_first($sql);
+    }
 }

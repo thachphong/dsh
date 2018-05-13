@@ -2,9 +2,10 @@
 
 namespace Multiple\Models;
 
-use Phalcon\Mvc\Model;
-
-class DownloadTemp extends Model
+use Multiple\Models\DBModel;
+use Multiple\PHOClass\PHOArray;
+use Multiple\PHOClass\PHOLog;
+class DownloadTemp extends DBModel
 {
     public $id_dl;
     public $status;
@@ -18,29 +19,28 @@ class DownloadTemp extends Model
     {
         $this->setSource("download_temp");
     }
-    public function get_All($status,$menu_id){
-    	$data = DownloadTemp::query()
-                ->where("status = :status:")   
-                ->addwhere("menu_id = :menu_id:")              
-                ->bind(array("status" => $status,'menu_id'=>$menu_id))
-                ->order("id_dl desc")
-                ->execute();
-        return $data;
+    public function get_All($status,$menu_id){    	
+        return  DownloadTemp::find(array(
+                "status = :status: and menu_id = :menu_id: ",
+                'bind' => array("status" => $status,'menu_id'=>$menu_id),
+                'order'=> "id_dl desc"
+        ));
         /*$usr_data = DownloadTemp::find(array('status'=>1));
         return $usr_data;*/
     }
     public function check_exists($url){    
-    	//$res = DownloadTemp::find(array('link_dl'=>$url));
-    	$pql = "SELECT count(*) cnt FROM Multiple\Models\DownloadTemp 
-    			where link_dl = :link_dl:";
-		$total = $this->modelsManager->executeQuery($pql,array( 'link_dl' => $url));
-		if($total[0]->cnt == 0){
+    	
+    	//$pql = "SELECT count(*) cnt FROM download_temp	where link_dl = :link_dl";
+        $pql = "select count(*) cnt from(
+                    SELECT pro_id FROM product  where src_link = :link_dl
+                    union 
+                    SELECT id_dl FROM download_temp where link_dl = :link_dl
+                ) t";
+		$total =$this->query_first($pql,array( 'link_dl' => $url)) ;
+		if($total['cnt'] == 0){
 			return TRUE;
 		}
-		/*return $total[0]->cnt;
-        if( count($res) == 0){
-			return TRUE;
-		}*/
+		
 		return FALSE;
     }   
 }

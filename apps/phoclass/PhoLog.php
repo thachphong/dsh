@@ -143,5 +143,10 @@ class PhoLog
     {
         PhoLog::write_file($predix, var_export($var, true));
     }
+    public static function Exception_log($predix, $var)
+    {
+        PhoLog::write_file($predix, '--------------------------------------');
+        PhoLog::write_file($predix, 'Message:'.$var->getMessage().' File:'.$var->getFile().'. Line:'.$var->getLine());
+    }
 
 }

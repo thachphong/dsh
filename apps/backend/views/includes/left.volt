@@ -44,7 +44,8 @@
                       <li><a href="{{url.get('category/list/1/0')}}">Danh mục cấp 1</a></li>
                       <li><a href="{{url.get('category/list/2/0')}}">Danh mục cấp 2</a></li>
                       <li><a href="{{url.get('category/list/3/0')}}">Danh mục cấp 3</a></li>
-                      <li><a href="{{url.get('product')}}">Sản phẩm</a></li>                      
+                      <li><a href="{{url.get('product')}}">Sản phẩm</a></li>   
+                      <li><a href="{{url.get('product?del_flg=1')}}">Duyệt Sản phẩm</a></li>                    
                     </ul>
                   </li>
                   <li><a href="{{url.get('page')}}"><i class="fa fa-file-powerpoint-o"></i> Trang <span class="fa"></span></a></li>
@@ -85,6 +86,7 @@
                       <!--<li><a href="tables_dynamic.html">Message</a></li>-->
                     </ul>
                   </li>
+                  <li><a href="{{url.get('download/dlbyurl')}}"><i class="fa fa-chevron-down"></i> Auto Download <span class="fa"></span></a></li>
                   <!-- <li><a ><i class="fa fa-gears"></i> Template <span class="fa fa-chevron-down"></span></a>
                       <ul class="nav child_menu">
                           <li><a href="{{url.get('template/list')}}">Template </a></li>                       

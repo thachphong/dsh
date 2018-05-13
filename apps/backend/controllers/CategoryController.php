@@ -65,7 +65,9 @@ class CategoryController extends PHOController
 		$param['title'] = '';
 		$param['description'] = '';
 		$param['keywords'] = '';
-		$param['img_path']='';
+		$param['img_path']=null;
+		$param['img_seo']=null;
+		$param['pro_desc']='';
 		$mt = new MType();
 		$param['mtypelist'] = $mt->get_all();	
 		if(strlen($param['ctg_level'])==0){
@@ -166,6 +168,8 @@ class CategoryController extends PHOController
 			,'keywords'
 			,'img_path'
 			,'folder_tmp'
+			,'img_seo'
+			,'pro_desc'
 			));
 		//$param['news_flg'] =0;
 		$result = array('status' => 'OK');
@@ -174,6 +178,7 @@ class CategoryController extends PHOController
 		$db = new Category();
 		$msg = $this->check_validate_update($param);
 		$file = new FilePHP();
+		//PhoLog::debug_var('---d---',$param);
 		if($msg ==""){
 			$login_info =  $this->session->get('auth');
         	$param['user_id'] = $login_info->user_id;
@@ -181,9 +186,16 @@ class CategoryController extends PHOController
 					$ext = $file->GetExtensionName($param['img_path']);				
 					$file_name = uniqid('',TRUE).'.'.$ext;	
 					$file->CopyFile(PHO_PUBLIC_PATH.$param['img_path'],PHO_PUBLIC_PATH.'images/category/'.$file_name);
-					$file->DeleteFolder(PHO_PUBLIC_PATH.'tmp/'.$param['folder_tmp']);
+					
 					$param['img_path'] ='images/category/'.$file_name;
 			}
+			if(strlen($param['img_seo'])>0 && strpos($param['img_seo'],'tmp')!== FALSE){				
+					$ext = $file->GetExtensionName($param['img_seo']);				
+					$file_name = uniqid('',TRUE).'.'.$ext;	
+					$file->CopyFile(PHO_PUBLIC_PATH.$param['img_seo'],PHO_PUBLIC_PATH.'images/category/'.$file_name);	
+					$param['img_seo'] ='images/category/'.$file_name;
+			}
+			$file->DeleteFolder(PHO_PUBLIC_PATH.'tmp/'.$param['folder_tmp']);
 			if(strlen($param['ctg_id'])==0){				
 				$ctg_id = $db->_insert($param);
 			}else{
@@ -192,6 +204,9 @@ class CategoryController extends PHOController
 				if($info['img_path'] != '' && $info['img_path'] != $param['img_path']){
 					$file->DeleteFile(PHO_PUBLIC_PATH.$info['img_path']);
 				}	
+				if($info['img_seo'] != '' && $info['img_seo'] != $param['img_seo']){
+					$file->DeleteFile(PHO_PUBLIC_PATH.$info['img_seo']);
+				}
 				$db->_update($param);
 			}
 		}else{
@@ -209,8 +224,11 @@ class CategoryController extends PHOController
 		$file = new FilePHP();
 		if($msg== ""){
 			$info = $db->get_ctg_info($ctg_id);
-			if($info['img_path'] != '' && $info['img_path'] != $param['img_path']){
+			if($info['img_path'] != '' ){
 				$file->DeleteFile(PHO_PUBLIC_PATH.$info['img_path']);				
+			}
+			if($info['img_seo'] != ''){
+				$file->DeleteFile(PHO_PUBLIC_PATH.$info['img_seo']);				
 			}	
 			$db->ctg_id = $ctg_id;
 			$db->delete();

@@ -24,6 +24,8 @@ class Category extends DBModel
     public $description;
     public $title;
     public $img_path;
+    public $img_seo;
+    public $pro_desc; // description add them phia sau mo ta cua san pham
     public function initialize()
     {
         $this->setSource("category");
@@ -67,7 +69,7 @@ class Category extends DBModel
     public function get_ctg_list($level,$news_flg=0)
     {
         return $this->pho_query("select m.ctg_id,m.parent_id, m.ctg_no,m.ctg_name,m.ctg_level,m.del_flg,m.sort,m1.ctg_name ctg_name_1,t.m_type_name,m.ctg_code
-        ,m2.ctg_name ctg_name_2,m.img_path
+        ,m2.ctg_name ctg_name_2,m.img_path,(select count(*) from product where ctg_id = m.ctg_id) cnt_pro
                 from category m
                 LEFT JOIN category m1 on m1.ctg_id = m.parent_id 
                 LEFT JOIN category m2 on m2.ctg_id = m1.parent_id
@@ -92,6 +94,8 @@ class Category extends DBModel
                     ,c.title               
                     ,c.description
                     ,c.img_path
+                    ,c.pro_desc
+                    ,c.img_seo
                 from category c
 								LEFT JOIN category p1 on p1.ctg_id = c.parent_id
                 where c.ctg_id = :ctg_id
@@ -135,6 +139,8 @@ class Category extends DBModel
         $this->description = $param['description'];     
         $this->title= $param['title'];
         $this->img_path= $param['img_path'];
+        $this->pro_desc = $param['pro_desc'];
+        $this->img_seo = $param['img_seo'];
         if($param['ctg_level'] ==1){
 			$this->ctg_code = $this->get_code_max($param['parent_id']);
 			$this->ctg_code++;
@@ -172,6 +178,8 @@ class Category extends DBModel
                     ,description =:description
                     ,title =:title
                     ,img_path =:img_path
+                    ,img_seo =:img_seo
+                    ,pro_desc =:pro_desc
                     where ctg_id = :ctg_id
                 ";
         
@@ -188,6 +196,8 @@ class Category extends DBModel
                     ,'description'
                     ,'title'
                     ,'img_path'
+                    ,'img_seo'
+                    ,'pro_desc'
                     )));  
         return TRUE;
     }
@@ -307,7 +317,7 @@ class Category extends DBModel
 	public function get_list_search($ctg_no,$limit = 10){
 		$sql = "select ctg_id,ctg_level,parent_id,ctg_no,ctg_name from category 
 				where ctg_no REGEXP :ctg_no
-				and ctg_level = 3
+				and ctg_level = 2
 				ORDER BY ctg_code
 				limit $limit";
 		$param['ctg_no'] = str_replace(' ','|',$ctg_no);

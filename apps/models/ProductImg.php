@@ -46,4 +46,8 @@ class ProductImg extends DBModel
 		$sql ="update product_img set avata_flg = $avata_flg where pro_img_id = $pro_img_id";
 		$this->pho_execute($sql);
 	}
+    public function update_color($pro_img_id,$color){
+        $sql ="update product_img set color = :color where pro_img_id = :pro_img_id";
+        $this->pho_execute($sql,array('color'=>$color,'pro_img_id'=>$pro_img_id));
+    }
 }

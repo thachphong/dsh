@@ -33,8 +33,18 @@ class DownloadStructure extends Model
         //         ->order("sort")
         //         ->execute();
         // return $data;
+        return  DownloadStructure::find(array(
+                "ref_link = :ref_link: and ctg_flg=:ctg_flg: and stop_flg = 0 ",
+                'bind' => array('ref_link' => $reflink,'ctg_flg'=>$ctg_flg),
+                'order'=> "sort"
+        ));
     }
     public function get_by_ctg_link($reflink,$dl_category_id = 0){
+        return  DownloadStructure::find(array(
+                "ref_link = :ref_link: and ctg_flg=1 and stop_flg = 0 and dl_category_id = :dl_category_id:",
+                'bind' => array('ref_link' => $reflink,'dl_category_id'=>$dl_category_id),
+                'order'=> "sort"
+        ));
         //$data = DownloadStructure::find(array('ref_link'=>$reflink,  "order" => "sort"));
         // $data = DownloadStructure::query()
         //         ->where("ref_link = :ref_link:")  

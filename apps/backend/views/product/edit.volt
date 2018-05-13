@@ -85,6 +85,7 @@
                         <div class="col-md-4 col-sm-4 col-xs-12">
                           <input type="text" id="pro_name" required="required" name="pro_name" class="form-control col-md-7 col-xs-12" value="{{pro_name}}">                          
                           <input type="hidden"  name="pro_id" value="{{pro_id}}">  
+                          <input type="hidden"  name="pro_code" value="{{pro_code}}"> 
                           <input type="hidden"  name="folder_tmp" id="folder_tmp" value="{{folder_tmp}}">                        
                         </div>
                         <label class="control-label col-md-2 col-sm-2 col-xs-12" for="ctg_id">Danh mục<span class="required">*</span>
@@ -246,7 +247,8 @@
                       				<td>
                       					<a class="btn btn-danger btn-xs btn_del_img" id="del_{{img.pro_img_id}}" type="button">Xóa hình</a>
                       				</td>
-                      				<td><label><input type="radio" name="chk" value="0" id="radio_{{img.pro_img_id}}" {%if img.avata_flg ==1%}checked="true"{%endif%} >làm ảnh đại diện</label>                      					
+                      				<td><label><input type="radio" name="chk" value="0" id="radio_{{img.pro_img_id}}" {%if img.avata_flg ==1%}checked="true"{%endif%} >làm ảnh đại diện</label> 
+                                <input type="hidden" name="img_list[{{img.pro_img_id}}]" value="{{img.img_path}}">
                       				</td>
                       				<td>Màu</td>
                       				<td><input type="text" name="color[{{img.pro_img_id}}]" value="{{img.color}}"></td>
@@ -346,7 +348,7 @@
 		    	var input_seller = $(td_seller).find('input')[0];
 		    	var input_exp = $(td_exp).find('input')[0];
 		    	var round_num =100;
-		    	if(parseFloat(val)>50000){
+		    	if(parseFloat(val)>=30000){
 		    		round_num =1000;
 		    	}
 		    	var price_seller = Math.round((parseFloat(val) + parseFloat(val)*per_exp/100)/round_num)*round_num;
@@ -407,9 +409,9 @@
         	if($("#src_link").val()=='' && $('#not_src').prop('checked')==false){
         		return "Bạn chưa nhập nguồn sản phẩm";
         	}
-        	if($("#description").val()==''){
+        	/*if($("#description").val()==''){
         		return "Bạn chưa nhập Description";
-        	}
+        	}*/
           var msg ="";
           $('#list_size').find('tr').each(function(){
               var size_input = $(this).find('.size_format')[0];
@@ -460,6 +462,19 @@
                 
             }
         }); 
+        $(window).scroll(function(e){
+          
+            var x = $(window).scrollTop();
+            console.log(x);
+            var height_comp = $(document).height()/2;
+            if(x<height_comp){
+                $('.icon_move').removeClass('top');
+                $('.icon_move').addClass('down');
+            }else{                
+                $('.icon_move').removeClass('down');
+                $('.icon_move').addClass('top');
+            }
+        });
         $(document).off('click','#btn_upload'); 
         $(document).on('click','#btn_upload',function(event){
         	$('#upload_file').click();

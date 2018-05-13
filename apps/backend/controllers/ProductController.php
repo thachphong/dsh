@@ -19,7 +19,7 @@ class ProductController extends PHOController
 	public function indexAction()
 	{
 		try{
-			$param = $this->get_Gparam(array('ctgid','pid','fdate','tdate','status','page'));
+			$param = $this->get_Gparam(array('ctgid','pid','fdate','tdate','status','page','del_flg'));
 			$db = new Product();
 			$ctg = new Category();
 			
@@ -71,13 +71,12 @@ class ProductController extends PHOController
 			$result['list']= $db->get_product_all($param,$start_row);
 			$result['categorys']= $ctg->get_category_rows(0);
 			//$this->set_template_share();
-		} catch (\Exception $e) {
-			PhoLog::debug_var('---Error---','------------------------------');
-			PhoLog::debug_var('---Error---',$e);
+		} catch (\Exception $e) {			
+			PhoLog::Exception_log('---Error---',$e);
 		}
 		//PhoLog::debug_var('---result---',$result);
 		$this->ViewVAR($result);
-	}
+	}	
 	public function editAction($pro_id)
 	{
 		$ctg = new Category();
@@ -85,6 +84,7 @@ class ProductController extends PHOController
 			//$param = self::get_param(array('parent_id'));
 			
 			$param['pro_id'] = null;
+			$param['pro_code'] = null;
 			$param['pro_name'] = null;
 			$param['del_flg'] = 0;
 			$param['ctg_id'] = NULL;		
@@ -130,7 +130,8 @@ class ProductController extends PHOController
 	}
 	public function updateAction(){
 		$param = $this->get_param(array(
-			  'pro_id',			  
+			  'pro_id',
+			  'pro_code',			  
 			  'pro_name',
 			  'ctg_id' ,
 			  'price_exp' ,
@@ -141,6 +142,7 @@ class ProductController extends PHOController
 			  'disp_home' ,
 			  'good_sell',
 			  'img_add',
+			  'img_list',
 			  'content',			 
 			  'del_flg'	,
 			  'avata_id',
@@ -212,11 +214,15 @@ class ProductController extends PHOController
 					$avatakey = str_replace("add_","",$param['avata_id']); //avata flg là image mới
 				}
 				
+				//update color cho image da co				
+				foreach ($param['img_list'] as $key => $img) {					
+					$proimg->update_color($key,$param['color'][$key]);
+				}
 			}
 			//update price
 			$price = new ProductPrice();
 			$price->insert_multi($param);
-			PhoLog::debug_var('--img---',$param['img_add']);
+			//PhoLog::debug_var('--img---',$param['img_add']);
 			// thêm hình ảnh sản phẩm
 			if(isset($param['img_add']) && count($param['img_add']) > 0){
 					$imglist = $this->move_file($param['pro_id'],$param['img_add'],$param['folder_tmp']);			
@@ -260,6 +266,17 @@ class ProductController extends PHOController
 	public function check_validate_update(&$param){
 		if(strlen($param['pro_name'])== 0){
 			return "Bạn chưa nhập tên sản phẩm !";
+		}
+		if(strlen($param['pro_id']) > 0){
+			$db = new Product();
+			$diff = $db->check_diff($param['pro_id'],$param['ctg_id']);
+			//PhoLog::debug_var('---diff----',$diff);
+			if($diff['diff_flg']=='1'){
+				$code_max  = $diff['code_max'];
+				$code_max++;
+				$param['pro_name'] = str_replace($diff['pro_code'], $code_max, $param['pro_name']);
+				$param['pro_code'] = $code_max;
+			}
 		}
 		$pro_no = $this->convert_vi_to_en($param['pro_name']);
 		$arr_rep = array(' - ',';',',',':','!','&','%',"'",'"','(',')','/',"\\",'?' );

@@ -421,7 +421,7 @@ class FilePHP
                 return false;
             } else {
                 // Create a FilesystemIterator instance 
-                $FilesystemIterator = new FilesystemIterator($directory,FilesystemIterator::SKIP_DOTS);
+                $FilesystemIterator = new \FilesystemIterator($directory,\FilesystemIterator::SKIP_DOTS);
                 // If destination directory not exists
                 if (!is_dir($destination)) {
                     // Create a destination directory

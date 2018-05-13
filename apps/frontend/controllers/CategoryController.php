@@ -207,7 +207,7 @@ class CategoryController extends PHOController
         }
 
         $param['page'] = $page;
-        $param['ctg_name'] ='Kết quả tìm';
+        $param['ctg_name'] ="Kết quả tìm '".$param['sp']."'";
         $param['ctg_no'] = str_replace('/','', $_SERVER['REQUEST_URI']);
         $exp = explode('&page',$param['ctg_no'])  ;
         $param['ctg_no']=  $exp[0]; 
@@ -216,7 +216,12 @@ class CategoryController extends PHOController
         $param['list']=$db->search_product($sp_search,$start_row);
         $param['total_post'] = $db->search_product_count($sp_search);
         $param['total_page']= round($param['total_post']/PAGE_LIMIT_RECORD);
-        
+        $param['disp_dm'] = 0;
+        $param['description'] = 'Thời trang nam, thời trang, nữ phụ kiện công nghệ, bán lẻ giá sỉ';
+        $param['title'] = 'Thời trang nam, thời trang, nữ phụ kiện công nghệ, bán lẻ giá sỉ';
+        //$param['rel_menu'] =$ctg->get_list_relation('',15);
+            
+
         $start = $page - 2;
         $end = $page + 2;
         if($page < 3){

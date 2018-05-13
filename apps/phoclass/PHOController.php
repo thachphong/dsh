@@ -24,7 +24,7 @@ class PHOController extends Controller
 			}
 			return $result;
 		} catch (\Exception $e) {
-			PhoLog::debug_var('---SYS_Error---',$e->getMessage());			
+			PhoLog::Exception_log('---SYS_Error---',$e);			
 			throw $e;
 		}
 	}
@@ -37,7 +37,7 @@ class PHOController extends Controller
 			}
 			return $result;
 		} catch (\Exception $e) {
-			PhoLog::debug_var('---SYS_Error---',$e->getMessage());			
+			PhoLog::Exception_log('---SYS_Error---',$e);			
 			throw $e;
 		}
 	}
@@ -48,7 +48,7 @@ class PHOController extends Controller
 	        $this->response->setJsonContent($result);
 	        return $this->response;
         } catch (\Exception $e) {
-			PhoLog::debug_var('---SYS_Error---',$e->getMessage());			
+			PhoLog::Exception_log('---SYS_Error---',$e);			
 			throw $e;
 		}
 	}
@@ -73,7 +73,7 @@ class PHOController extends Controller
 			];*/
 			return $this->response->send();
 		} catch (\Exception $e) {
-			PhoLog::debug_var('---SYS_Error---',$e->getMessage());			
+			PhoLog::Exception_log('---SYS_Error---',$e);			
 			throw $e;
 		}
 	}
@@ -88,7 +88,7 @@ class PHOController extends Controller
 				}
 			}		
 		} catch (\Exception $e) {
-			PhoLog::debug_var('---SYS_Error---',$e->getMessage());			
+			PhoLog::Exception_log('---SYS_Error---',$e);			
 			throw $e;
 		}
 	}
@@ -98,7 +98,7 @@ class PHOController extends Controller
 	 		$cache = new BackFile( $frontCache,  ['cacheDir' => PHO_CACHE_HTML ]);
 	 		return $cache;
  		} catch (\Exception $e) {
-			PhoLog::debug_var('---SYS_Error---',$e->getMessage());			
+			PhoLog::Exception_log('---SYS_Error---',$e);			
 			throw $e;
 		}
 	}
@@ -123,7 +123,7 @@ class PHOController extends Controller
 				return $this->response->send();
 			}
 		} catch (\Exception $e) {
-			PhoLog::debug_var('---SYS_Error---',$e->getMessage());			
+			PhoLog::Exception_log('---SYS_Error---',$e);			
 			throw $e;
 		}
 	}
@@ -133,7 +133,7 @@ class PHOController extends Controller
 	 		$cache = new BackFile( $frontendCache,  ['cacheDir' => PHO_CACHE_DIR ]);
 	 		return $cache;
  		} catch (\Exception $e) {
-			PhoLog::debug_var('---SYS_Error---',$e->getMessage());			
+			PhoLog::Exception_log('---SYS_Error---',$e);			
 			throw $e;
 		}
 	}
@@ -143,7 +143,7 @@ class PHOController extends Controller
 	 		$cache = new Memory( $frontendCache);
 	 		return $cache;
  		} catch (\Exception $e) {
-			PhoLog::debug_var('---SYS_Error---',$e->getMessage());			
+			PhoLog::Exception_log('---SYS_Error---',$e);			
 			throw $e;
 		}
 	}
@@ -155,7 +155,7 @@ class PHOController extends Controller
 	            return $this->response->redirect('loginadm/',TRUE);
 	        }
         } catch (\Exception $e) {
-			PhoLog::debug_var('---SYS_Error---',$e->getMessage());			
+			PhoLog::Exception_log('---SYS_Error---',$e);			
 			throw $e;
 		}
     }
@@ -167,7 +167,7 @@ class PHOController extends Controller
 	            return $this->response->redirect('dang-nhap',FALSE);
 	        }
         } catch (\Exception $e) {
-			PhoLog::debug_var('---SYS_Error---',$e->getMessage());			
+			PhoLog::Exception_log('---SYS_Error---',$e);			
 			throw $e;
 		}
     }
@@ -193,7 +193,7 @@ class PHOController extends Controller
 		     $str = preg_replace("/(Đ)/", 'D', $str);
 		     return trim(strtolower($str));
 	     } catch (\Exception $e) {
-			PhoLog::debug_var('---SYS_Error---',$e->getMessage());			
+			PhoLog::Exception_log('---SYS_Error---',$e);			
 			throw $e;
 		}
 	}
@@ -208,7 +208,7 @@ class PHOController extends Controller
 			$str =str_replace(' ','-', $str);
 			return $str;
 		} catch (\Exception $e) {
-			PhoLog::debug_var('---SYS_Error---',$e->getMessage());			
+			PhoLog::Exception_log('---SYS_Error---',$e);			
 			throw $e;
 		}
 	}
@@ -219,7 +219,7 @@ class PHOController extends Controller
 			$str =str_replace($arr_rep,'', $str);	
 			return $str;
 		} catch (\Exception $e) {
-			PhoLog::debug_var('---SYS_Error---',$e->getMessage());			
+			PhoLog::Exception_log('---SYS_Error---',$e);			
 			throw $e;
 		}
 	}
@@ -246,7 +246,7 @@ class PHOController extends Controller
 			}
 			return $data; 
 		} catch (\Exception $e) {
-			PhoLog::debug_var('---SYS_Error---',$e->getMessage());			
+			PhoLog::Exception_log('---SYS_Error---',$e);			
 			throw $e;
 		}
 	}
@@ -262,7 +262,7 @@ class PHOController extends Controller
 			}
 			return $data; 
 		} catch (\Exception $e) {
-			PhoLog::debug_var('---SYS_Error---',$e->getMessage());			
+			PhoLog::Exception_log('---SYS_Error---',$e);			
 			throw $e;
 		}
 	}
@@ -278,7 +278,7 @@ class PHOController extends Controller
 			}
 			return $data;
 		} catch (\Exception $e) {
-			PhoLog::debug_var('---SYS_Error---',$e->getMessage());			
+			PhoLog::Exception_log('---SYS_Error---',$e);			
 			throw $e;
 		} 
 	}
@@ -293,7 +293,7 @@ class PHOController extends Controller
 			}
 			return $data; 
 		} catch (\Exception $e) {
-			PhoLog::debug_var('---SYS_Error---',$e->getMessage());			
+			PhoLog::Exception_log('---SYS_Error---',$e);			
 			throw $e;
 		}
 	}

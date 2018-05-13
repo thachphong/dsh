@@ -8,11 +8,11 @@ class Product extends DBModel
 {	
 	public  $pro_id ;
     public  $pro_no ;
-    public  $pro_name   ;
-    public  $disp_home  ;
-    public  $good_sell   ;
-    public  $status  ;
-    public  $content ;
+    public  $pro_name   ;  // ten san pham
+    public  $disp_home  ;  // hien thi tren trang chu
+    public  $good_sell   ; //sp ban chay
+    public  $status  ;  //0:con hang; 1:het hang
+    public  $content ;  // noi dung
     public  $technology   ;
     public  $promotions   ;
     public  $add_date;
@@ -20,10 +20,10 @@ class Product extends DBModel
     public  $upd_date  ;
     public  $upd_user;
 	public  $del_flg;
-	public 	$pro_code;
-	public 	$src_link;
-	public  $sizelist;
-	public  $description;
+	public 	$pro_code;  //ma san pham
+	public 	$src_link;  //link nguon hang
+	public  $sizelist;  // size san phan
+	public  $description; 
 	public function initialize()
     {
         $this->setSource("product");
@@ -50,6 +50,10 @@ class Product extends DBModel
 		if(strlen($param['status']) > 0){
 			$sql .=" and p.status = :status";	
 			$pasql['status'] = $param['status'];		
+		}
+		if(strlen($param['del_flg']) > 0){
+			$sql .=" and p.del_flg = :del_flg";	
+			$pasql['del_flg'] = $param['del_flg'];		
 		}		
         if (isset($param['fdate']) && empty($param['fdate'])==FALSE && isset($param['tdate']) && empty($param['tdate'])==FALSE) {
 			$pasql['tdate'] = $param['tdate'].' 23:59';
@@ -80,10 +84,11 @@ class Product extends DBModel
 		$sql .=" order by p.pro_id desc";
 		return $this->pho_query($sql,$pasql);
 	}
-	public function get_product_all_count(){
+	public function get_product_all_count($param){
 		$sql="select count(p.pro_id) cnt
 				FROM
 				product p
+				where 1=1
 				";
 		$pasql = array();
 		if(strlen($param['status']) > 0){
@@ -158,22 +163,30 @@ class Product extends DBModel
 		    $this->status  = 0;
 		    
 		    $this->content   = $param['content'];   
-		    $this->content = $param['content'];
-		    $this->technology    = $param['technology'];
-		    $this->promotions    = $param['promotions'];
+		 
+		    if(isset($param['technology'])){
+		    	$this->technology    = $param['technology'];
+			}
+		    if(isset($param['promotions'])){
+		    	$this->promotions    = $param['promotions'];
+			}
 		    $this->add_user    = $param['user_id'];	    
 		    $this->upd_user    = $param['user_id'];
 		    $this->add_date = date("Y-m-d H:i:s");
 		    $this->upd_date = date("Y-m-d H:i:s");
-		    $this->del_flg = 0;
+		    if(isset($param['del_flg'])){
+		    	$this->del_flg = $param['del_flg'];
+		    }else{
+		    	$this->del_flg = 0;
+		    }		    
 		    $this->src_link = $param['src_link'];
 		    $this->pro_code =$this->get_code_max($param['ctg_id']);
 		    $this->pro_code++;
 		    $this->pro_no = $param['pro_no'] .'-'.strtolower($this->pro_code);
 		    $this->pro_name   = $param['pro_name'].' '.$this->pro_code;
-		    $this->sizelist = $param['sizelist'];	
+		    $this->sizelist = $param['sizelist'];
 		    $this->description =$param['description'];	
-		    if(strlen($param['good_sell'])>0){
+		    if(isset($param['good_sell']) && strlen($param['good_sell'])>0){
 				$this->good_sell = $param['good_sell'];  
 			}else{
 				$this->good_sell = 0;
@@ -197,6 +210,7 @@ class Product extends DBModel
 		$sql = "update product
 					set pro_name= :pro_name ,					
 					  pro_no = :pro_no,
+					  pro_code = :pro_code,
 					  ctg_id = :ctg_id,					  
 					  status = :status,					  				 				
 					  upd_date =now(),
@@ -217,6 +231,7 @@ class Product extends DBModel
 					'pro_id',
 					'pro_name',					
 					  'pro_no',
+					  'pro_code',
 					  'ctg_id' ,
 					 // 'price_old' ,
 					 // 'price_new',
@@ -307,21 +322,25 @@ class Product extends DBModel
 	public function get_product_info($pro_id){
 		$sql=" select pro_name,
 					  pro_id,
+					  pro_code,
 					  pro_no,			
-					  ctg_id ,	
+					  p.ctg_id ,	
 					  (case when status = 0 then 'còn hàng' else 'hết hàng' end) status_name,				
 					  disp_home ,
 					  good_sell ,
 					  status,
-					  del_flg,
+					  p.del_flg,
 					  content,
 					  promotions,
 					  technology,
 					  full_box,
 					  src_link,
 					  sizelist,
-					  description
-			  from product where pro_id = :pro_id";
+					  p.description,
+						c.pro_desc
+			  from product p
+				INNER JOIN category c on c.ctg_id = p.ctg_id
+				where pro_id = :pro_id";
 		$res = $this->pho_query($sql ,array('pro_id'=>$pro_id));
 		if(count($res)> 0){
 			return $res[0];
@@ -460,4 +479,15 @@ class Product extends DBModel
 		}
 		return 0;
 	}	
+	public function check_diff($pro_id,$ctg_id){
+		$sql="select pro_code,ctg_id ,
+				(case when pro_code like  concat((select ctg_code from category where ctg_id = :ctg_id),'%') then 0 else 1 end) diff_flg,
+				(select IFNULL(max(p.pro_code),CONCAT((select ctg_code from category where ctg_id = :ctg_id ),'0000')) code_max 
+								from product p
+								where p.ctg_id = :ctg_id) code_max
+				from 
+				product 
+				where pro_id = :pro_id";
+		return $this->query_first($sql,array('ctg_id'=>$ctg_id,'pro_id'=>$pro_id));
+	}
 }

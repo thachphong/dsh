@@ -72,13 +72,19 @@
                       <div class="form-group">
                         <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Description</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                          <textarea id="description" class="form-control" name="description" rows="3">{{description}}</textarea>
+                          <textarea id="description" class="form-control" name="description" rows="2">{{description}}</textarea>
                         </div>
                       </div>
                       <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="ctg_name">Hình ảnh<span class="required">*</span>
+                        <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Desc For Pro</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <textarea id="pro_desc" class="form-control" name="pro_desc" rows="2">{{pro_desc}}</textarea>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="ctg_name">Hình ảnh menu<span class="required">*</span>
                         </label>
-                        <div class="col-md-4 col-sm-4 col-xs-12">
+                        <div class="col-md-3 col-sm-3 col-xs-12">
                           <img id="img_disp" class="img-rounded" width="100" height="70" {%if img_path is defined%}src="{{url.get(img_path)}}"{%endif%}/>                         
                         </div>                        
                         <div class="col-md-1 col-sm-1 col-xs-12">
@@ -86,12 +92,25 @@
                           <input  type="file" id="upload_file" style="display: none"/>
                           
                         </div>
-                        <input type="hidden" id="img_path" required="required" name="img_path" class="form-control col-md-7 col-xs-12" value="{{img_path}}">                        
+                        <input type="hidden" id="img_path" required="required" name="img_path" class="form-control col-md-7 col-xs-12" value="{{img_path}}"> 
+                      </div> 
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="ctg_name">Hình ảnh Seo<span class="required">*</span>
+                        </label>
+                        <div class="col-md-3 col-sm-3 col-xs-12">
+                          <img id="img_disp_seo" class="img-rounded" width="100" height="70" {%if img_seo is defined%}src="{{url.get(img_seo)}}"{%endif%}/>                         
+                        </div>                        
+                        <div class="col-md-1 col-sm-1 col-xs-12">
+                          <button class="btn btn-primary" type="button" id="btn_upload_seo">Upload</button>
+                          <input  type="file" id="upload_file_seo" style="display: none"/>
+                          
+                        </div>
+                        <input type="hidden" id="img_seo" required="required" name="img_seo" class="form-control col-md-7 col-xs-12" value="{{img_seo}}">                        
                         <input type="hidden"  name="folder_tmp" value="{{folder_tmp}}" >
-                      </div>                                               
+                      </div>                                              
                       <div class="ln_solid"></div>
                       <div class="form-group">
-                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                        <div class="col-md-12 col-sm-12 col-xs-12" style="text-align: center">
                           <button class="dialog_close btn btn-primary" type="button">Thoát</button>
                           <button class="btn btn-success" id="btn_save" type="button">Cập nhật</button>
                         </div>
@@ -136,7 +155,7 @@
     $(document).off('click','#btn_upload'); 
     $(document).on('click','#btn_upload',function(event){
           $('#upload_file').click();
-        }); 
+    }); 
     $(document).off('change','#upload_file'); 
     $(document).on('change','#upload_file',function(event){
           var corractpath = $(this).val();
@@ -160,5 +179,30 @@
                 
             });
     });	
+    $(document).off('click','#btn_upload_seo'); 
+    $(document).on('click','#btn_upload_seo',function(event){
+          $('#upload_file_seo').click();
+    });
+    $(document).off('change','#upload_file_seo'); 
+    $(document).on('change','#upload_file_seo',function(event){
+          var corractpath = $(this).val();     
+          var file_data=$(this).prop("files")[0];
+          //console.log(file_data); 
+          var form_data=new FormData(this);
+            form_data.append("file",file_data);
+            var base_url= "{{url.get('')}}";
+            //console.log(form_data); 
+          Pho_upload("{{url.get('phofile/upload/')}}{{folder_tmp}}" ,form_data,function(datas){
+        //if(datas.status =="OK"){
+           //console.log(datas);
+        var file_name = datas.link.replace(base_url,"");  
+        $('#img_seo').val(file_name);  
+        $('#img_disp_seo').attr('src',datas.link);      
+        //}else{
+          //Pho_message_box_error("Lỗi",datas.msg);
+        //}
+                
+            });
+    }); 
   });
 </script>

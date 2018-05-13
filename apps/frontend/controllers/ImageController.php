@@ -18,31 +18,34 @@ class ImageController extends PHOController
 		
 			$QUERY_STRING = $_SERVER['QUERY_STRING'];
 			$url = str_replace('_url=/crop/'.$size.'/', '', $QUERY_STRING);
+			//$url = str_replace('_url=/crop/', '', $QUERY_STRING);			
 			$url = str_replace('&', '', $url);
-			PhoLog::debug_var('---img---',$url);
-			$file_cache = PHO_CACHE_HTML. str_replace('/', '_', $url);
+			$path_parts = pathinfo($url);
+			$file_thumb = str_replace('.'.$path_parts['extension'], $size.'.'.$path_parts['extension'], $url);
+			//PhoLog::debug_var('---img---',$url);
+			$file_cache = PHO_CACHE_HTML. str_replace('/', '_', $file_thumb);
 			if(!file_exists($file_cache)){
 						
 			//}else{
 				$file_name =PHO_PUBLIC_PATH. $url;
 				//PhoLog::debug_var('---img---','1:'.$file_name);
-				PhoLog::debug_var('---img---','2:'.$file_cache);
+				//PhoLog::debug_var('---img---','2:'.$file_cache);
 				
 				$exp = explode('x', $size);
-				PhoLog::debug_var('---img---',$exp);
+				//PhoLog::debug_var('---img---',$exp);
 				/*$img = new GD($file_name);			
 				$img->resize($exp[0],null,\Phalcon\Image::WIDTH);//->crop($exp[0],$exp[1]);*/
 			    self::thumb_image($file_name,$exp[0],$exp[1],$file_cache);
-				PhoLog::debug_var('---img---',$file_name);
+				//PhoLog::debug_var('---img---',$file_name);
 				//$this->view->disable();	
 				//$this->response->setContent(file_get_contents($file_cache));		
 				//$this->response->setContent($img->render('jpg'));
 				//$img->save($file_cache);
 			}	
 			$this->view->disable();	
-			PhoLog::debug_var('---img---','view');
+			//PhoLog::debug_var('---img---','view');
 			$this->response->setContent(file_get_contents($file_cache));		
-	        PhoLog::debug_var('---img---',$exp);
+	       // PhoLog::debug_var('---img---',$exp);
 	        return $this->response;
         } catch (\Exception $e) {
 			PhoLog::debug_var('---Error---','------------------------------');

@@ -73,13 +73,12 @@
                     	<div class="col-sm-2">
                     		<input type="text" name="tdate" class="form-control datetimepicker">                    		
                     	</div>
-                    	<label class="col-sm-1">Trạng thái</label>
+                    	<label class="col-sm-1">Ẩn/Hiện</label>
                     	<div class="col-sm-2">                    		
-                    		<select class="form-control" name="status">
+                    		<select class="form-control" name="del_flg">
                     			<option value=""></option>
-                    			<option value="0">Chưa duyệt</option>
-                    			<option value="1">Đã duyệt</option>
-                    			<option value="2">Không duyệt</option>
+                    			<option value="0" {%if del_flg== '0'%}selected="selected"{%endif%}>Hiện</option>
+                    			<option value="1" {%if del_flg== '1'%}selected="selected"{%endif%}>Ẩn</option>
                     		</select>                    		
                     	</div>                    	
                     </div>

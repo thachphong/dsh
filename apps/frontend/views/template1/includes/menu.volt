@@ -58,7 +58,7 @@
     		<li><a href="{{baseurl}}c/ban-chay">Bán chạy</a></li>
     		<li><a href="{{baseurl}}c/top-chiet-khau">Top chiết khấu</a></li>    		
     		<li class="hide_mobile"><a href="{{baseurl}}p/quyen-loi-cong-tac-vien">Quyền lợi CTV</a></li>
-    		<li class="hide_mobile"><a>Hướng đẫn đăng ký CTV</a></li>
+    		<li class="hide_mobile"><a href="{{baseurl}}p/huong-dan-dang-ky-ctv">Hướng đẫn đăng ký CTV</a></li>
     	</ul>
     </div>
 </div>

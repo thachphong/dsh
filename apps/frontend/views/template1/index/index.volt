@@ -68,7 +68,7 @@
 					<div class="col-md-20 col-sm-3 col-xs-6 pro_list_item">
 						<a href="{{url.get('sp/')}}{{item['pro_no']}}_{{item['pro_id']}}">	
 						<div class="div_img">
-							<img src="{{url.get('')}}{{item['img_path']}}"/>
+							<img src="{{url.get('crop/210x210')}}{{item['img_path']}}"/>
 						</div>						
 						<div class="div_desc">
 							<span class="lst-it-title">{{item['pro_name']}}</span>
@@ -91,7 +91,7 @@
 					<div class="col-md-20 col-sm-3 col-xs-6 pro_list_item">
 						<a href="{{url.get('sp/')}}{{item['pro_no']}}_{{item['pro_id']}}">	
 						<div class="div_img">				
-							<img src="{{url.get('')}}{{item['img_path']}}"/>
+							<img src="{{url.get('crop/210x210')}}{{item['img_path']}}"/>
 						</div>						
 						<div class="div_desc">
 							<span class="lst-it-title">{{item['pro_name']}}</span>
@@ -115,7 +115,7 @@
 					<div class="col-md-20 col-sm-3 col-xs-6 pro_list_item">
 						<a href="{{url.get('sp/')}}{{item['pro_no']}}_{{item['pro_id']}}">	
 						<div class="div_img">				
-							<img src="{{url.get('')}}{{item['img_path']}}"/>
+							<img src="{{url.get('crop/210x210')}}{{item['img_path']}}"/>
 						</div>						
 						<div class="div_desc">
 							<span class="lst-it-title">{{item['pro_name']}}</span>

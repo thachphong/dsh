@@ -23,10 +23,13 @@ class DownloadCategory extends Model
                 ->where("status=1")
                 ->execute();
 		}else{
-			$data = DownloadCategory::query()
+			/*$data = DownloadCategory::query()
                 ->where("status=1 and menu_id = :menu_id:")                
                 ->bind(array("menu_id" => $menu_id))
-                ->execute();
+                ->execute();*/
+            return  DownloadCategory::find(array(
+                "status=1 and menu_id = :menu_id: ", 'bind' => array('menu_id' => $menu_id)
+            ));
 		}
         
         return $data;

@@ -19,7 +19,7 @@ class AutoDownload
         @$doc->loadHTML($result);
         $this->xpath= new DOMXpath($doc);*/
         $path = APP_PATH.'var/logs/auto_dl_'.date('Y-m-d').'.log';
-        $this->log = new FileLogger($path);
+        //$this->log = new FileLogger($path);
         
     }
     public function Set_URL($url){
@@ -171,21 +171,36 @@ class AutoDownload
 		}
         return  '';
     }
+    public function get_src_list($condition){        
+        
+        $elements =  $this->sdom->find($condition);
+        $result=array();
+        if($elements !=NULL){
+            foreach ($elements as $element) {
+                $result[]= $element->src;
+                $element->class="fr-fic fr-dib";
+            }
+        }
+        $this->sdom->save();
+        return  $result;
+    }
     public function get_link($condition,$url =''){
         $arr_con = explode(';',$condition);   
         $result = array();     
         foreach($arr_con as $item){
             $elements = $this->sdom->find($item);    
-            $this->log->info('item: '.$item);        
+           // $this->log->info('item: '.$item);        
     		foreach ($elements as $element) {   
     			$img = $element->find('img',0);  
     			if($img != NULL){
 	                $data['link'] = $element->href ;  
-	                $this->log->info('img: '.$img->src); 
+                    //$data['link'] = str_replace('//','/' , $data['link']);
+                    //$data['link'] = str_replace('http:/','http://' , $data['link']);
+	                //$this->log->info('img: '.$img->src); 
 	                $data['img_link'] = preg_replace('/[\?].+/','', $img->src);              
 	                if(strlen($url)>0){
 						if(strpos($url,$data['link']) === FALSE){
-							$data['link'] = $url.$data['link'];
+							$data['link'] = $url.trim($data['link'],'/');
 						}
 					}
 	                $data['title'] = $element->title ;
@@ -196,6 +211,30 @@ class AutoDownload
     		}    
         }  
         return  $result;
+    }
+    public function get_img_list($condition,$foler_tmp,$url='')
+    {
+        $folder_path = PHO_PUBLIC_PATH.'tmp/'.$foler_tmp;
+        if(!is_dir($folder_path)){
+            mkdir($folder_path);
+        }
+        $src_list = $this->get_src_list($condition);
+        $result= array();
+        foreach ($src_list as $key => $value) {
+            $src = $value;
+            $extension = pathinfo($src, PATHINFO_EXTENSION);
+            $file_name = uniqid('',TRUE).'.'.$extension;
+            $file_full = $folder_path.'/'.$file_name;
+            $result[] =array('old'=>$value,'new'=> $file_name);
+            if( strpos($src, 'http')===FALSE){
+                $src = $url.$src ;
+            }
+            $src = str_replace(' ','%20',$src);
+            $data = $this->GetData_Url($src);
+            //var_dump($data); 
+            $this->file_save($data,$file_full);
+        }
+        return $result;
     }
     public function get_img($condition,$url=''){
         $year = date('Y');

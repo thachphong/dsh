@@ -2,36 +2,129 @@
 
 namespace Multiple\Backend\Controllers;
 
-use Phalcon\Mvc\Controller;
+use Multiple\PHOClass\PHOController;
 use Multiple\Models\DownloadStructure;
 use Multiple\Models\DownloadTemp;
 use Multiple\Library\AutoDownload;
-use Multiple\Models\Menu;
+use Multiple\Models\Category;
 use Multiple\Models\Posts;
 use Multiple\Models\Tags;
 use Multiple\Models\TagsPosts;
 use Multiple\Models\DownloadCategory;
+use Multiple\Models\Product;
+use Multiple\Models\ProductImg;
+use Multiple\Models\ProductPrice;
+use Multiple\Library\FilePHP;
+use Multiple\PHOClass\PhoLog;
+
+
 //require __DIR__.'/../../library/AutoDownload.php';
 
-class DownloadController extends Controller
+class DownloadController extends PHOController
 {
 	public function initialize()
     {
-        $auth = $this->session->get('auth');
-        if(isset($auth['id'])==FALSE){
-            return $this->response->redirect('useradm/login/',false);
-        }
+        $this->check_loginadmin();
     }
 	public function indexAction()
 	{
 		//$this->view->disable();
-		$menu = new Menu();
+		$menu = new Category();
 		$list_menu = $menu->get_All();
 		$this->view->listmenu = $list_menu;
 		$ctg = new DownloadCategory();
+
 		$this->view->ctglist = $ctg->get_All();
 		$this->view->date_out =date('H:i');
 	}
+    public function dlbyurlAction()
+    {
+        //$this->view->setVar('pass', sha1('admin'));
+        //return $this->ViewHtml('download/dlbyurl',array());
+        $ctg = new Category();
+        $result['categorys']= $ctg->get_category_rows(0);
+        $this->set_template_share();
+        return $this->ViewVAR($result);
+    }
+    public function downloadurlAction(){
+        $result['status']='NOT';
+        $result['msg']='Download thất bại !!!';
+        if ($this->request->isPost()) {
+            $param =$this->get_param(array('link_dl','ctg_id'));
+            if($this->dl_product_by_link($param['link_dl'],$param['ctg_id'])){
+                $result['status']='OK';
+                $result['msg']='Download thành công !';
+            }            
+        }
+        return $this->ViewJSON($result);
+    }
+    public function downloadctgAction(){
+        $result['status']='NOT';
+        $result['msg']='Download thất bại !!!';
+        if ($this->request->isPost()) {
+            $param =$this->get_param(array('max_dl','ctg_id'));
+            $ctg = new DownloadCategory();
+            $category = $ctg->get_All($param['ctg_id']);
+            //PhoLog::debug_var('---link---',$category);
+            $dl = new AutoDownload();
+            $structure= new DownloadStructure();
+            foreach($category as $item)
+            {
+                preg_match('/^(http:\/\/).+?\//',$item->link,$match);
+                if(count($match)==0){
+                    preg_match('/^(https:\/\/).+?\//',$item->link,$match);
+                }
+                //PhoLog::debug_var('---link---','match:'.$match[0]);
+                //PhoLog::debug_var('---link---','id:'.$item->id);
+                $data_st = $structure->get_by_ctg_link($match[0],$param['ctg_id']);            
+                if($dl->Set_URL($item->link)== FALSE){
+                    continue;
+                }
+                //PhoLog::debug_var('---link---',$data_st);
+                $link_get = array();
+             
+                foreach($data_st as $row){
+                    if($row->key=='category_link'){
+                        $link_get = $dl->get_link($row->xpath,$match[0]);
+                    }else if($row->key=='del'){
+                        //$this->logger->info('del'); 
+                        //$this->logger->info($row->xpath); 
+                        $dl->remove_element($row->xpath,$row->element_remove); 
+                    }
+                }
+                //PhoLog::debug_var('---link---',$link_get);
+                foreach($link_get as $link){
+                    $dltemp = new DownloadTemp();                    
+                    //$this->logger->info('link: '.$link['link']);
+                    
+                    if(isset($link['title']) && strlen($link['title'])>0 && $dltemp->check_exists($link['link'])){
+                        $dltemp->link_dl = $link['link'];
+                        $dltemp->status = 0;
+                        $dltemp->caption = $link['title'];
+                        $dltemp->img_link = $link['img_link'];
+                        $dltemp->menu_id = $item->menu_id;
+                            
+                        $dltemp->save();                       
+                    }           
+                }                
+            }
+            $temp = new DownloadTemp();
+            $list=$temp->get_All(0,$param['ctg_id']);
+            foreach($list as $row){
+                //PhoLog::debug_var('---link---','link_dl:'.$row->link_dl);
+                //PhoLog::debug_var('---link---','link_dl:'.$row->menu_id);
+                if($this->dl_product_by_link($row->link_dl,$row->menu_id))
+                {
+                    $row->status = 1;                            
+                    $row->save();
+                }
+            }
+            $result['status']='OK';
+            $result['msg']='Download thành công !';
+                    
+        }
+        return $this->ViewJSON($result);
+    }
     public function exeAction(){
         $this->view->disable();
         $result['status']='NOT';
@@ -257,6 +350,151 @@ class DownloadController extends Controller
         $this->response->setJsonContent($result);
         return $this->response;
 	}
+    public function dl_product_by_link($url,$ctg_id,$img_link = ''){
+        try{            
+            $dl = new AutoDownload();
+            $structure= new DownloadStructure();
+                        
+            preg_match('/^(http:\/\/).+?\//',$url,$match);
+            if(count($match)==0){
+                preg_match('/^(https:\/\/).+?\//',$url,$match);
+            }
+            $data_st = $structure->get_by_ref_link($match[0]);
+            if($dl->set_URL($url)== FALSE){
+                return FALSE;
+            }
+           
+            $title ='';
+            $img_list =array();
+            $content ='';
+            $datetime = '';
+            $code ='';
+            $tags = array();
+            $price = 0;
+            $folder_tmp = uniqid();
+            foreach($data_st as $row){
+                if($row->key=='title'){
+                    //$this->logger->info('title');
+                    $title = $dl->GetTitle($row->xpath);
+                }else if($row->key =='image'){   
+                    //$this->logger->info('image');                     
+                    $img_list = $dl->get_img_list($row->xpath,$folder_tmp,$match[0]);
+                    
+                }else if($row->key=='del'){
+                    //$this->logger->info('del'); 
+                    $dl->remove_element($row->xpath,$row->element_remove); 
+                }else if($row->key=='replace'){ 
+                    //$this->logger->info('replace');    
+                    $dl->replaceString($row->xpath,$row->from_string,$row->to_string);
+                }else if($row->key=='des'){ 
+                    //$this->logger->info('des');    
+                    $des = $dl->get_text($row->xpath);
+                }else if($row->key=='tag'){
+                    //$this->logger->info('tag');  
+                    //$this->logger->info($row->xpath);     
+                    $tags = $dl->get_tag($row->xpath,$row->from_string,'');
+                }else if($row->key=='datetime'){
+                    //$this->logger->info('datetime');  
+                    //$this->logger->info($row->xpath);     
+                    $datetime = $dl->get_text($row->xpath);
+                    //$this->logger->info($datetime);  
+                }else if($row->key=='price'){                     
+                    $price = $dl->get_text($row->xpath);
+                    $price = trim(str_replace($row->from_string,$row->to_string, $price));
+                    $price = str_replace('.','', $price);
+                   
+                }else if($row->key=='code'){                     
+                    $code = trim($dl->get_text($row->xpath));                   
+                   
+                }else if($row->key=='content'){                    
+                    $content = $dl->get_content($row->xpath,$match[0]);
+                    //$this->logger->info('content2'); 
+                }
+            }
+            //xoa ma
+            
+            $title = str_replace($code, '', $title);
+            $title = html_entity_decode($title);
+            $post = new Product();
+            $param_ins['ctg_id']= $ctg_id;
+            $param_ins['pro_name']= $title;
+            $param_ins['disp_home']= 0;
+            $param_ins['user_id']= 1;
+            $param_ins['del_flg']= 1;
+            $param_ins['src_link']= $url;
+            $param_ins['content']= $content;
+            $param_ins['pro_no']= $this->convert_url($title);
+            $param_ins['sizelist']= $this->get_size_pro($content);
+            $param_ins['description']= '';            
+            $pro_id = $post->_insert($param_ins);
+            PhoLog::debug_var('---insert---','code:'.$code);
+            PhoLog::debug_var('---insert---',$param_ins);
+            if(count($img_list)>0){
+                $paimg['pro_id'] = $pro_id;
+                foreach($img_list as $key=> $img){                    
+                    $pimg = new ProductImg();
+                    $paimg['img_path'] ='/images/products/'.$pro_id.'/'. $img['new'];
+                    $paimg['avata_flg'] = 0;
+                    if($key==0){
+                        $paimg['avata_flg'] =1;
+                    }
+                    $paimg['color'] = '';                  
+                    $content =  str_replace($img['old'], $paimg['img_path'] , $content) ;             
+                    $pimg->_insert($paimg);
+                }
+            }
+            // insert price for product
+            $proprice = new ProductPrice();
+            $proprice->pro_id = $pro_id;
+            $proprice->size = '-';            
+            $proprice->price_imp = $price;
+            $proprice->price_seller = $this->cal_price($price,PERCENT_EXPORT);
+            $proprice->price_exp = $this->cal_price($proprice->price_seller,PERCENT_SELLER);
+            $proprice->avata_flg =1;
+            $proprice->save();
+            //
+            $content = str_replace($code, '', $content);
+            $content = str_replace('class="fr-fic fr-dib" /><br /> <br /> <img', 'class="fr-fic fr-dib" /><br /><img', $content);
+            
+            $post->content =  $content;
+            $post->save();
+
+
+            $file = new FilePHP();
+            $file->CopyFolder(PHO_PUBLIC_PATH.'tmp/'.$folder_tmp,PHO_PUBLIC_PATH.'images/products/'.$pro_id);
+            return TRUE;
+        } catch (\Exception $e) {           
+            PhoLog::Exception_log('---Error---',$e);
+            return FALSE;
+        }   
+        
+    }
+    public function cal_price($price,$percent){
+        if(!is_numeric($price)){
+            PhoLog::debug_var('Price_error','is not numeric:'.$price);
+            return 0;
+        }
+        $num_round =100;
+        if($price >=30000){
+            $num_round =1000;
+        }
+        $price = ceil(($price + $price*$percent/100)/$num_round) *$num_round;
+       return $price;
+    }
+    public function get_size_pro($content){
+        $pattern='/(\+ Size)+[\s\:\w+\,][^+]{1,100}/';
+        preg_match($pattern,$content,$match);
+        $find ="";
+        if(isset($match[0]) && strlen($match[0])>0){
+            $find = preg_replace('/(\()+[\w\d\>\s]+(\))/', '', $match[0]);
+            //$find= preg_replace('/(<//div>)+.+/', '', $find);  
+            $find = str_replace(array(' ','+Size:','.'), '', $find);  
+            $find = preg_replace('/(\<\/div\>)+.+/', '', $find);
+            $find = preg_replace('/(\<br\/\>)+.+/', '', $find); 
+            $find = str_replace(',', ';', $find);
+        }
+        return $find; 
+    }
 	public function download_by_link($url,$menu_id,$img_link = ''){
 		$dl = new AutoDownload();
             $structure= new DownloadStructure();
@@ -267,7 +505,7 @@ class DownloadController extends Controller
 			}
             $data_st = $structure->get_by_ref_link($match[0]);
             if($dl->set_URL($url)== FALSE){
-				return ;
+				return FALSE;
 			}
             //$title = "div.artshow h1";
             //$content = "div.artbody";

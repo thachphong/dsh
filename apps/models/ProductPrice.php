@@ -24,8 +24,10 @@ class ProductPrice extends DBModel
     public function _insert($param){
 
         $this->pro_id = $param['pro_id'];
-        $this->img_path = $param['img_path'];
-        $this->avata_flg = $param['avata_flg'];
+        $this->size = $param['size'];
+        $this->price_exp = $param['price_exp'];
+        $this->price_imp = $param['price_imp'];
+        $this->price_seller = $param['price_seller'];
         return $this->save();
     }
     public function insert_multi($param){
