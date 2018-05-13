@@ -62,9 +62,16 @@ class DownloadController extends PHOController
         $result['status']='NOT';
         $result['msg']='Download thất bại !!!';
         if ($this->request->isPost()) {
-            $param =$this->get_param(array('max_dl','ctg_id'));
+            $param =$this->get_param(array('max_dl','ctg_id','ctg_url'));
             $ctg = new DownloadCategory();
-            $category = $ctg->get_All($param['ctg_id']);
+            if(isset($param['ctg_url']) && strlen($param['ctg_url']) > 0){
+                $ctg->link=$param['ctg_url'];
+                $ctg->menu_id=$param['ctg_id'];
+                $category[]= $ctg;
+            }else{
+                $category = $ctg->get_All($param['ctg_id']);
+            }
+            
             //PhoLog::debug_var('---link---',$category);
             $dl = new AutoDownload();
             $structure= new DownloadStructure();
@@ -74,8 +81,8 @@ class DownloadController extends PHOController
                 if(count($match)==0){
                     preg_match('/^(https:\/\/).+?\//',$item->link,$match);
                 }
-                //PhoLog::debug_var('---link---','match:'.$match[0]);
-                //PhoLog::debug_var('---link---','id:'.$item->id);
+                PhoLog::debug_var('---link---','match:'.$match[0]);
+                PhoLog::debug_var('---link---','id:'.$param['ctg_id']);
                 $data_st = $structure->get_by_ctg_link($match[0],$param['ctg_id']);            
                 if($dl->Set_URL($item->link)== FALSE){
                     continue;
