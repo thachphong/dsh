@@ -94,7 +94,11 @@ class Product extends DBModel
 		if(strlen($param['status']) > 0){
 			$sql .=" and p.status = :status";	
 			$pasql['status'] = $param['status'];		
-		}		
+		}	
+		if(strlen($param['del_flg']) > 0){
+			$sql .=" and p.del_flg = :del_flg";	
+			$pasql['del_flg'] = $param['del_flg'];		
+		}	
         if (isset($param['fdate']) && empty($param['fdate'])==FALSE && isset($param['tdate']) && empty($param['tdate'])==FALSE) {
 			$pasql['tdate'] = $param['tdate'].' 23:59';
 			$pasql['fdate'] = $param['fdate'];

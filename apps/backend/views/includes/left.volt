@@ -86,7 +86,15 @@
                       <!--<li><a href="tables_dynamic.html">Message</a></li>-->
                     </ul>
                   </li>
-                  <li><a href="{{url.get('download/dlbyurl')}}"><i class="fa fa-chevron-down"></i> Auto Download <span class="fa"></span></a></li>
+                  <li><a><i class="fa fa-chevron-down"></i> Auto Download <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="{{url.get('download/dlbyurl')}}">Download</a></li>                             
+                      <li><a href="{{url.get('downloadctg/index')}}">Categpry Download</a></li>
+                      <li><a href="{{url.get('downloadstructure/index')}}">Structure Download</a></li>
+                      
+                    </ul> 
+                  </li>
+                
                   <!-- <li><a ><i class="fa fa-gears"></i> Template <span class="fa fa-chevron-down"></span></a>
                       <ul class="nav child_menu">
                           <li><a href="{{url.get('template/list')}}">Template </a></li>                       
