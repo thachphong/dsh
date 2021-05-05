@@ -147,7 +147,7 @@ class News extends DBModel
                   n.content,                 
                   n.des,
                   n.img_path,                 
-                  DATE_FORMAT(n.add_date ,'%d/%m/%Y %H:%i')  add_date,
+                  to_char(n.add_date ,'dd/mm/yyyy')  add_date,
                   n.add_user,
                   n.ctg_id,
                     c.ctg_name
@@ -226,12 +226,25 @@ class News extends DBModel
     $res = $this->pho_query($sql ,array('ctg_id'=>$ctg_id,'news_id'=>$news_id));    
     return $res;
   }
+  public function get_list_byctgno($ctg_no,$limit){    
+    $sql="select news_id, news_no,news_name,des,img_path from news  where del_flg =0
+        and ctg_id in (select ctg_id from category 
+          where ctg_no = :ctg_no
+          union all
+          select ctg_id from category 
+          where parent_id =(select ctg_id from category where ctg_no = :ctg_no)
+        )
+        order by news_id desc
+        limit $limit     
+        ";
+    return $this->pho_query($sql,array('ctg_no'=>$ctg_no));
+  }
   public function update_traffic($param){
-		$sql="select update_traffic_news(:news_id,:section_id,:time,:ip)";
-		return $this->pho_execute($sql,$param);
+		/*$sql="select update_traffic_news(:news_id,:section_id,:time,:ip)";
+		return $this->pho_execute($sql,$param);*/
   }
   public function get_project_all(){
-  	  $sql="select news_id,news_name,news_no from news where ctg_id = 5 and del_flg =0";
-  	  return $this->pho_query($sql);
+  	  /*$sql="select news_id,news_name,news_no from news where ctg_id = 5 and del_flg =0";
+  	  return $this->pho_query($sql);*/
   }
 }

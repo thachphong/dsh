@@ -55,6 +55,7 @@ class SlideController extends PHOController
 			,'banner_flg'
 			,'folder_tmp'		
 			,'position'
+			,'description'
 			));
 		
 		$result = array('status' => 'OK');

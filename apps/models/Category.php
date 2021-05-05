@@ -33,27 +33,27 @@ class Category extends DBModel
     public function get_category_rows($news_flg)
     {
         $sql = "select t.ctg_id,t.ctg_name,t.ctg_no,t.cnt_child,t.ctg_level,t.parent_id from(
-                (select * ,CONCAT(LPAD(sort,5,'0'),'_',LPAD(ctg_id,5,'0'))   sort2,
+                (select * ,CONCAT(LPAD(sort::text,5,'0'),'_',LPAD(ctg_id::text,5,'0'))   sort2,
                 (SELECT count(*) from category where parent_id = x.ctg_id and del_flg = 0)  cnt_child
                 from category x
                 where ctg_level = 1 and news_flg = $news_flg)
                 union
-                (select m.* , CONCAT(m1.sort2,'_',LPAD(m.sort,5,'0'),'_',LPAD(m.ctg_id,5,'0')) sort2,
+                (select m.* , CONCAT(m1.sort2,'_',LPAD(m.sort::text,5,'0'),'_',LPAD(m.ctg_id::text,5,'0')) sort2,
                 (SELECT count(*) from category where parent_id = m.ctg_id and del_flg = 0)  cnt_child
                 from 
                 category m,
-                (select * ,CONCAT(LPAD(sort,5,'0'),'_',LPAD(ctg_id,5,'0'))   sort2
+                (select * ,CONCAT(LPAD(sort::text,5,'0'),'_',LPAD(ctg_id::text,5,'0'))   sort2
                 from category m
                 where ctg_level = 1 and news_flg = $news_flg) m1
                 where m.parent_id = m1.ctg_id
                 and m.ctg_level = 2 )
                 union
-                (select m3.*, CONCAT(m2.sort2,'_',LPAD(m3.sort,5,'0'),'_',LPAD(m3.ctg_id,5,'0')) sort2,0 as cnt_child
+                (select m3.*, CONCAT(m2.sort2,'_',LPAD(m3.sort::text,5,'0'),'_',LPAD(m3.ctg_id::text,5,'0')) sort2,0 as cnt_child
                 from category m3,
-                (select m.* , CONCAT(m1.sort2,'_',LPAD(m.sort,5,'0'),'_',LPAD(m.ctg_id,5,'0')) sort2
+                (select m.* , CONCAT(m1.sort2,'_',LPAD(m.sort::text,5,'0'),'_',LPAD(m.ctg_id::text,5,'0')) sort2
                 from 
                 category m,
-                (select * ,CONCAT(LPAD(sort,5,'0'),'_',LPAD(ctg_id,5,'0'))   sort2
+                (select * ,CONCAT(LPAD(sort::text,5,'0'),'_',LPAD(ctg_id::text,5,'0'))   sort2
                 from category m
                 where ctg_level = 1 and news_flg = $news_flg) m1
                 where m.parent_id = m1.ctg_id
@@ -83,8 +83,8 @@ class Category extends DBModel
         $r = $this->pho_query("
             select c.ctg_id
                     ,c.ctg_name
-                    ,(case when IFNULL(p1.parent_id ,0)<>0 then p1.parent_id else c.parent_id end) as parent_id_1
-					,(case when IFNULL(p1.parent_id ,0)<>0 then c.parent_id else p1.parent_id end) as parent_id_2
+                    ,(case when COALESCE(p1.parent_id ,0)<>0 then p1.parent_id else c.parent_id end) as parent_id_1
+					,(case when COALESCE(p1.parent_id ,0)<>0 then c.parent_id else p1.parent_id end) as parent_id_2
                     ,c.del_flg                    
                     ,c.sort 
                     ,c.ctg_level
@@ -234,7 +234,7 @@ class Category extends DBModel
 		
 	}
 	public function get_code_max($parent_id){
-		$sql ="select IFNULL(max(ctg_code),'A') code_max from category where parent_id = $parent_id";
+		$sql ="select COALESCE(max(ctg_code),'A') code_max from category where parent_id = $parent_id";
 		$res = $this->query_first($sql);
 		return $res['code_max'];
 	}

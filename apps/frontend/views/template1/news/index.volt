@@ -1,10 +1,30 @@
 {{ stylesheet_link('froala/css/froala_style.css')}}
+<div class="row pos_rl" >
+	<div class="bg_frame_search">
+	    <div class="container">  
+	    	<div class="col-md-7 col-sm-6 col-xs-12">
+		    	<span class="page_title fs35" style="font-size: 25px !important;">{{news_name}}</span>
+		    	<div class="row brdcrumb">
+		    	<a href="{{baseurl}}">Trang chủ</a>	
+				{%for br in breadcrumbs%}
+					<span>></span>
+					<a href="{{baseurl}}c/{{br['ctg_no']}}">{{br['ctg_name']}}</a>
+				{%endfor%}
+				<span>> {{news_name}}</span>	
+				</div>	    		
+			</div>	
+			<div class=" col-md-5 col-sm-6 col-xs-12 box_search">
+				<form method="get" class="searchform" action="{{url.get('search')}}">				    
+				    <input id="s-keyword" name="s" type="text" value="" class="input_search text_input" placeholder="Tìm sản phẩm và dịch vụ">
+					<input type="submit" value="" style="font-family:FontAwesome" class="btn_search">
+				</form>	
+			</div>
+	    </div>
+    </div>
+</div>
 <div class="row">
-	{% set banners= elements.get_banner()%}
-   {{ partial('includes/banner_left') }}
-   <div class="container">
-   
-      <div class="col-md-8 col-sm-12 col-xs-12 margin_top no_padding_left">
+   <div class="container">   
+     <!-- <div class="col-md-8 col-sm-12 col-xs-12 margin_top no_padding_left">-->
          <div class="row margin_top pn_background pn_border post_pn" >
             <div class="post_head">
                <h1>{{news_name}}</h1>
@@ -34,11 +54,10 @@
             	
             </div>
          </div>
-         <div class="row margin_top" >
-            <div class="pn_title">
-               <span class="bg_icon" style="padding: 6px 4px 4px 2px;"><i class="fa fa-list"></i></span>
-               <h1>Bài viết liên quan</h1>               
-            </div>
+         <div class="row margin_top" >           
+            <div class="pn-title">
+					<h3 class="ctg_title">Bài viết liên quan </h3>
+			</div>
             {%for key,item in relations%}
             <div class="col-md-6 col-sm-6 col-xs-12 {%if key%2==0 %}col_left{%else%}col_right{%endif%}" >
                <div class="relation_item pn_background pn_border">
@@ -49,18 +68,14 @@
             {%endfor%}
          </div>
          <div class="row margin_top" >
-            <div class="pn_title">
+            <!--<div class="pn_title">
                <span class="bg_icon" style="padding: 6px 4px 4px 2px;"><i class="fa fa-list"></i></span>
                <h1>Bình luận</h1>               
-            </div>
+            </div>-->
+            <hr/>
             <div class="row margin_top pn_background pn_border">
-               <ul class="nav nav-tabs" id="comment_tab">
-                 <li class="active"><a data-toggle="tab" href="#tab1">Facebook</a></li>
-                 <li><a data-toggle="tab" href="#tab2" >Google+</a></li>                 
-               </ul>
-               <div class="tab-content">
-                  <div id="tab1" class="tab-pane fade in active">
-                  <div class="fb-comments" data-href="{{url.get('t/')}}{{news_no}}_{{news_id}}" data-width="100%" data-numposts="20"></div>
+                  
+                  <div class="fb-comments" data-href="{{url.get('t/')}}{{news_no}}_{{news_id}}" data-width="100%" data-numposts="20" style="width: 100%"></div>
                                  <div id="fb-root"></div>
                                     <script>(function(d, s, id) {
                                       var js, fjs = d.getElementsByTagName(s)[0];
@@ -69,33 +84,14 @@
                                       js.src = "//connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v2.9&appId=807407399380069";
                                       fjs.parentNode.insertBefore(js, fjs);
                                     }(document, 'script', 'facebook-jssdk'));</script>
-                  </div>
-                  <div id="tab2" class="tab-pane fade">
-                     <div id="google_comments" style="width:100%"></div>
-                     <script src="https://apis.google.com/js/plusone.js" type="text/javascript" >{lang: 'vi'}</script>
-                     <script>gapi.comments.render('google_comments',{
-                        href:window.location.href,
-                        width:"725",
-                        first_party_property: 'BLOGGER',
-                        view_type: 'FILTERED_POSTMOD'}
-                        );
-                        function fix_google()
-                        {                           
-                           $("#google_comments").css({"width":"100%"});                           
-                           $("#google_comments iframe").css("width","100%");
-                        }
-                        setTimeout(fix_google,4000);
-                     </script>
-                  </div>
                   
-               </div>
+                 
+                  
+              
             </div>
             
          </div>
 
-      </div>
-      {{ partial('includes/right') }}
-   </div>
-   {% set banners= elements.get_banner()%}
-   {{ partial('includes/banner_right_2') }}
+      <!--</div>     -->
+   </div>   
 </div>

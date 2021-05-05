@@ -171,8 +171,8 @@ class Orders extends DBModel
 	}
 	public function get_total_info(){
 		$sql ="select 
-				(SELECT count(*) from orders where `status`= 0) cnt_new
-				,(SELECT count(*) from orders where `status`= 1) cnt_shipping";
+				(SELECT count(*) from orders where status= 0) cnt_new
+				,(SELECT count(*) from orders where status= 1) cnt_shipping";
 		return  $this->query_first($sql);
 	}
 }

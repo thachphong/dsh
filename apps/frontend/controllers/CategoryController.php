@@ -63,7 +63,9 @@ class CategoryController extends PHOController
 			}
 		}
 		$param['ctg_no'] ='c/'. $ctg_no;
-        $param['list']=$db->get_list_byctg($ctg_no,$start_row);
+		$param['list'] = $db->get_list_byctg($ctg_no,$start_row);
+		
+        
         $param['total_post'] = $db->get_list_byctg_count($ctg_no);
         $param['total_page']=  ceil($param['total_post']/PAGE_LIMIT_RECORD);
         
@@ -85,7 +87,7 @@ class CategoryController extends PHOController
         }
         $param['start'] = $start;
         $param['end'] = $end;
-        
+        //PhoLog::debug_var('--ccc--',$param);
         //$this->set_template_share();
         $this->ViewVAR($param);
 	}
@@ -110,11 +112,25 @@ class CategoryController extends PHOController
 
             $param['page'] = $page;
             $info = $ctg->get_ctg_byno($ctg_no);
+            $param['description'] = $info->description;
             $param['ctg_name'] = $info->ctg_name;
+            $param['title'] = $info->title;	
             $param['news']=$db->get_news_byctgno($ctg_no,$start_row);
             $param['total_post'] = $db->get_news_byctgno_count($ctg_no);
             $param['total_page']= round($param['total_post']/PAGE_NEWS_LIMIT_RECORD);
             $param['ctg_no'] ='dm/'. $ctg_no;
+            
+            if($info->ctg_id =='1' || $info->ctg_id=='2'){
+				$param['type'] = $info->ctg_id;
+			}else{
+				$param['ctgid'] = $info->ctg_id;
+				$param['type'] = $info->parent_id;
+			}
+			$param['breadcrumbs'] =$ctg->get_breadcrumb($info->parent_id);
+			$param['rel_menu'] =$ctg->get_list_relation($info->ctg_code,15);
+            
+            $param['disp_dm'] = $info->ctg_level;
+            
             $start = $page - 2;
             $end = $page + 2;
             if($page < 3){

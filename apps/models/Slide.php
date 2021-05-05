@@ -18,6 +18,7 @@ class Slide extends DBModel
     public $link_page;
     public $banner_flg;
     public $position;
+    public $description;
     public function initialize()
     {
         $this->setSource("slides");
@@ -54,6 +55,7 @@ class Slide extends DBModel
 	    $this->add_user= $param['user_id'];	  
 	    $this->upd_user= $param['user_id'];
 	    $this->link_page= $param['link_page'];
+	    $this->description= $param['description'];
 	    $this->banner_flg= 0;
 	    if(strlen($param['banner_flg']) > 0){
 			$this->banner_flg= $param['banner_flg'];
@@ -71,7 +73,8 @@ class Slide extends DBModel
 					,link_page= :link_page				
 					,upd_date =  now()
 					,upd_user =:user_id	
-					,position =:position				
+					,position =:position	
+					,description =:description			
 					where slide_id = :slide_id
 				";	
  
@@ -81,7 +84,8 @@ class Slide extends DBModel
 					,'user_id'
 					,'del_flg'	
 					,'link_page'
-					,'position'			
+					,'position'		
+					,'description'
 					)));	
 	}
 }

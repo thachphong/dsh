@@ -5,7 +5,7 @@ namespace Multiple\Backend\Controllers;
 use Multiple\PHOClass\PHOController;
 use Multiple\Models\DownloadStructure;
 use Multiple\Models\Category;
-use Multiple\PHOClass\PHOLog;
+use Multiple\PHOClass\PhoLog;
 class DownloadstructureController extends PHOController
 {
 
@@ -48,7 +48,7 @@ class DownloadstructureController extends PHOController
 			  ,'key'
 			));
 		
-		PHOLog::debug_var('---test---',$param);
+		PhoLog::debug_var('---test---',$param);
 		$result = array('status' => 'OK');
 		$result['status'] = 'OK';	
 		$result['msg'] = 'Cập nhật thành công!';		

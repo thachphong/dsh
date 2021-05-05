@@ -108,6 +108,7 @@ class ProductController extends PHOController
 			$param['src_link'] = '';
 			$param['sizelist'] ='';
 			$param['description']='';
+			$param['combo_flg']=0;
 			/*if(strlen($param['parent_id'])==0){
 				$param['parent_id'] = 0;
 			}*/
@@ -156,6 +157,7 @@ class ProductController extends PHOController
 			  ,'sizelist'
 			  ,'color'
 			  ,'description'
+			  ,'combo_flg'
 			));
 				
 		$result['status'] = 'OK';	
@@ -410,7 +412,10 @@ class ProductController extends PHOController
 					
 			$file_lb = new FilePHP();
 			$dest_folder = PHO_PUBLIC_PATH.'images/products/'.$pro_id;
-			$file_lb->DeleteFolder($dest_folder);
+			if(strlen($pro_id)>0){
+				$file_lb->DeleteFolder($dest_folder);
+			}
+			
 		}else{
 			$result['status']="NOT";
 			$result['msg']= $msg;

@@ -32,7 +32,7 @@ class Users extends DBModel
     public $ctv_flg;
     public function initialize()
     {
-        $this->setSource("user");
+        $this->setSource("m_user");
     }
     public function get_All(){
         $usr_data = Users::query()->execute();
@@ -69,7 +69,7 @@ class Users extends DBModel
         return sha1(PHO_SALT.$pass);
     }
 	public function get_row($user_no,$pass){
-        $sql="select * from user t
+        $sql="select * from m_user t
         where ( user_no = :email)  AND del_flg = 0 ";
                 
         
@@ -126,7 +126,7 @@ class Users extends DBModel
         }
     }
     public function updatepass($user_id,$pass_old,$pass_new){
-		$sql="update user set pass=:pass_new where user_id =:user_id and pass =:pass_old";
+		$sql="update m_user set pass=:pass_new where user_id =:user_id and pass =:pass_old";
 		return $this->pho_execute($sql,array('user_id'=>$user_id,'pass_new'=>$this->encodepass($pass_new),'pass_old'=>$this->encodepass($pass_old)));
 	}
 	public function updateinfo($param){
@@ -145,7 +145,7 @@ class Users extends DBModel
                     ,'bank_acc_name'
                    ));
         
-		$sql ="update user set user_name= :user_name
+		$sql ="update m_user set user_name= :user_name
 						,mobile= :mobile
 						,address= :address
 						,sex= :sex					
@@ -187,26 +187,26 @@ class Users extends DBModel
 		return $this->pho_query($sql, $sql_param);
 	}
 	public function updatelevel($user_id,$level){		
-		$sql ="update user set 
+		$sql ="update m_user set 
 						level = :level	
 				where user_id =:user_id ";		
 		return $this->pho_execute($sql,array('level'=>$level,'user_id'=>$user_id));
 	}
 	public function updatelock($user_id,$lock){
-		$sql ="update user set 
+		$sql ="update m_user set 
 						del_flg = :del_flg	
 				where user_id =:user_id ";		
 		return $this->pho_execute($sql,array('del_flg'=>$lock,'user_id'=>$user_id));
 	}
 	public function get_user_bymail($email){
-		$sql = "select * from user where email=:email";
+		$sql = "select * from m_user where email=:email";
 		return $this->query_first($sql,array('email'=>$email));
 	}
     public function get_total_info(){
         $sql="select 
-                (select count(*) from user ) total
-                ,(select count(*) from user where `status` = 0) not_active
-                ,(select count(*) from user where `status` = 1 and ctv_flg = 1) total_ctv";
+                (select count(*) from m_user ) total
+                ,(select count(*) from m_user where status = 0) not_active
+                ,(select count(*) from m_user where status = 1 and ctv_flg = 1) total_ctv";
         return $this->query_first($sql);
     }
 }

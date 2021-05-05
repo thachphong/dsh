@@ -3,7 +3,7 @@ namespace Multiple\Models;
 
 use Multiple\Models\DBModel;
 use Multiple\PHOClass\PHOArray;
-use Multiple\PHOClass\PHOLog;
+use Multiple\PHOClass\PhoLog;
 class Product extends DBModel
 {	
 	public  $pro_id ;
@@ -24,6 +24,7 @@ class Product extends DBModel
 	public 	$src_link;  //link nguon hang
 	public  $sizelist;  // size san phan
 	public  $description; 
+	public  $combo_flg; 
 	public function initialize()
     {
         $this->setSource("product");
@@ -36,7 +37,7 @@ class Product extends DBModel
 				--(case when p.disp_home= 1 then 'hiện' else 'không' end) disp_home,
 				p.disp_home,
 				c.ctg_name,
-				DATE_FORMAT(p.upd_date ,'%d/%m/%Y')  upd_date,
+				to_char(p.upd_date ,'dd/mm/yyyy')  upd_date,
 				p.del_flg,
 				good_sell,
 				img.img_path
@@ -185,11 +186,12 @@ class Product extends DBModel
 		    }		    
 		    $this->src_link = $param['src_link'];
 		    $this->pro_code =$this->get_code_max($param['ctg_id']);
-		    $this->pro_code++;
+		    $this->pro_code++;	 
 		    $this->pro_no = $param['pro_no'] .'-'.strtolower($this->pro_code);
-		    $this->pro_name   = $param['pro_name'].' '.$this->pro_code;
+		    $this->pro_name   = $param['pro_name'];//.' '.$this->pro_code;
 		    $this->sizelist = $param['sizelist'];
 		    $this->description =$param['description'];	
+		    $this->combo_flg =$param['combo_flg'];	
 		    if(isset($param['good_sell']) && strlen($param['good_sell'])>0){
 				$this->good_sell = $param['good_sell'];  
 			}else{
@@ -198,12 +200,14 @@ class Product extends DBModel
 		     
 		    $this->save();
 	    } catch (\Exception $e) {
-			PhoLog::debug_var('update----',$e);
+			//PhoLog::debug_var('update----',$e);
+			PhoLog::Exception_log('---SQL_ERROR---',$e);
+			PhoLog::debug_var('---SQL_ERROR---',$param);
 		}	    
 	    return $this->pro_id;
 	}	
 	public function get_code_max($parent_id){
-		$sql ="select IFNULL(max(p.pro_code),CONCAT((select ctg_code from category where ctg_id = :ctg_id ),'0000')) code_max 
+		$sql ="select COALESCE(max(p.pro_code),CONCAT((select ctg_code from category where ctg_id = :ctg_id ),'0000')) code_max 
 				from product p
 				where p.ctg_id = :ctg_id";
 		$res = $this->query_first($sql,array('ctg_id'=>$parent_id));
@@ -227,7 +231,8 @@ class Product extends DBModel
 					  good_sell =:good_sell,
 					  src_link =:src_link,
 					  sizelist =:sizelist,
-					  description =:description					 
+					  description =:description,
+					  combo_flg = :combo_flg					 
 					where pro_id = :pro_id
 				";
 		
@@ -249,12 +254,14 @@ class Product extends DBModel
 					  'user_id'	,
 					  'src_link',
 					  'sizelist',
-					  'description'
+					  'description',
+					  'combo_flg'
 					));
 		$this->pho_execute($sql,$sql_par );			
 		return TRUE;	
 		} catch (\Exception $e) {
-			PhoLog::debug_var('update----',$e);
+			PhoLog::Exception_log('---SQL_ERROR---',$e);
+			PhoLog::debug_var('---SQL_ERROR---',$param);
 			return FALSE;
 		}
 	}
@@ -314,13 +321,14 @@ class Product extends DBModel
 							where parent_id = (select parent_id 
 										from category where ctg_id = :ctg_id))
 				) t
-				INNER JOIN product_img img on img.pro_id = t.pro_id and img.avata_flg =1
+				INNER JOIN (select pro_id,array_agg(img_path) img_path from product_img group by pro_id) img on img.pro_id = t.pro_id 
 				INNER JOIN product_price pri on pri.pro_id = t.pro_id and pri.avata_flg = 1
 				where t.pro_id <> :pro_id
 				and t.del_flg= 0
 				ORDER BY pro_id DESC
 				limit $limit";
-		return $this->pho_query($sql ,array('pro_id'=>$pro_id,'ctg_id'=>$ctg_id));		
+		$res= $this->pho_query($sql ,array('pro_id'=>$pro_id,'ctg_id'=>$ctg_id));		
+		return $this->format_col_array($res,'img_path');
 	}
 	
 	public function get_product_info($pro_id){
@@ -341,7 +349,8 @@ class Product extends DBModel
 					  src_link,
 					  sizelist,
 					  p.description,
-						c.pro_desc
+						c.pro_desc,
+						p.combo_flg
 			  from product p
 				INNER JOIN category c on c.ctg_id = p.ctg_id
 				where pro_id = :pro_id";
@@ -365,14 +374,42 @@ class Product extends DBModel
 	public function get_goodsell($limit = 10){		
 		$sql ="select p.pro_id,p.pro_name,p.pro_no,img.img_path,pri.price_exp,pri.price_seller
 				from product p
-				INNER JOIN product_img img on img.pro_id = p.pro_id and img.avata_flg =1
+				INNER JOIN (select pro_id,array_agg(img_path) img_path from product_img group by pro_id) img on img.pro_id = p.pro_id 
 				INNER JOIN product_price pri on pri.pro_id = p.pro_id and pri.avata_flg = 1
 				where p.del_flg= 0
 				and good_sell = 1
 				ORDER BY p.pro_id desc
 				limit $limit";
 //		PhoLog::debug_var('vip',$sql);
-		return $this->pho_query($sql);
+		$res =  $this->pho_query($sql);
+		return $this->format_col_array($res,'img_path');
+	}
+	public function get_disphome($limit = 10){		
+		$sql ="select p.pro_id,p.pro_name,p.pro_no,img.img_path,pri.price_exp,pri.price_seller
+				from product p
+				INNER JOIN product_img img on img.pro_id = p.pro_id and img.avata_flg =1
+				INNER JOIN product_price pri on pri.pro_id = p.pro_id and pri.avata_flg = 1
+				where p.del_flg= 0
+				and p.disp_home = 1
+				ORDER BY p.pro_id desc				
+				limit $limit";
+//		PhoLog::debug_var('vip',$sql);
+		$res =  $this->pho_query($sql);
+		return $res;
+	}
+	public function get_combo($limit = 10){		
+		$sql ="select p.pro_id,p.pro_name,p.pro_no,img.img_path,pri.price_exp,pri.price_seller,opt.combo_name
+				from product p
+				INNER JOIN product_img img on img.pro_id = p.pro_id and img.avata_flg =1
+				INNER JOIN product_price pri on pri.pro_id = p.pro_id and pri.avata_flg = 1
+				INNER JOIN (select t.pro_id,array_agg(t.size) combo_name from product_price t group by pro_id) opt on opt.pro_id = p.pro_id 
+				where p.del_flg= 0
+				and p.combo_flg = 1
+				ORDER BY p.pro_id desc				
+				limit $limit";
+//		PhoLog::debug_var('vip',$sql);
+		$res =  $this->pho_query($sql);
+		return $this->format_col_array($res,'combo_name');		
 	}
 	public function get_topdiscount($limit = 10){		
 		$sql ="select p.pro_id,p.pro_name,p.pro_no,img.img_path,pri.price_exp,pri.price_seller,(pri.price_exp-pri.price_seller) disctount
@@ -408,7 +445,7 @@ class Product extends DBModel
 		}	
 		$sql ="select p.pro_id,p.pro_name,p.pro_no,img.img_path,pri.price_exp,pri.price_seller
 				from product p
-				INNER JOIN product_img img on img.pro_id = p.pro_id and img.avata_flg =1
+				INNER JOIN (select pro_id,array_agg(img_path) img_path from product_img group by pro_id) img on img.pro_id = p.pro_id 
 				INNER JOIN product_price pri on pri.pro_id = p.pro_id and pri.avata_flg = 1
 				where p.del_flg= 0
 				$where
@@ -417,7 +454,7 @@ class Product extends DBModel
 				OFFSET $start_row";
 		//PhoLog::debug_var('vip',$sql);
 		//PhoLog::debug_var('vip',$param);
-		return $this->pho_query($sql,$param);
+		return  $this->format_col_array($this->pho_query($sql,$param),'img_path');
 	}	
 	public function get_list_byctg_count($ctg_no){
 		$where ="";
@@ -486,7 +523,7 @@ class Product extends DBModel
 	public function check_diff($pro_id,$ctg_id){
 		$sql="select pro_code,ctg_id ,
 				(case when pro_code like  concat((select ctg_code from category where ctg_id = :ctg_id),'%') then 0 else 1 end) diff_flg,
-				(select IFNULL(max(p.pro_code),CONCAT((select ctg_code from category where ctg_id = :ctg_id ),'0000')) code_max 
+				(select COALESCE(max(p.pro_code),CONCAT((select ctg_code from category where ctg_id = :ctg_id ),'0000')) code_max 
 								from product p
 								where p.ctg_id = :ctg_id) code_max
 				from 

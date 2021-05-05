@@ -5,7 +5,7 @@ namespace Multiple\Backend\Controllers;
 use Multiple\PHOClass\PHOController;
 use Multiple\Models\DownloadCategory;
 use Multiple\Models\Category;
-use Multiple\PHOClass\PHOLog;
+use Multiple\PHOClass\PhoLog;
 class DownloadctgController extends PHOController
 {
 
@@ -30,7 +30,9 @@ class DownloadctgController extends PHOController
 			$result['data'] = $db->get_info($id);
 		}		
 		$ctg = new Category();
+		//PhoLog::debug_var('---test---','id:'.$id);
         $result['categorys']= $ctg->get_category_rows(0);
+        //PhoLog::debug_var('---test---',$result);
 		$this->ViewHtml('downloadctg/edit',$result);
 	}	
 	public function updateAction(){
@@ -40,7 +42,7 @@ class DownloadctgController extends PHOController
 			  'menu_id',			
 			  'status'
 			));
-		PHOLog::debug_var('---test---',$param);
+		//PhoLog::debug_var('---test---',$param);
 		$result = array('status' => 'OK');
 		$result['status'] = 'OK';	
 		$result['msg'] = 'Cập nhật thành công!';		

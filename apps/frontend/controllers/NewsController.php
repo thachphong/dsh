@@ -7,6 +7,7 @@ use Multiple\Models\News;
 use Multiple\Models\Tags;
 use Multiple\Models\CheckView;
 use Multiple\PHOClass\PhoLog;
+use Multiple\Models\Category;
 class NewsController extends PHOController
 {
 
@@ -24,7 +25,11 @@ class NewsController extends PHOController
 		$traffic['section_id'] = session_id();
 		$traffic['ip'] = $this->get_client_ip_server();
 		$traffic['news_id'] =$id;
-		$db->update_traffic($traffic);
+		
+		$ctg = new Category();
+		$result['breadcrumbs'] = $ctg->get_breadcrumb($result['ctg_id']);
+		
+		//$db->update_traffic($traffic);
         
 		//$this->set_template_share();
         //PhoLog::debug_var('---tét---',$result);

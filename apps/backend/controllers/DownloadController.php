@@ -500,6 +500,10 @@ class DownloadController extends PHOController
             $find = preg_replace('/(\<br\/\>)+.+/', '', $find); 
             $find = str_replace(',', ';', $find);
         }
+        $lower = strtolower($find);
+        if(strpos($lower, 'freesize')!== FALSE || strpos($lower, 'free size')!== FALSE){
+            return '';
+        }
         return $find; 
     }
 	public function download_by_link($url,$menu_id,$img_link = ''){

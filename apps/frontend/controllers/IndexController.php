@@ -39,9 +39,10 @@ class IndexController extends PHOController
 				$ctg = new Category();	
 				$param['newlist'] = $db->get_list_new(10);
 				$param['goodsells'] = $db->get_goodsell(10);
-				$param['discounts'] = $db->get_topdiscount(10);
-				$param['categorys']= $ctg->get_ctg_rows(1);
-				//$param['xemnhieu'] = $ne->get_news_pupular(5);
+				$param['combo'] = $db->get_combo(3);
+				
+				$param['disphome']= $db->get_disphome(4);
+				$param['lamdep'] = $ne->get_list_byctgno('lam-dep',3);
 				$this->set_template_share();      // set template dung chung
 				//PhoLog::debug_var('test',$param);
 				$this->ViewVAR($param);	          // set bien

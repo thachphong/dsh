@@ -95,15 +95,21 @@
                     </ul> 
                   </li>
                 
-                  <!-- <li><a ><i class="fa fa-gears"></i> Template <span class="fa fa-chevron-down"></span></a>
+                   <li><a ><i class="fa fa-gears"></i> Template <span class="fa fa-chevron-down"></span></a>
                       <ul class="nav child_menu">
-                          <li><a href="{{url.get('template/list')}}">Template </a></li>                       
-                        <li><a href="{{url.get('template')}}">Template general</a></li>
-                        <li><a href="{{url.get('template/mod')}}">Template module</a></li>
-                        <li><a href="{{url.get('templatecontent')}}">Template content</a></li>                 
-                        <li><a href="{{url.get('template/create')}}">Create</a></li>
+                        <li><a href="{{url.get('psysfolder/index')}}">Template folder layout </a></li>  
+                        <li><a href="{{url.get('psystemplate/index')}}">Template manager</a></li>
+                        <li><a href="{{url.get('psyspage/index')}}">Page </a></li>
+                        <li><a href="{{url.get('psyscontainer/index')}}">Container </a></li>
+                        <li><a href="{{url.get('psysmodule/index')}}">Module </a></li>
+                        <li><a href="{{url.get('psysobject/index')}}">Object </a></li> 
+                        <li><a href="{{url.get('psyspage/list')}}">Create page</a></li>                         
+                        <li><a href="{{url.get('template/index')}}">Template general</a></li>
+                        <li><a href="{{url.get('template/modlist')}}">Template module</a></li>
+                        <li><a href="{{url.get('templatecontent/index')}}">Template content</a></li>                 
+                        
                       </ul>   
-                  </li> -->
+                  </li> 
                   
                 </ul>
               </div>

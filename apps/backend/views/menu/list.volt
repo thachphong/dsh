@@ -101,7 +101,7 @@
                             <td>{{item['menu_name_1']}}</td>
                           {%endif%}     
                           <td id="name_{{item['menu_id']}}">{{item['menu_name']}}</td> 
-                          <td>{{item['type']}}</td>
+                          <td>{{item['mtype']}}</td>
                           <td>{{item['dm_name']}}</td>                                           
                           <td>                            
                             <span class="fa {%if item['del_flg'] == 1%}fa-square-o{%else%}fa-check-square{%endif%}" style="font-size: 16px;"></span>                            

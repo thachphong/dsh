@@ -1,4 +1,27 @@
-<div class="row breadcrumb">
+<div class="row pos_rl" >
+	<div class="bg_frame_search">
+	    <div class="container">  
+	    	<div class="col-md-6 col-sm-6 col-xs-12">
+		    	<span class="page_title fs35">{{pro_name}}</span>
+		    	<div class="row brdcrumb">
+		    	<a href="{{baseurl}}">Trang chủ</a>	
+				{%for br in breadcrumbs%}
+					<span>></span>
+					<a href="{{baseurl}}c/{{br['ctg_no']}}">{{br['ctg_name']}}</a>
+				{%endfor%}
+				<span>> {{pro_name}}</span>	
+				</div>	    		
+			</div>	
+			<div class=" col-md-6 col-sm-6 col-xs-12 box_search">
+				<form method="get" class="searchform" action="{{url.get('search')}}">				    
+				    <input id="s-keyword" name="s" type="text" value="" class="input_search text_input" placeholder="Tìm sản phẩm và dịch vụ">
+					<input type="submit" value="" style="font-family:FontAwesome" class="btn_search">
+				</form>	
+			</div>
+	    </div>
+    </div>
+</div>
+<!--<div class="row breadcrumb">
 	<div class="container">
 		<a href="{{baseurl}}">Trang chủ</a>
 		{%for br in breadcrumbs%}
@@ -7,8 +30,8 @@
 		{%endfor%}		
 		<span>> {{pro_name}}</span>
 	</div>
-</div>
-<div class="row content_bg" >
+</div>-->
+<div class="row" >
 	<div class="container panel_bg margin-top10">		
 		<div class="row padding-bottom10">
 			<div class="col-md-6 col-sm-6 col-xs-12">
@@ -26,11 +49,15 @@
 			<div class="col-md-6 col-sm-6 col-xs-12 no_padding_left mobi_lpad">
 				<h1>{{pro_name}}</h1>
 				<hr/>
-				<div class="col-md-6 col-sm-6 col-xs-12 no_padding_left">
-					<h5>Giá bán lẻ: <strong class="price col_red">{{elements.currency_format(pricelist[0].price_exp)}} đ</strong></h5>
+				<div class="row no_padding_left">
+					<h5>Giá : <del class="price">{{elements.currency_format(pricelist[0].price_seller)}} đ</del>
+						<strong class="price col_blue">{{elements.currency_format(pricelist[0].price_exp)}} đ</strong>
+					</h5>
 				</div>
 				<div class="col-md-6 col-sm-6 col-xs-12">
-					<h5>Chiết khấu: <strong class="price col_blue">{{elements.currency_format(pricelist[0].price_exp-pricelist[0].price_seller)}} đ</strong></h5>
+					<h5>
+					
+					</h5>
 				</div>
 				<div class="row margin-top10">
 					<span>Trạng thái: {{status_name}}</span>					
@@ -122,7 +149,7 @@
 			<div class="row margin-top-10">
 				<div class="pn-header-top">
 					<div class="pn-title">
-						<h2>Sản phẩm cùng danh mục</h2>
+						<h3 class="ctg_title">Sản phẩm cùng danh mục</h3>
 					</div>
 					
 				</div>
@@ -130,15 +157,21 @@
 					{%for item in relations%}					
 					<div class="col-md-3 col-sm-3 col-xs-6 pro_list_item">
 						<a href="{{url.get('sp/')}}{{item['pro_no']}}_{{item['pro_id']}}">	
-						<div class="div_img">				
-							<img src="{{url.get('')}}{{item['img_path']}}"/>
+						<div class="div_img">		
+							{%for key,img in item['img_path']%}
+								{%if key < 2%}
+									<img src="{{url.get('')}}{{img}}" class="{%if key >0%}img_sec{%else%}img_first{%endif%}" title="{{item['pro_name']}}" alt="{{item['pro_name']}}"/>
+								{%endif%}
+							{%endfor%}
 						</div>						
 						<div class="div_desc">
 							<span class="lst-it-title">{{item['pro_name']}}</span>
-							<div>Giá bán lẻ: <strong class="font_size14 col_red">{{elements.currency_format(item['price_exp'])}} đ</strong></div>
-							<div>Chiết khấu: <strong class="font_size14 col_blue">{{elements.currency_format(item['price_exp']-item['price_seller'])}} đ</strong></div>
+							<div><del class="font_size14">{{elements.currency_format(item['price_seller'])}} đ</del><strong class="font_size14 col_blue">{{elements.currency_format(item['price_exp'])}} đ</strong></div>
 						</div>						
 						</a>
+						<div class="row">
+							<a class="icon-cart"></a>
+						</div>
 					</div>
 					
 					{%endfor%}
@@ -148,7 +181,7 @@
 		<div class="col-md-20 col-sm-3 col-xs-12 no_padding">
 			<div class="row pn-header-top">
 				<div class="pn-title">
-					<h2>Sản phẩm bán chạy</h2>
+					<h3 class="ctg_title">Sản phẩm bán chạy</h3>
 				</div>
 			</div>
 			<div class="row pro_list">

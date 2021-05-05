@@ -10,7 +10,7 @@
 			<div class="pn_posts">
 				<div class="pn_title">
 					<!--<span class="bg_icon"><i class="fa post-pencil"></i></span>-->
-					<h1>Đăng nhập </h1>
+					<h1>Đăng nhập dđ</h1>
 				</div>	
 				<hr class="line" />			
 				<div class="margin_top login_form">

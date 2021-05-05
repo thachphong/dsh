@@ -19,7 +19,7 @@
 				<li><a>Hướng dẫn đặt hàng</a></li>				
 			</ul>
 		</div>
-		<div class="col-md-3 col-sm-3 col-xs-12">
+		<!--<div class="col-md-3 col-sm-3 col-xs-12">
 			<p class="footer_title">Nhà cung cấp</p>
 			<ul class="menu_footer">
 				<li><a href="{{baseurl}}p/quy-dinh-nha-cung-cap">Quy định chung</a></li>
@@ -27,13 +27,13 @@
 				<li><a href="{{baseurl}}p/chinh-sach-thanh-toan">Chính sách thanh toán</a></li>
 				<li><a href="{{baseurl}}p/quyen-loi-nha-cung-cap">Quyền lợi của nhà cung cấp</a></li>
 			</ul>
-		</div>
+		</div>-->
 		<div class="col-md-3 col-sm-3 col-xs-12">			
 		</div>
 	</div>
 </div>
 <div class="row footer-copywrite">
 	<div class="container">
-		<p style="text-align: center;margin: 0px">@ copy right 2018</p>
+		<p style="text-align: center;margin: 0px">@ copy right 2019</p>
 	</div>
 </div>

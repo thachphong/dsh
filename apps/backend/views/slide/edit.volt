@@ -55,6 +55,12 @@
                         </div>
                       </div> 
                       <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Mô tả</label>
+                        <div class="col-md-8 col-sm-8 col-xs-12">
+                          <textarea class="form-control" name="description" rows="2" >{{data.description}}</textarea>
+                        </div>
+                      </div> 
+                      <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Hiện/Ẩn</label>
                         <div class="col-md-3 col-sm-3 col-xs-12">
                           <select class="form-control" name="del_flg">

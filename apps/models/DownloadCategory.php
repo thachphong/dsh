@@ -41,8 +41,9 @@ class DownloadCategory extends DBModel
         return $this->pho_query($sql);
     }
     public function get_info($id){
-        return  DownloadCategory::findFirst(array(
-                array('id'=>$id)
+        return  DownloadCategory::findFirst(array(               
+                "id = :id: ",
+                'bind' => array('id' => $id)
             ));
     }
     public function insert($param){

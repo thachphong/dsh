@@ -5,6 +5,7 @@
     {{ stylesheet_link('templateadm/css/jquery.mCustomScrollbar.min.css') }}
     {{ stylesheet_link('templateadm/css/custom.min.css') }}
     {{ stylesheet_link('templateadm/css/jquery.modal.css') }}
+    {{ stylesheet_link('templateadm/css/style.css') }}
     {{ javascript_include('templateadm/js/jquery.min.js') }}
     {{ javascript_include('templateadm/js/bootstrap.min.js') }}
     {{ javascript_include('templateadm/js/jquery.modal.js') }}  

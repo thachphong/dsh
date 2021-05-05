@@ -196,10 +196,12 @@ class CategoryController extends PHOController
 					$param['img_seo'] ='images/category/'.$file_name;
 			}
 			$file->DeleteFolder(PHO_PUBLIC_PATH.'tmp/'.$param['folder_tmp']);
-			if(strlen($param['ctg_id'])==0){				
+			if(strlen($param['ctg_id'])==0){	
+				PhoLog::debug_var('---d---',$param);
+				PhoLog::debug_var('---d---','insert');			
 				$ctg_id = $db->_insert($param);
 			}else{
-				//PhoLog::debug_var('---d---',$param);
+				PhoLog::debug_var('---d---',$param);
 				$info = $db->get_ctg_info($param['ctg_id']);
 				if($info['img_path'] != '' && $info['img_path'] != $param['img_path']){
 					$file->DeleteFile(PHO_PUBLIC_PATH.$info['img_path']);

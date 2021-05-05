@@ -45,4 +45,15 @@ class DBModel extends Model
 			throw $e;
 		}     
     }
+    protected function format_col_array($list,$column_name){
+    	$result= array();
+		if(count($list)>0){
+			foreach($list as $item){
+				$item[$column_name] = explode(',',str_replace('"','', trim($item[$column_name], '{}') ));
+				$result[]= $item;
+			}
+		} 
+        return $result;
+	}
+    
 }

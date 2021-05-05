@@ -145,8 +145,15 @@
                              <option value="1" {%if disp_home == 1%}selected="selected"{%endif%}>Hiện</option>
                           </select>                          
                         </div>
+                        <label class="control-label col-md-2 col-sm-2 col-xs-12">Combo</label>
+                        <div class="col-md-2 col-sm-2 col-xs-12">
+                          <select class="form-control" name="combo_flg">
+                             <option value="0" {%if combo_flg == 0%}selected="selected"{%endif%}>Không</option>
+                             <option value="1" {%if combo_flg == 1%}selected="selected"{%endif%}>Có</option>
+                          </select>                          
+                        </div>
                       </div>
-                      <div class="form-group">
+                      <!--<div class="form-group">
                         <label class="control-label col-md-2 col-sm-2 col-xs-12">Nguồn sản phẩm</label>
                         <div class="col-md-7 col-sm-7 col-xs-12">
                           <input type="text" id="src_link" name="src_link" class="form-control col-md-7 col-xs-12" value="{{src_link}}">                              
@@ -156,7 +163,7 @@
                         </div> 
                         <label class="control-label col-md-2 col-sm-2 col-xs-12"><input type="checkbox" id="not_src"> không có nguồn</label>
                                             
-                      </div>
+                      </div>-->
                       <div class="form-group">
                         <label class="control-label col-md-2 col-sm-2 col-xs-12">Kích thước</label>
                         <div class="col-md-6 col-sm-5 col-xs-12">
@@ -206,9 +213,9 @@
                               <td><input type="text" name="pro_size[]" class="form-control size_format" value="-">
                               	  <input type="hidden" name="pro_price_id[]" value="0">
                               </td>
-                              <td>Giá nhập</td>
-                              <td><input type="text" name="price_imp[]" class="col-md-3 form-control number_format imp" value=""></td>
-                              <td>Giá CTV</td>
+                              <!--<td>Giá nhập</td>
+                              <td><input type="text" name="price_imp[]" class="col-md-3 form-control number_format imp" value=""></td>-->
+                              <td>Giá gốc</td>
                               <td><input type="text" name="price_seller[]" class="col-md-3 form-control number_format" value=""></td>
                               <td>Giá bán lẻ</td>
                               <td><input type="text" name="price_exp[]" class="col-md-3 form-control number_format" value=""></td>
@@ -220,9 +227,9 @@
                               <td><input type="text" name="pro_size[]" class="form-control size_format" value="{{pri['size']}}">
                               	  <input type="hidden" name="pro_price_id[]" value="{{pri['pro_price_id']}}">
                               </td>
-                              <td>Giá nhập</td>
-                              <td><input type="text" name="price_imp[]" class="col-md-3 form-control number_format imp" value="{{elements.currency_format(pri['price_imp'],',')}}"></td>
-                              <td>Giá CTV</td>
+                             <!-- <td>Giá nhập</td>
+                              <td><input type="text" name="price_imp[]" class="col-md-3 form-control number_format imp" value="{{elements.currency_format(pri['price_imp'],',')}}"></td>-->
+                              <td>Giá gốc</td>
                               <td><input type="text" name="price_seller[]" class="form-control number_format" value="{{elements.currency_format(pri['price_seller'],',')}}"></td>
                               <td>Giá bán lẻ</td>
                               <td><input type="text" name="price_exp[]" class="form-control number_format" value="{{elements.currency_format(pri['price_exp'],',')}}"></td>
@@ -394,21 +401,21 @@
         	if($('#ctg_id').val()==''){
         		return "Bạn chưa chọn danh mục !";
         	}
-        	if($('#price_seller').val()==''){
+        	/*if($('#price_seller').val()==''){
         		return "Bạn chưa nhập giá CTV!";
-        	}
-        	if($('#price_imp').val()==''){
+        	}*/
+        	/*if($('#price_imp').val()==''){
         		return "Bạn chưa nhập giá nhập!";
-        	}
+        	}*/
         	if($('#price_exp').val()==''){
         		return "Bạn chưa nhập giá bán lẻ!";
         	}
         	if($("#list_file").find('img').length==0){
         		return "Bạn chưa upload ảnh cho sản phẩm!";
         	}
-        	if($("#src_link").val()=='' && $('#not_src').prop('checked')==false){
+        	/*if($("#src_link").val()=='' && $('#not_src').prop('checked')==false){
         		return "Bạn chưa nhập nguồn sản phẩm";
-        	}
+        	}*/
         	/*if($("#description").val()==''){
         		return "Bạn chưa nhập Description";
         	}*/

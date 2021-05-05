@@ -2,16 +2,22 @@
          <div class="container" id="header">
             <div class="row" >	
                {% set login_info= elements.getuser()%}
-               <div class="col-md-12 col-sm-12 col-xs-12 no_padding_right">               	  
+               <div class="col-md-3 col-sm-3 col-xs-hide no_padding_right pd_t5">
+               		<span class="slogan">Sắc Đẹp Là Sức Mạnh Của Phái Nữ </span>
+               </div>
+               <div class="col-md-9 col-sm-9 col-xs-12 no_padding_right">               	  
                	  <div class="row" style="text-align:right">
-                  <ul class="top_menu">                  	 
-                     <li><strong >Hotline:<span class="col_blue"> {{define['comp_phone']}}</span></strong></li>
+                  <ul class="top_menu">  
+                     <li><span class="fa fs18 fa-phone-square"></span>
+                     	<span class="fs14"> {{define['comp_phone']}}</span>
+                     </li>
+                     
                      {%if login_info is defined%}
-                        <li><span class="fa fa-users"></span><a href="{{url.get('thanh-vien')}}">{{login_info.user_name}}</a></li>
-                        <li><span class="fa fa-sign-out"></span><a href="{{url.get('users/logout')}}">Thoát</a></li>
+                        <li><span class="fa fs18 fa-users"></span><a href="{{url.get('thanh-vien')}}">{{login_info.user_name}}</a></li>
+                        <li><span class="fa fs18 fa-sign-out"></span><a href="{{url.get('users/logout')}}">Thoát</a></li>
                      {%else%}
-                        <li><span class="fa fa-pencil-square-o"></span><a href="{{url.get('dang-ky')}}">Đăng ký</a></li>
-                        <li><span class="fa fa-users"></span><a href="{{url.get('dang-nhap')}}">Đăng nhập</a></li>
+                        <li><span class="fa fs18 fa-pencil-square-o"></span><a href="{{url.get('dang-ky')}}">Đăng ký</a></li>
+                        <li><span class="fa fs18 fa-users"></span><a href="{{url.get('dang-nhap')}}">Đăng nhập</a></li>
                      {%endif%}                     
                   </ul>                  
                   </div>
@@ -22,45 +28,36 @@
 <div class="row header_bg">
     <div class="container">
     	<div class="row" >
-    		<div class="col-md-3 col-sm-3 col-xs-12"> 
+    		<div class="col-md-3 col-sm-3 col-xs-hide"> 
     			<a href="{{baseurl}}">
     				<img src="{{url.get('template1/images/logo.png')}}" class="logo margin-top10"/>
+    				<span class="logo_name">Linh Anh</span>
     			</a>
+    		</div>    		
+    		<div class="col-md-6 col-sm-8 col-xs-9 box_search"> 
+    			<form method="get" class="searchform" action="{{url.get('search')}}">				    
+				    <input id="s-keyword" name="s" type="text" value="" class="input_search text_input" placeholder="Tìm sản phẩm và dịch vụ">
+					<input type="submit" value="" style="font-family:FontAwesome" class="btn_search">
+				</form>   			
+    			 			
     		</div>
-    		<div class="col-md-6 col-sm-8 col-xs-9">
-    			<div class="div_search">
-    				<form action="{{baseurl}}tim" method="GET" enctype="multipart/form-data">
-	    				<input placeholder="Nhập tên sản phẩm cân tìm" name="sp"/>
-	    				<button class="fa fa-search" ></button>
-    				</form>
-    			</div>
-    			
-    		</div>
-    		<div class="col-md-3 col-sm-1 col-xs-3">
-    			<div class="shopping_cart" style="">
-    				<a href="{{baseurl}}cart"><i class="fa fa-shopping-cart"></i>
-    					<span class="cart_number" id="cart_number">{{elements.get_cart_number()}}</span>
+    		<div class="col-md-3 col-sm-1 col-xs-3 col-xs-npd">   
+    			<div class="shopping_cart">
+    				<a href="" class="pos_rl">
+    				<span class="cart_num"></span>
+    				<span class="cart_number">{{elements.get_cart_number()}}</span>
     				</a>
     			</div>
     		</div>
     	</div>
     </div>
 </div> 
-<div class="row top-container-bg">
-    <div class="container">  
-    	<ul class="main_menu">
-    		<!--<li onclick="show_menu()"><label>Danh mục sản phẩm <i id="icon_dm" class="fa fa-sort-down"></i></label>
-    			<ul class="dm-sp" id="dm-sp">			
-					elements.getMenu()			
-				</ul>
-    		</li>-->
-    		<li><a href="{{baseurl}}c/san-pham-moi">Sản phẩm mới</a></li>    		
-    		<li><a href="{{baseurl}}c/ban-chay">Bán chạy</a></li>
-    		<li><a href="{{baseurl}}c/top-chiet-khau">Top chiết khấu</a></li>    		
-    		<li class="hide_mobile"><a href="{{baseurl}}p/quyen-loi-cong-tac-vien">Quyền lợi CTV</a></li>
-    		<li class="hide_mobile"><a href="{{baseurl}}p/huong-dan-dang-ky-ctv">Hướng đẫn đăng ký CTV</a></li>
+<div class="row menu_bg" >	
+	<div class="container">  
+	    <ul class="main_menu">    		
+    		{{ elements.getMenu() }}
     	</ul>
-    </div>
+	</div>   
 </div>
 <script>
 		function show_menu(){					

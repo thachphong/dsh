@@ -34,6 +34,129 @@ class Elements extends Component
 		$menu_data  = $this->dataCache->get($cacheKey);
 		if ($menu_data === null) {
 			$menu_data ='';
+            $db = new Menu();
+		    $list_menu = $db->get_menus();
+            $url = new Url();
+            $url->setBaseUri(BASE_URL_NAME);            
+	        $base_url = $url->get('');
+            foreach($list_menu as $key=>$item){
+                if($item['child_flg'] > 0){
+	                $menu_data .='<li>';
+                    $href = $base_url;
+                    
+                    if(strlen($item['link'])>0){                        
+                        if($item['page_flg']==1){
+                            $href .= 'p/';
+                        }else if($item['page_flg']==2){
+                            $href .= 'c/';
+                        }else if($item['page_flg']==3){
+                            $href .= 'dm/';
+                        }else if($item['page_flg']==4){
+                            $href .= 'la/';
+                        }
+                         $href .=$item['link'];
+                    }else{
+                        $href ='#';
+                    }
+                    $menu_data .='<a href="'.$href.'">'.$item['menu_name'].'</a><ul>';
+                            
+                    foreach($item['child'] as $sub1){                              
+                        if($sub1['child_flg'] > 0){                               
+                            $menu_data .='<li>';
+                            $href = $base_url;
+                            
+                            if(strlen($sub1['link'])>0) {                       
+                                if($sub1['page_flg']==1){
+                                    $href .= 'p/';
+                                }else if($sub1['page_flg']==2){
+                                    $href .= 'c/';
+                                }else if ($sub1['page_flg']==3){
+                                    $href .= 'dm/';
+                                }else if ($sub1['page_flg']==4){
+                                    $href .= 'la/';
+                                }
+                                 $href .=$sub1['link'];
+                            }else{
+                               // $href ='#';
+                            }
+                            $menu_data .='<a href="'.$href.'">'.$sub1['menu_name'].'</a><ul>';
+                            foreach($sub1['child'] as $sub2){                            
+                                $href = $base_url;                    
+                                if(strlen($sub2['link'])>0) {                       
+                                    if( $sub2['page_flg']==1){
+                                        $href .= 'p/';
+                                    }else if( $sub2['page_flg']==2){
+                                        $href .= 'c/';
+                                    }else if ($sub2['page_flg']==3){
+                                        $href .= 'dm/';
+                                    }else if ($sub2['page_flg']==4){
+                                    	$href .= 'la/';
+                                	}
+                                     $href .=$sub2['link'];
+                                }else{
+                                    //$href ='#';
+                                }                
+                                $menu_data .='<li><a href="'.$href.'">'.$sub2['menu_name'].'</a></li>';
+                            }                   
+                            $menu_data .='</ul></li>';
+                        }else{                      
+                            $href = $base_url;                    
+                            if(strlen($sub1['link'])>0) {                       
+                                if( $sub1['page_flg']==1){
+                                    $href .= 'p/';
+                                }else if( $sub1['page_flg']==2){
+                                    $href .= 'c/';
+                                }else if ($sub1['page_flg']==3){
+                                    $href .= 'dm/';
+                                }else if ($sub1['page_flg']==4){
+                                    $href .= 'la/';
+                                }
+                                 $href .=$sub1['link'];
+                            }else{
+                                //$href ='#';
+                            }                
+                            $menu_data .='<li><a href="'.$href.'">'.$sub1['menu_name'].'</a></li>';
+                        }              
+                    }               
+                    $menu_data .='</ul></li>';
+                }else{
+                    $href = $base_url;                    
+                    if(strlen($item['link'])>0){                        
+                        if( $item['page_flg']==1){
+                            $href .= 'p/';
+                        }else if( $item['page_flg']==2){
+                            $href .= 'c/';
+                        }else if ($item['page_flg']==3){
+                            $href .= 'dm/';
+                        }else if ($item['page_flg']==4){
+                            $href .= 'la/';
+                        }
+                        $href .=$item['link'];
+                    }else{
+                        //$href ='#';
+                    }   
+                    if($key>0){
+						$menu_data .='<li><a href="'.$href.'">'.$item['menu_name'].'</a></li>';
+					}else{											
+						//$menu_data .='<li><a href="'.$href.'" style="padding-top: 6px;padding-bottom: 13px;"><i class="fa fa-home"></i></a></li>';
+						$menu_data .='<li><a href="'.$href.'" >'.$item['menu_name'].'</a></li>';
+					}             
+                    
+                }        
+	        }
+		    // Store it in the cache
+		    $this->dataCache->save($cacheKey, $menu_data);
+		    
+		}
+		echo $menu_data;
+
+    }
+    public function getMenu_danhmuc()
+    {
+    	$cacheKey = 'menu.cache';
+		$menu_data  = $this->dataCache->get($cacheKey);
+		if ($menu_data === null) {
+			$menu_data ='';
             $db = new Category();
 		    $list_menu = $db->get_categorys();
             $url = new Url();
@@ -270,20 +393,33 @@ class Elements extends Component
         $html  = $cache->get($cacheKey);
         if ($html === null) {
             $db = new Product();  
-            $data = $db->get_goodsell(5);      //san pham ban chay     //8row
+            $data = $db->get_goodsell(8);      //san pham ban chay     //8row
             $html = '';
             foreach($data as $key=>$item){
                 $html .= '<div class="col-md-12 pro_list_item">';                
 				$html .= '<a href="'.$item['pro_no'].'_'.$item['pro_id'].'">
-						<div class="div_img">					
-							<img src="'.BASE_URL_NAME.$item['img_path'].'"/>
-						</div>						
+						<div class="div_img">';	
+				foreach($item['img_path'] as $key1=>$img){
+					if($key1<2){
+						$class="img_first";
+						if($key1 > 0){
+							$class ="img_sec";
+						}
+						$html .='<img src="'.BASE_URL_NAME.$img.'" class="'.$class.'"/>';
+					}
+				}
+							
+							
+				$html .= '</div>						
 						<div class="div_desc">
                             <span class="lst-it-title">'.$item['pro_name'].'</span>
-							<div>Giá bán lẻ: <strong class="font_size14 col_red">'.$this->currency_format($item['price_exp']).' đ</strong></div>
-							<div>Chiết khấu: <strong class="font_size14 col_blue">'.$this->currency_format($item['price_exp'] - $item['price_seller']).' đ</strong></div>
+							<div><del class="font_size14">'.$this->currency_format($item['price_seller']).' đ</del>
+							 <strong class="font_size14 col_blue">'.$this->currency_format($item['price_exp']).' đ</strong></div>
 						</div>						
 						</a>
+						<div class="row">
+							<a class="icon-cart"></a>
+						</div>	
 					</div>';                             
             }
             // Store it in the cache

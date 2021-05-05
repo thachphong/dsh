@@ -27,7 +27,7 @@
                 <input type="text" class="form-control" name="email" placeholder="{{lang['LOG002']}}" required="" />
               </div>
               <div>
-                <input type="password" class="form-control" name="password" placeholder="{{lang['LOG003']}}" required="" />
+                <input type="password" id="password" class="form-control" name="password" placeholder="{{lang['LOG003']}}" required="" />
               </div>
               <div>
             
@@ -65,7 +65,7 @@
                 <input type="email" name="email" class="form-control" placeholder="Email" required="" />
               </div>
               <div>
-                <input type="password" name="password" class="form-control" placeholder="Password" required="" />
+                <input type="password" name="password" id="password" class="form-control" placeholder="Password" required="" />
               </div>
               <div>
                 <a class="btn btn-default submit" href="login/authoradmin" style="float: none">Submit</a>

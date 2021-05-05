@@ -64,7 +64,7 @@ class ProductController extends PHOController
 			//PhoLog::debug_var('view----',__LINE__);
 			//$db->update_traffic($traffic);			
 			
-			$result['relations']= $db->get_relation($result['ctg_id'],$result['pro_id'],6);
+			$result['relations']= $db->get_relation($result['ctg_id'],$result['pro_id'],8);
 			//PhoLog::debug_var('view----',$result['relations']);
 	        //PhoLog::debug_var('view----',__LINE__);
 	        //PhoLog::debug_var('view----',$result);
